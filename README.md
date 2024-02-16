@@ -12,7 +12,7 @@
     9. Buka browser dan akses `http://localhost:8000`
 
 ## Flow Add Menu/Submenu
-    1. Insert menu di DB atau setting > menu (login as superadmin)
+    1. Insert menu di DB atau setting > menu (login as admin)
     2. Set hak akses menu
     3. Buat MVC yg dibutuhkan. Viewpath samakan dengan value di DB. Pastikan diakhir ada tanda titik (.) --> jika lupa, maka akan error view not found. Sesuaikan dengan path view.
     4. Set route di `web_<user>.php` sesuai kebutuhan.
