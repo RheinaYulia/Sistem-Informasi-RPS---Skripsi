@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use App\Models\Master\JurusanModel;
 use App\Models\Master\ProdiModel;
-use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
 
 class ProdiController extends Controller
 {

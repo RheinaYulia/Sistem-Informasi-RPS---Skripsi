@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Master\BeritaController;
 use App\Http\Controllers\Master\DosenCircleController;
-use App\Http\Controllers\Master\DosenController;
+use App\Http\Controllers\Dosen\DosenController;
 use App\Http\Controllers\Master\JurusanController;
 use App\Http\Controllers\Master\KategoriController;
 use App\Http\Controllers\Master\MahasiswaController;
@@ -34,6 +34,15 @@ Route::group(['prefix' => 'master', 'middleware' => ['auth']], function () {
     Route::resource('prodi', ProdiController::class)->parameter('prodi', 'id');
     Route::post('prodi/list', [ProdiController::class, 'list']);
     Route::get('prodi/{id}/delete', [ProdiController::class, 'confirm']);
+});
+
+Route::group(['prefix' => 'dosen', 'middleware' => ['auth']], function () {
+
+    // Kelola Dosen
+    Route::resource('kelola_dosen', DosenController::class)->parameter('kelola_dosen', 'id');
+    Route::post('kelola_dosen/list', [DosenController::class, 'list']);
+    Route::get('kelola_dosen/{id}/delete', [DosenController::class, 'confirm']);
+
 });
 
 Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {

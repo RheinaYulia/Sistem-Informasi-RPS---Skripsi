@@ -15,7 +15,7 @@ class DDosen extends Migration
     {
         Schema::create('d_dosen', function (Blueprint $table) {
             $table->id('dosen_id');
-            $table->string('nama_dosen',50)->index();
+            $table->string('nama_dosen',50)->unique();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Master;
+namespace App\Http\Controllers\Dosen;
 
 use App\Http\Controllers\Controller;
-use App\Models\Master\JurusanModel;
+use App\Models\Dosen\DosenModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\DataTables;
 
-class JurusanController extends Controller
+class DosenController extends Controller
 {
     public function __construct(){
-        $this->menuCode  = 'MASTER.JURUSAN';
-        $this->menuUrl   = url('master/jurusan');     // set URL untuk menu ini
-        $this->menuTitle = 'Jurusan';                       // set nama menu
-        $this->viewPath  = 'master.jurusan.';         // untuk menunjukkan direktori view. Diakhiri dengan tanda titik
+        $this->menuCode  = 'DOSEN.KELOLADOSEN';
+        $this->menuUrl   = url('dosen/kelola_dosen');     // set URL untuk menu ini
+        $this->menuTitle = 'Kelola Dosen';                       // set nama menu
+        $this->viewPath  = 'dosen.kelola_dosen.';         // untuk menunjukkan direktori view. Diakhiri dengan tanda titik
     }
 
     public function index(){
@@ -23,12 +23,12 @@ class JurusanController extends Controller
 
         $breadcrumb = [
             'title' => $this->menuTitle,
-            'list'  => ['Data Master', 'Jurusan']
+            'list'  => ['Data Dosen', 'Kelola Dosen']
         ];
 
         $activeMenu = [
-            'l1' => 'master',
-            'l2' => 'master-jurusan',
+            'l1' => 'dosen',
+            'l2' => 'dosen-kelola_dosen',
             'l3' => null
         ];
 
@@ -48,7 +48,7 @@ class JurusanController extends Controller
         $this->authAction('read', 'json');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        $data  = JurusanModel::selectRaw("jurusan_id, jurusan_name, jurusan_code");
+        $data  = DosenModel::selectRaw("dosen_id, nama_dosen");
 
         return DataTables::of($data)
             ->addIndexColumn()
@@ -77,8 +77,7 @@ class JurusanController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
 
             $rules = [
-                'jurusan_code' => ['required', 'string', 'max:10', JurusanModel::setUniqueInsert()],
-                'jurusan_name' => 'required|string|max:100',
+                'nama_dosen' => ['required', 'string', 'max:50', DosenModel::setUniqueInsert()],
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -92,7 +91,7 @@ class JurusanController extends Controller
                 ]);
             }
 
-            $res = JurusanModel::insertData($request);
+            $res = DosenModel::insertData($request);
 
             return response()->json([
                 'stat' => $res,
@@ -114,7 +113,7 @@ class JurusanController extends Controller
             'title' => 'Edit ' . $this->menuTitle
         ];
 
-        $data = JurusanModel::find($id);
+        $data = DosenModel::find($id);
 
         return (!$data)? $this->showModalError() :
             view($this->viewPath . 'action')
@@ -131,8 +130,7 @@ class JurusanController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
 
             $rules = [
-                'jurusan_code' => ['required', 'string', 'max:10', JurusanModel::setUniqueInsertIgnore($id)],
-                'jurusan_name' => 'required|string|max:100',
+                'nama_dosen' => ['required', 'string', 'max:50', DosenModel::setUniqueInsertIgnore($id)],
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -146,7 +144,7 @@ class JurusanController extends Controller
                 ]);
             }
 
-            $res = JurusanModel::updateData($id, $request);
+            $res = DosenModel::updateData($id, $request);
 
             return response()->json([
                 'stat' => $res,
@@ -162,7 +160,7 @@ class JurusanController extends Controller
         $this->authAction('read', 'modal');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        $data = JurusanModel::find($id);
+        $data = DosenModel::find($id);
         $page = [
             'title' => 'Detail ' . $this->menuTitle
         ];
@@ -179,7 +177,7 @@ class JurusanController extends Controller
         $this->authAction('delete', 'modal');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        $data = JurusanModel::find($id);
+        $data = DosenModel::find($id);
 
         return (!$data)? $this->showModalError() :
             $this->showModalConfirm($this->menuUrl.'/'.$id, [

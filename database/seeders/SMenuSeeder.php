@@ -29,8 +29,8 @@ class SMenuSeeder extends Seeder
                 
                 //Level 2
                 ['menu_id' => '5','menu_scope' => 'ADMIN','menu_code' => 'DOSEN.KELOLADOSEN','menu_name' => 'Kelola Dosen','menu_url' => 'dosen/kelola_dosen','menu_level' => '2','order_no' => '5','parent_id' => '2','class_tag' => 'dosen-kelola_dosen','icon' => 'fas fa-minus text-xs','is_active' => '1'],
-                ['menu_id' => '6','menu_scope' => 'ADMIN','menu_code' => 'DOSEN.AKTIVASIDOSEN','menu_name' => 'Aktivasi Dosen','menu_url' => 'dosen/aktivasi_dosen','menu_level' => '2','order_no' => '6','parent_id' => '2','class_tag' => 'dosen-aktivasi_dosen','icon' => 'fas fa-minus text-xs','is_active' => '1'],
-                ['menu_id' => '7','menu_scope' => 'ADMIN','menu_code' => 'MASTER.JURUSAN','menu_name' => 'Jurusan','menu_url' => 'master/jurusan','menu_level' => '2','order_no' => '7','parent_id' => '3','class_tag' => 'master-jurusan','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '6','menu_scope' => 'ADMIN','menu_code' => 'DOSEN.PENGEMBANG','menu_name' => 'Pengembang Dosen','menu_url' => 'dosen/pengembang','menu_level' => '2','order_no' => '6','parent_id' => '2','class_tag' => 'dosen-pengembang','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '7','menu_scope' => 'ADMIN','menu_code' => 'DOSEN.PENGAMPU','menu_name' => 'Pengampu Dosen','menu_url' => 'dosen/pengampu','menu_level' => '2','order_no' => '7','parent_id' => '2','class_tag' => 'dosen-pengampu','icon' => 'fas fa-minus text-xs','is_active' => '1'],
                 ['menu_id' => '8','menu_scope' => 'ADMIN','menu_code' => 'MASTER.PRODI','menu_name' => 'Program Studi','menu_url' => 'master/prodi','menu_level' => '2','order_no' => '8','parent_id' => '3','class_tag' => 'master-prodi','icon' => 'fas fa-minus text-xs','is_active' => '1'],
                 ['menu_id' => '9','menu_scope' => 'ADMIN','menu_code' => 'SETTING.MENU','menu_name' => 'Menu','menu_url' => 'setting/menu','menu_level' => '2','order_no' => '9','parent_id' => '4','class_tag' => 'setting-menu','icon' => 'fas fa-minus text-xs','is_active' => '1'],
                 ['menu_id' => '10','menu_scope' => 'ADMIN','menu_code' => 'SETTING.GROUP','menu_name' => 'Group','menu_url' => 'setting/group','menu_level' => '2','order_no' => '10','parent_id' => '4','class_tag' => 'setting-group','icon' => 'fas fa-minus text-xs','is_active' => '1'],
@@ -45,7 +45,7 @@ class SMenuSeeder extends Seeder
                 ['menu_id' => '13','menu_scope' => 'TTC','menu_code' => 'RPS','menu_name' => 'rps','menu_url' => NULL,'menu_level' => '1','order_no' => '13','parent_id' => NULL,'class_tag' => 'setting','icon' => 'fas fa-cogs','is_active' => '1'],
 
                 //Level 2
-                ['menu_id' => '14','menu_scope' => 'TTC','menu_code' => 'RPS.KELOLARPS','menu_name' => 'Kelola Rps','menu_url' => 'rps/kelola_rps','menu_level' => '2','order_no' => '12','parent_id' => '4','class_tag' => 'setting-account','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '14','menu_scope' => 'TTC','menu_code' => 'RPS.KELOLARPS','menu_name' => 'Kelola Rps','menu_url' => 'rps/kelola_rps','menu_level' => '2','order_no' => '12','parent_id' => '13','class_tag' => 'setting-account','icon' => 'fas fa-minus text-xs','is_active' => '1'],
             
             /////////////////////////////////
             //////// DOSEN KURIKULUM //////////

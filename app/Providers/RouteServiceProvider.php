@@ -53,8 +53,11 @@ class RouteServiceProvider extends ServiceProvider
             ], function ($router) {
                 require base_path('routes/web.php');
                 require base_path('routes/web_admin.php');
+                require base_path('routes/web_ttc.php');
+                require base_path('routes/web_dokur.php');
+                require base_path('routes/web_kaprodi.php');
                 require base_path('routes/web_dosen.php');
-                require base_path('routes/web_mahasiswa.php');
+                
             });
         });
     }
