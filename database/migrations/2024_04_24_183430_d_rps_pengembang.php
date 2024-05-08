@@ -38,4 +38,30 @@ class DRpsPengembang extends Migration
     {
         Schema::dropIfExists('d_rps_pengembang');
     }
+
+
+//     public function up()
+//     {
+//         DB::unprepared('
+//             CREATE TRIGGER triger_dosen AFTER UPDATE ON d_dosen
+//             FOR EACH ROW
+//             BEGIN
+//                 UPDATE s_user
+//                 SET group_id = NEW.group_id
+//                 WHERE user_id = NEW.user_id;
+//             END
+//         ');
+//     }
+
+//     /**
+//      * Reverse the migrations.
+//      *
+//      * @return void
+//      */
+//     public function down()
+//     {
+//         DB::unprepared('DROP TRIGGER IF EXISTS triger_dosen');
+//     }
+// }
+
 }

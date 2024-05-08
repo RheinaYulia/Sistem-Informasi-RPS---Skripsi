@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class VWMenu extends Migration
+class VwRps extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,13 @@ class VWMenu extends Migration
      */
     public function up()
     {
-        $view = "create or replace view vw_menu as
-select 	m.menu_id, m.menu_scope, m.menu_code, m.menu_name, m.menu_url, m.menu_level, m.order_no, m.parent_id, m.class_tag, m.icon, m.is_active,
-		p.menu_code as parent_code, p.menu_name as parent_name
-from 	s_menu m
-left join s_menu p on m.parent_id = p.menu_id ";
+        $view = "create or replace view vw_rps as
+select 	m.rps_id, m.kurikulum_mk_id,m.kaprodi_id, d.mk_nama, k.prodi_id, k.tahun
+from 	m_rps m
+join d_kaprodi k on k.kaprodi_id = m.kaprodi_id
+join d_kurikulum_mk p on p.kurikulum_mk_id = m.kurikulum_mk_id 
+join m_mk d on d.mk_id = p.mk_id"
+;
 
         DB::statement($view);
     }

@@ -68,7 +68,7 @@ class DosenController extends Controller
         return view($this->viewPath . 'action')
             ->with('page', (object) $page);
     }
-
+    
 
     public function store(Request $request){
         $this->authAction('create', 'json');
@@ -77,7 +77,7 @@ class DosenController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
 
             $rules = [
-                'nama_dosen' => ['required', 'string', 'max:50', DosenModel::setUniqueInsert()],
+                'nama_dosen' => 'required|string|max:100',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -118,8 +118,7 @@ class DosenController extends Controller
         return (!$data)? $this->showModalError() :
             view($this->viewPath . 'action')
                 ->with('page', (object) $page)
-                ->with('id', $id)
-                ->with('data', $data);
+                ->with('id', $id);
     }
 
 
@@ -130,7 +129,7 @@ class DosenController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
 
             $rules = [
-                'nama_dosen' => ['required', 'string', 'max:50', DosenModel::setUniqueInsertIgnore($id)],
+                'nama_dosen' => 'required|string|max:100',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -156,7 +155,7 @@ class DosenController extends Controller
         return redirect('/');
     }
 
-    public function show($id){
+    public function show($id) {
         $this->authAction('read', 'modal');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
@@ -171,7 +170,6 @@ class DosenController extends Controller
                 ->with('id', $id)
                 ->with('data', $data);
     }
-
 
     public function confirm($id){
         $this->authAction('delete', 'modal');
@@ -202,3 +200,4 @@ class DosenController extends Controller
         return redirect('/');
     }
 }
+

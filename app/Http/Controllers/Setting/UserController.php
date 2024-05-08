@@ -154,7 +154,7 @@ class UserController extends Controller
         return (!$data) ? $this->showModalError() :
             view($this->viewPath . 'detail')
             ->with('page', (object) $page)
-            ->with('data', $data);
+            ->with('data', $data);   
     }
 
 

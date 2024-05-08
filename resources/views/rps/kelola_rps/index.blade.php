@@ -10,20 +10,22 @@
                             <i class="fas fa-angle-double-right text-md text-{{ $theme->card_outline }} mr-1"></i>
                             {!! $page->title !!}
                         </h3>
+
                         <div class="card-tools">
-    @if($allowAccess->create)
-    {{-- && auth()->user()->is_active= 0 --}}
+    @if($allowAccess->create || $allowAccess->update)
+    
         <button type="button" data-block="body" class="btn btn-sm btn-{{ $theme->button }} mt-1 ajax_modal" data-url="{{ $page->url }}/create"><i class="fas fa-plus"></i> Tambah</button>
     @endif
 </div>
-                    </div>
+                       
                     <div class="card-body p-0">
                         <div class="table-responsive">
                         <table class="table table-striped table-hover table-full-width" id="table_master">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Dosen</th>
+                                    <th>Mata Kuliah</th>
+                                    <th> Input RPS </th>
                                     <th>#</th>
                                 </tr>
                             </thead>
@@ -58,14 +60,29 @@
                         "bSearchable": false
                     },
                     {
-                        "mData": "nama_dosen",
+                        "mData": "mk_nama",
                         "sClass": "",
                         "sWidth": "20%",
                         "bSortable": true,
-                        "bSearchable": true
+                        "bSearchable": true,
+                        "mRender": function(data, type, row, meta) {
+                            return data;
+                        }
+                        
                     },
                     {
-                        "mData": "dosen_id",
+                        "mData": "rps_id",
+                        "sClass": "text-center pr-2",
+                        "sWidth": "8%",
+                        "bSortable": false,
+                        "bSearchable": false,
+                        "mRender": function(data, type, row, meta) {
+                            return ''
+                                @if($allowAccess->update) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/showi" class="ajax_modal btn btn-xs btn-info tooltips text-light text-xs" data-placement="left" data-original-title="RPS" ><i class="fa fa-th"></i> Detail</a> ` @endif
+                        }
+                    },
+                    {
+                        "mData": "rps_id",
                         "sClass": "text-center pr-2",
                         "sWidth": "10%",
                         "bSortable": false,

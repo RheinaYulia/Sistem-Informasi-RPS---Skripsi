@@ -23,11 +23,11 @@ class SUserSeeder extends Seeder
                 'email'     => 'admin@admin.com',
                 'password'  => password_hash('12345', PASSWORD_DEFAULT),
             ],[
-                'user_id'   => 2, // Admin
-                'group_id'  => 2, // Admin
-                'username'  => 'teamtc',
-                'name'      => 'Team Teaching',
-                'email'     => 'ttc@admin.com',
+                'user_id'   => 2, //
+                'group_id'  => 2, // Dosen
+                'username'  => 'dosen',
+                'name'      => 'Dosen',
+                'email'     => 'dosen@admin.com',
                 'password'  => password_hash('12345', PASSWORD_DEFAULT),
             ],[
                 'user_id'   => 3, //
@@ -43,13 +43,6 @@ class SUserSeeder extends Seeder
                 'username'  => 'kaprodi',
                 'name'      => 'Kaprodi',
                 'email'     => 'kaprodi@admin.com',
-                'password'  => password_hash('12345', PASSWORD_DEFAULT),
-            ],[
-                'user_id'   => 5, //
-                'group_id'  => 4, // Dosen
-                'username'  => 'dosen',
-                'name'      => 'Dosen',
-                'email'     => 'dosen@admin.com',
                 'password'  => password_hash('12345', PASSWORD_DEFAULT),
             ],
         ]);

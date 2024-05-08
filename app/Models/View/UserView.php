@@ -15,4 +15,7 @@ class UserView extends AppModel
     protected static $_uniqueKey = 'user_code';
 
     protected $fillable = []; // data view tidak dapat di insert, hanya di select
+
+   
 }
+

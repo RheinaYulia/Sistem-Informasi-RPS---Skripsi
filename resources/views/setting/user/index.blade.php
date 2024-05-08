@@ -48,7 +48,7 @@
                                     <th>No</th>
                                     <th>Username</th>
                                     <th>Nama</th>
-                                    <th>Level</th>
+                                    <th>Level</th>                          
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>

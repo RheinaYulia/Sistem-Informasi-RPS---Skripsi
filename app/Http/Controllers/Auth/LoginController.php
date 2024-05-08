@@ -95,16 +95,6 @@ class LoginController extends Controller
 
             $this->redirectTo = url('/');
 
-            if($db->group_id == 3){         // jika yg login Dosen
-                $dosen = $db->getUserDosen;
-                session()->put('dosen', $dosen);
-            }
-
-            if($db->group_id == 4){         // jika yg login Mahasiswa
-                $mhs = $db->getUserMahasiswa;
-                session()->put('mahasiswa', $mhs);
-            }
-
             //session()->put('periode', $periode);
             session()->put('userAccess', $this->userAccess);
             session()->put('userMenu', $this->userMenu);

@@ -42,6 +42,9 @@ Route::group(['prefix' => 'dosen', 'middleware' => ['auth']], function () {
     Route::resource('kelola_dosen', DosenController::class)->parameter('kelola_dosen', 'id');
     Route::post('kelola_dosen/list', [DosenController::class, 'list']);
     Route::get('kelola_dosen/{id}/delete', [DosenController::class, 'confirm']);
+    Route::get('kelola_dosen/show', [DosenController::class, 'show'])->name('show-data');
+    Route::get('kelola_dosen/menu_save', [DosenController::class, 'menu_save']);
+
 
 });
 

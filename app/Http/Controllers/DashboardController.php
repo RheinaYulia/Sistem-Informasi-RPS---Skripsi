@@ -56,10 +56,10 @@ class DashboardController extends Controller
         };*/
 
         switch (Auth::user()->getRole()){
-            case 'SPR': return $this->index_admin($breadcrumb, $activeMenu, $page); break;
-            case 'ADM' : return $this->index_admin($breadcrumb, $activeMenu, $page); break;
-            case 'DSN' : return $this->index_dosen($breadcrumb, $activeMenu, $page); break;
-            case 'MHS' : return $this->index_mahasiswa($breadcrumb, $activeMenu, $page); break;
+            case 'ADM': return $this->index_admin($breadcrumb, $activeMenu, $page); break;
+            case 'DSN' : return $this->index_admin($breadcrumb, $activeMenu, $page); break;
+            case 'DKR' : return $this->index_dosen($breadcrumb, $activeMenu, $page); break;
+            case 'KPR' : return $this->index_mahasiswa($breadcrumb, $activeMenu, $page); break;
             default : return $this->index_default($breadcrumb, $activeMenu, $page); break;
         }
 

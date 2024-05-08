@@ -39,7 +39,7 @@ class GroupMenuModel extends AppModel
             })
             ->where('m.is_active', '=', 1)
             ->orderBy('m.order_no');
-
+            
         if(empty($parent_id)){
             $map->where(function($query){
                 $query->whereNull('m.parent_id')

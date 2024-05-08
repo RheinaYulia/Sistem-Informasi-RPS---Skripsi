@@ -10,20 +10,21 @@
                             <i class="fas fa-angle-double-right text-md text-{{ $theme->card_outline }} mr-1"></i>
                             {!! $page->title !!}
                         </h3>
+
                         <div class="card-tools">
     @if($allowAccess->create)
     {{-- && auth()->user()->is_active= 0 --}}
         <button type="button" data-block="body" class="btn btn-sm btn-{{ $theme->button }} mt-1 ajax_modal" data-url="{{ $page->url }}/create"><i class="fas fa-plus"></i> Tambah</button>
     @endif
 </div>
-                    </div>
+                       
                     <div class="card-body p-0">
                         <div class="table-responsive">
                         <table class="table table-striped table-hover table-full-width" id="table_master">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Dosen</th>
+                                    <th>Mata Kuliah</th>
                                     <th>#</th>
                                 </tr>
                             </thead>
@@ -71,7 +72,7 @@
                         "bSortable": false,
                         "bSearchable": false,
                         "mRender": function(data, type, row, meta) {
-                            return  ''
+                            return  ''y
                                     @if($allowAccess->update) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/edit" class="ajax_modal btn btn-xs btn-warning tooltips text-secondary" data-placement="left" data-original-title="Edit Data" ><i class="fa fa-edit"></i></a> ` @endif
                                     @if($allowAccess->delete) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/delete" class="ajax_modal btn btn-xs btn-danger tooltips text-light" data-placement="left" data-original-title="Hapus Data" ><i class="fa fa-trash"></i></a> ` @endif
                             ;

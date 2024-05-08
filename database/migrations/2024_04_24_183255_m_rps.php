@@ -19,6 +19,8 @@ class MRps extends Migration
             $table->unsignedBigInteger('kurikulum_mk_id')->index();
             $table->text('deskripsi_rps')->index();
             $table->date('tanggal_penyusunan')->nullable();
+            $table->tinyInteger('verifikasi')->default(0);
+            $table->tinyInteger('pengesahan')->default(0);
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();

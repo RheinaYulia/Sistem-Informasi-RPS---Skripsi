@@ -3,7 +3,7 @@
 namespace App\Models\Setting;
 
 
-use App\Models\Master\DosenModel;
+use App\Models\Dosen\DosenModel;
 use App\Models\Master\MahasiswaModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -99,13 +99,13 @@ class UserModel extends Authenticatable
 
 
 
-    /*
-        Relasi terhadap data SISWA
-    */
-    public function getUserMahasiswa()
-    {
-        return $this->hasOne(MahasiswaModel::class, 'user_id', 'user_id');
-    }
+    // /*
+    //     Relasi terhadap data SISWA
+    // */
+    // public function getUserMahasiswa()
+    // {
+    //     return $this->hasOne(MahasiswaModel::class, 'user_id', 'user_id');
+    // }
 
 
 
@@ -143,4 +143,5 @@ class UserModel extends Authenticatable
         return self::where('user_id', $id)
             ->update($data);
     }
+   
 }
