@@ -18,14 +18,14 @@ class SGroupMenuSeeder extends Seeder
         $menu_admin = [];
         $menu_dokur = [];
         $menu_kaprodi = [];
-        for ($i = 1; $i <= 20; $i++) {
-            if ($i === 15 || $i === 17) {
+        for ($i = 1; $i <= 22; $i++) {
+            if ($i === 17 || $i === 19) {
                 $menu_dokur[] = ['group_id'  => 3, 'menu_id'   => $i, 'c'   => 1, 'r'    => 1, 'u'   => 1, 'd' => 1];
-            } if ($i === 1 || ($i >= 11 && $i <= 14)) {
+            } if ($i === 1 || ($i >= 11 && $i <= 16)) {
                 $menu_admin[] = ['group_id'  => 2, 'menu_id'   => $i, 'c'   => 0, 'r'    => 1, 'u'   => 0, 'd' => 0];
                 $menu_kaprodi[] = ['group_id'  => 4, 'menu_id'   => $i, 'c'   => 0, 'r'    => 1, 'u'   => 0, 'd' => 0];
                 $menu_dokur[] = ['group_id'  => 3, 'menu_id'   => $i, 'c'   => 0, 'r'    => 1, 'u'   => 0, 'd' => 0];
-            } if($i === 16 || ($i >= 18 && $i <= 20)) {
+            } if($i === 18 || ($i >= 18 && $i <= 22)) {
                 $menu_kaprodi[] = ['group_id'  => 4, 'menu_id'   => $i, 'c'   => 1, 'r'    => 1, 'u'   => 1, 'd' => 1];
                 $menu_admin[] = ['group_id'  => 2, 'menu_id'   => $i, 'c'   => 0, 'r'    => 1, 'u'   => 0, 'd' => 0];
                 $menu_dokur[] = ['group_id'  => 3, 'menu_id'   => $i, 'c'   => 0, 'r'    => 1, 'u'   => 0, 'd' => 0];

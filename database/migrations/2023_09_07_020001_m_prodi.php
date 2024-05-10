@@ -15,7 +15,7 @@ class MProdi extends Migration
     {
         Schema::create('m_prodi', function (Blueprint $table) {
             $table->id('prodi_id');
-            $table->string('prodi_name', 100)->unique();
+            $table->string('nama_prodi', 100)->unique();
             $table->tinyInteger('is_active')->default(0);
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();

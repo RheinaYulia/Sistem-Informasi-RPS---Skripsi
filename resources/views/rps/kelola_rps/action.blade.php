@@ -43,7 +43,20 @@
                         <input type="textarea" class="form-control form-control-sm" id="deskripsi_rps" name="deskripsi_rps" value="{{ isset($data->deskripsi_rps) ? $data->deskripsi_rps : '' }}"/>
                     </div>
                 </div>
-               
+
+                <div class="form-group required row mb-2">
+                    <!-- Date -->
+                    <label class="col-sm-3 control-label col-form-label">Tanggal Penyusunan</label>
+                    <div class="col-sm-9">
+                      <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                          <input type="text" name="tanggal_penyusunan" id="tanggal_penyusunan" class="form-control datetimepicker-input" data-target="#reservationdate" value="{{ isset($data->tanggal_penyusunan) ? $data->tanggal_penyusunan : '' }}"/>
+                          <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+       
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
@@ -53,6 +66,17 @@
 </form>
 
 <script>
+     $(document).ready(function() {
+        $('#reservationdate').datetimepicker({
+            format: 'YYYY-MM-DD',
+            locale: moment.locale('id')
+});
+    });
+</script>
+
+<script>
+
+
     $(document).ready(function () {
         unblockUI();
 
@@ -70,6 +94,9 @@
                     digits: true
                 },
                 deskripsi_rps: {
+                    required: true
+                },
+                tanggal_penyusunan: {
                     required: true
                 }
             },

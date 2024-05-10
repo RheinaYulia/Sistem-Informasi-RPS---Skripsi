@@ -24,6 +24,7 @@ class RpsModel extends AppModel
         'kaprodi_id',
         'kurikulum_mk_id',
         'deskripsi_rps',
+        'tanggal_penyusunan',
         'created_at',
         'created_by',
         'updated_at',

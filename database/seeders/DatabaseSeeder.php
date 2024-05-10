@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use DCpmk;
+use DKaprodi;
 use Illuminate\Database\Seeder;
+use MCplProdi;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +22,19 @@ class DatabaseSeeder extends Seeder
             SUserSeeder::class,
             SMenuSeeder::class,
             SGroupMenuSeeder::class,
+            
+            MatkulSeeder::class,
+            MProdiSeeder::class,
+            DDosenSeeder::class,
+            DKurikulumSeeder::class,
+            DRumpunMKSeeder::class,
+            DKaprodiSeeder::class,
+            DKurikulumMKSeeder::class,
+            MCplProdiSeeder::class,
+            DCpmkSeeder::class,
+            MBkSeeder::class,
+            TCplCpmkSeeder::class,
+            TMkBkSeeder::class,
         ]);
     }
 }

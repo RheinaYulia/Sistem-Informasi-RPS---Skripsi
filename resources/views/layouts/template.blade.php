@@ -43,6 +43,11 @@
         integrity="sha512-rBi1cGvEdd3NmSAQhPWId5Nd6QxE8To4ADjM2a6n0BrqQdisZ/RPUlm0YycDzvNL1HHAh1nKZqI0kSbif+5upQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" 
+        integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        
+    <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"
         integrity="sha512-kq3FES+RuuGoBW3a9R2ELYKRywUEQv0wvPTItv3DSGqjpbNtGWVdvT8qwdKkqvPzT93jp8tSF4+oN4IeTEIlQA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -56,9 +61,14 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/daterangepicker/daterangepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/datepicker/css/bootstrap-datepicker.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.css') }}">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="{{ asset('assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/moment/moment-with-locales.min.js')}}">
+
     @endif
     <link rel="stylesheet" href="{{ asset('assets/dist/css/custom.css') }}">
 
@@ -133,12 +143,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js"
         integrity="sha512-mh+AjlD3nxImTUGisMpHXW03gE6F4WdQyvuFRkjecwuWLwD2yCijw4tKA3NsEFpA1C3neiKhGXPSIGSfCYPMlQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" 
+        integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('assets/plugins/jquery-file-download/ajaxdownloader.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/store-js/store.everything.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.0.1/js/adminlte.min.js"
         integrity="sha512-A492om6jtW/jTQioO8fpDRHVRR5jjP2d9RvqFoaP/sRHBuORYREu42G/tRiu489qVA1QRhyqtbr53wJDS4sl6g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
+        <script src = "https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js"></script>
+        
     @else
     <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
@@ -148,7 +164,9 @@
     <script src="{{ asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-
+    
+    
+    
     <script src="{{ asset('assets/plugins/jquery-ui/jquery.blockUI.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
@@ -157,11 +175,15 @@
     <script src="{{ asset('assets/plugins/jquery-validation/jquery.form.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/inputmask/min/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datepicker/css/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/jquery-file-download/ajaxdownloader.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/store-js/store.everything.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
     <script src="{{ asset('assets/dist/js/adminlte.js') }}"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{{ asset('assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
+    <script src="{{ asset('assets/plugins/moment/locale/id.js')}}"></script>
     @endif
     <script src="{{ asset('assets/plugins/jquery-jclock/jquery.jclock.min.js') }}"></script>
 

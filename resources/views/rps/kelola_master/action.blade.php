@@ -3,7 +3,7 @@
     $is_edit = isset($data);
 ?>
 
-<form method="post" action="{{$page->url}}/menu_save" role="form" class="form-horizontal" id="form-master">
+<form method="post" action="{{$page->url}}" role="form" class="form-horizontal" id="form-master">
     @csrf
     {!! ($is_edit)? method_field('PUT') : '' !!}
     <div id="modal-master" class="modal-dialog modal-md" role="document">
@@ -63,7 +63,7 @@
                         <div class="col-sm-9">
                             <select type="text" class="form-control form-control-sm select2_combobox" id="dosen_id" name="dosen_id">
                                 <option value="">-</option>
-                                @foreach ($data as $d)
+                                @foreach ($dosen as $d)
                                     <option value="{{ $d->dosen_id }}">{{ $d->nama_dosen }}</option>
                                 @endforeach
                             </select>
@@ -71,6 +71,8 @@
                         </div>
                     </div>
             </div>
+
+            
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>

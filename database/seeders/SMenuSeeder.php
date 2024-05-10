@@ -44,27 +44,31 @@ class SMenuSeeder extends Seeder
 
                 //Level 2
                 ['menu_id' => '12','menu_scope' => 'DSN','menu_code' => 'RPS.KELOLARPS','menu_name' => 'Kelola RPS','menu_url' => 'rps/kelola_rps','menu_level' => '2','order_no' => '15','parent_id' => '11','class_tag' => 'rps-kelola_rps','icon' => 'fas fa-minus text-xs','is_active' => '1'],
-                ['menu_id' => '13','menu_scope' => 'DSN','menu_code' => 'RPS.KELOLAKONTRAK','menu_name' => 'Kelola Kontrak Kuliah','menu_url' => 'rps/kelola_kontrak','menu_level' => '2','order_no' => '16','parent_id' => '11','class_tag' => 'rps-kelola_kontrak','icon' => 'fas fa-minus text-xs','is_active' => '1'],
-                ['menu_id' => '14','menu_scope' => 'DSN','menu_code' => 'RPS.RPSIKU','menu_name' => 'Kelola RPS IKU','menu_url' => 'rps/kelola_rpsiku','menu_level' => '2','order_no' => '17','parent_id' => '11','class_tag' => 'rps-kelila_rpsiku','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '13','menu_scope' => 'DSN','menu_code' => 'RPS.KELOLAMASTER','menu_name' => 'Kelola Master RPS','menu_url' => 'rps/kelola_master','menu_level' => '2','order_no' => '16','parent_id' => '11','class_tag' => 'rps-kelola_master','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '14','menu_scope' => 'DSN','menu_code' => 'RPS.KELOLABAB','menu_name' => 'Kelola Bab RPS','menu_url' => 'rps/kelola_bab','menu_level' => '2','order_no' => '17','parent_id' => '11','class_tag' => 'rps-kelola_bab','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '15','menu_scope' => 'DSN','menu_code' => 'RPS.KELOLAKONTRAK','menu_name' => 'Kelola Kontrak Kuliah','menu_url' => 'rps/kelola_kontrak','menu_level' => '2','order_no' => '18','parent_id' => '11','class_tag' => 'rps-kelola_kontrak','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '16','menu_scope' => 'DSN','menu_code' => 'RPS.RPSIKU','menu_name' => 'Kelola RPS IKU','menu_url' => 'rps/kelola_rpsiku','menu_level' => '2','order_no' => '19','parent_id' => '11','class_tag' => 'rps-kelila_rpsiku','icon' => 'fas fa-minus text-xs','is_active' => '1'],
 
+                //level 3
+                
             
                 /////////////////////////////////
             //////// DOSEN KURIKULUM //////////
             /////////////////////////////////
 
-                ['menu_id' => '15','menu_scope' => 'DKR','menu_code' => 'PENGEMBANG','menu_name' => 'Pengembang','menu_url' => NULL,'menu_level' => '1','order_no' => '6','parent_id' => NULL,'class_tag' => 'pengembang','icon' => 'fas fa-th','is_active' => '1'],
-                ['menu_id' => '16','menu_scope' => 'DKR','menu_code' => 'VERIFIKASI','menu_name' => 'Verifikasi','menu_url' => NULL,'menu_level' => '1','order_no' => '7','parent_id' => NULL,'class_tag' => 'verifikasi','icon' => 'fas fa-th','is_active' => '1'],
+                ['menu_id' => '17','menu_scope' => 'DKR','menu_code' => 'PENGEMBANG','menu_name' => 'Pengembang','menu_url' => NULL,'menu_level' => '1','order_no' => '6','parent_id' => NULL,'class_tag' => 'pengembang','icon' => 'fas fa-th','is_active' => '1'],
+                ['menu_id' => '18','menu_scope' => 'DKR','menu_code' => 'VERIFIKASI','menu_name' => 'Verifikasi','menu_url' => NULL,'menu_level' => '1','order_no' => '7','parent_id' => NULL,'class_tag' => 'verifikasi','icon' => 'fas fa-th','is_active' => '1'],
                 //Level 2
-                ['menu_id' => '17','menu_scope' => 'DKR','menu_code' => 'PENGEMBANG.DOSEN','menu_name' => 'Pengembang Dosen','menu_url' => 'rps/pengembang','menu_level' => '2','order_no' => '18','parent_id' => '15','class_tag' => 'pengembang-dosen','icon' => 'fas fa-minus text-xs','is_active' => '1'],
-                ['menu_id' => '18','menu_scope' => 'DKR','menu_code' => 'VERIFIKASI.RPS','menu_name' => 'Verifikasi RPS','menu_url' => 'rps/verifikasi','menu_level' => '2','order_no' => '19','parent_id' => '16','class_tag' => 'verifikasi-rps','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '19','menu_scope' => 'DKR','menu_code' => 'PENGEMBANG.DOSEN','menu_name' => 'Pengembang Dosen','menu_url' => 'rps/pengembang','menu_level' => '2','order_no' => '20','parent_id' => '17','class_tag' => 'pengembang-dosen','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '20','menu_scope' => 'DKR','menu_code' => 'VERIFIKASI.RPS','menu_name' => 'Verifikasi RPS','menu_url' => 'rps/verifikasi','menu_level' => '2','order_no' => '21','parent_id' => '18','class_tag' => 'verifikasi-rps','icon' => 'fas fa-minus text-xs','is_active' => '1'],
                 
                 /////////////////////////////////
             //////// KAPRODI //////////
             /////////////////////////////////
 
-            ['menu_id' => '19','menu_scope' => 'KPR','menu_code' => 'PENGESAHAN','menu_name' => 'Pengesahan','menu_url' => NULL,'menu_level' => '1','order_no' => '6','parent_id' => NULL,'class_tag' => 'pengesahan','icon' => 'fas fa-th','is_active' => '1'],
+            ['menu_id' => '21','menu_scope' => 'KPR','menu_code' => 'PENGESAHAN','menu_name' => 'Pengesahan','menu_url' => NULL,'menu_level' => '1','order_no' => '6','parent_id' => NULL,'class_tag' => 'pengesahan','icon' => 'fas fa-th','is_active' => '1'],
             //Level 2
-            ['menu_id' => '20','menu_scope' => 'KPR','menu_code' => 'PENGESAHAN.RPS','menu_name' => 'Pengesahan RPS','menu_url' => 'rps/pengesahan','menu_level' => '2','order_no' => '18','parent_id' => '19','class_tag' => 'pengesahan-rps','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+            ['menu_id' => '22','menu_scope' => 'KPR','menu_code' => 'PENGESAHAN.RPS','menu_name' => 'Pengesahan RPS','menu_url' => 'rps/pengesahan','menu_level' => '2','order_no' => '22','parent_id' => '21','class_tag' => 'pengesahan-rps','icon' => 'fas fa-minus text-xs','is_active' => '1'],
 
 
             

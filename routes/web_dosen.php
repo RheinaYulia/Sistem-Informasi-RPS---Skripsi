@@ -9,6 +9,7 @@ use App\Http\Controllers\Proposal\DosenUjianSemproController;
 use App\Http\Controllers\Proposal\DosenUsulanTopikController;
 use App\Http\Controllers\Proposal\DosenSemproController;
 use App\Http\Controllers\Rps\RpsController;
+use App\Http\Controllers\Rps\RPSdetailController;
 use App\Http\Controllers\Setting\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +31,10 @@ Route::group(['prefix' => 'rps', 'middleware' => ['auth']], function() {
      Route::post('kelola_rps/list', [RpsController::class, 'list']);
      Route::get('kelola_rps/{id}/delete', [RpsController::class, 'confirm']);
      Route::get('kelola_rps/{id}/showi', [RpsController::class, 'showi']);
-     Route::post('kelola_rps/{id}/menu_save', [RPSController::class, 'menu_save']);
+     Route::post('kelola_rps/{id}/detail/menu_save', [RPSController::class, 'menu_save']);
+
+      // Kelola Dosen
+      Route::resource('kelola_master', RPSdetailController::class)->parameter('kelola_master', 'id');
+      Route::post('kelola_master/list', [RPSdetailController::class, 'list']);
+      Route::get('kelola_master/{id}/delete', [RPSdetailController::class, 'confirm']);
 });

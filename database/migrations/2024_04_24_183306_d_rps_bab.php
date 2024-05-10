@@ -20,7 +20,7 @@ class DRpsBab extends Migration
             $table->string('sub_cpmk',500)->nullable();
             $table->text('materi')->nullable();
             $table->string('estimasi_waktu',50)->nullable();
-            $table->text('pegalaman_belajar')->nullable();
+            $table->text('pengalaman_belajar')->nullable();
             $table->text('indikator_penilaian')->nullable();
             $table->decimal('bobot_penilaian')->nullable();
             $table->date('tanggal_penyusunan')->nullable();
