@@ -198,7 +198,7 @@ class RpsController extends Controller
             'title' => 'Edit ' . $this->menuTitle
         ];
 
-        $data  = RpsView::where('rps_id', $id)->first();
+        $data  = RpsModel::find($id);
         
         $kaprodi = KaprodiModel::selectRaw("kaprodi_id, prodi_id, tahun")->get();
         $kurikulumk  = KurikulumMKModel::getMks();
