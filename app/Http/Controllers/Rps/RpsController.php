@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Rps;
 use App\Http\Controllers\Controller;
 use App\Models\KaprodiModel;
 use App\Models\KurikulumMKModel;
+use App\Models\Rps\RpsBabModel;
 use App\Models\Rps\RpsModel;
 use App\Models\View\RpsView;
 use Illuminate\Http\Request;
@@ -52,13 +53,17 @@ class RpsController extends Controller
     public function list(Request $request){
         $this->authAction('read', 'json');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
-
-        $data  = RpsModel::getMkRps();
-
+    
+        // Ambil nilai create_by dari request (misalnya dari user session atau request parameter)
+        $userId = $request->user()->user_id;
+    
+        $data = RpsModel::getMkRps($userId);
+    
         return DataTables::of($data)
             ->addIndexColumn()
             ->make(true);
     }
+    
 
     public function create(){
         $this->authAction('create || update', 'modal');
@@ -69,7 +74,8 @@ class RpsController extends Controller
             'title' => 'Tambah ' . $this->menuTitle
         ];
 
-        $kaprodi = KaprodiModel::selectRaw("kaprodi_id, prodi_id, tahun")->get();
+        $data  = RpsModel::get();
+        $kaprodi = KaprodiModel::getKaprodiWithNamaDosen();
         $kurikulumk  = KurikulumMKModel::getMks();
 
         return view($this->viewPath . 'action')
@@ -116,78 +122,51 @@ class RpsController extends Controller
         return redirect('/');
     }
 
-    public function showi($id){
-        $this->authAction('create || update', 'json');
+    public function show($id){
+        $this->authAction('read', 'modal');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        
-        // untuk set konten halaman web
-        $page = [
-            'url' => $this->menuUrl . '/' . $id . '/detail',
-            'title' => 'Detail Hak Akses'
-        ];
-        
-        $data = DB::select('CALL sp_get_rps_data(?)', array($id));
+        $data = RpsModel::getRpsDescription($id);
+        $mediaview = RpsModel::getRpsMedia($id);
+        $bab = RpsBabModel::getRpsBab($id);
+        $pengembang = RpsModel::getPengembang($id);
 
+        $page = [
+            'title' => 'Detail ' . $this->menuTitle
+        ];
 
         return (!$data)? $this->showModalError() :
             view($this->viewPath . 'detail')
                 ->with('page', (object) $page)
                 ->with('id', $id)
-                ->with('data', $data);
+                ->with('data', $data)
+                ->with('mediaview', $mediaview)
+                ->with('pengembang', $pengembang)
+                ->with('bab', $bab);
     }
 
-    public function menu_save(Request $request)
-    {
-        $this->authAction('create || update', 'json');
+    public function shows($id){
+        $this->authAction('read', 'modal');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        // cek untuk Insert/Update/Delete harus via AJAX
-        if ($request->ajax() || $request->wantsJson()) {
+        $data = RpsModel::getRpsDescription($id);
+        $mediaview = RpsModel::getRpsMedia($id);
+        $bab = RpsBabModel::getRpsBab($id);
 
-            $rules = [
-                'rps_id' => 'required|integer',
-                'jenis_media' => 'required|integer',
-            'nama_media' => 'required|string',
-            'dosen_id' => 'required|integer',
-            ];
+        $page = [
+            'title' => 'Detail ' . $this->menuTitle
+        ];
 
-            $validator = Validator::make($request->all(), $rules);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'stat'     => false,
-                    'mc'       => false,
-                    'msg'      => 'Terjadi kesalahan.',
-                    'msgField' => $validator->errors()
-                ]);
-            }
-
-           // Panggil stored procedure untuk insert atau update
-        try {
-            $results = DB::select('CALL sp_InsertOrUpdateRPS(?, ?, ?, ?)', [
-                $request->input('rps_id'),
-                $request->input('jenis_media'),
-                $request->input('nama_media'),
-                $request->input('dosen_id'),
-            ]);
-            $res = ($results) ? true : false;
-            return response()->json([
-                'stat' => $res,
-                'mc' => $res, // close modal
-                'msg' => ($res) ? $this->getMessage('update.success') : $this->getMessage('update.failed')
-            ]);
-        } catch (\Exception $e) {
-            // Tangani kesalahan jika panggilan stored procedure gagal
-            return response()->json([
-                'stat' => false,
-                'mc' => false,
-                'msg' => 'Terjadi kesalahan saat memproses data.'
-            ]);
-        }
+        return (!$data)? $this->showModalError() :
+            view($this->viewPath . 'cetak-rps')
+                ->with('page', (object) $page)
+                ->with('id', $id)
+                ->with('data', $data)
+                ->with('mediaview', $mediaview)
+                ->with('bab', $bab);
     }
-    return redirect('/');
-}
+
+
 
     public function edit($id){
         $this->authAction('update', 'modal');
@@ -200,8 +179,8 @@ class RpsController extends Controller
 
         $data  = RpsModel::find($id);
         
-        $kaprodi = KaprodiModel::selectRaw("kaprodi_id, prodi_id, tahun")->get();
-        $kurikulumk  = KurikulumMKModel::getMks();
+        $kaprodi = KaprodiModel::getKaprodiWithNamaDosen();
+        $kurikulumk  = KurikulumMKModel::getMksWithSelected($data->kurikulum_mk_id);
 
         return (!$data)? $this->showModalError() :
             view($this->viewPath . 'action')
@@ -242,6 +221,40 @@ class RpsController extends Controller
                 'stat' => $res,
                 'mc' => $res, // close modal
                 'msg' => ($res)? $this->getMessage('update.success') : $this->getMessage('update.failed')
+            ]);
+        }
+
+        return redirect('/');
+    }
+
+    public function confirm($id)
+{
+    $this->authAction('delete', 'modal');
+    if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+    $data = RpsModel::getRpsDelete($id);
+
+    return (!$data) ? $this->showModalError() :
+        $this->showModalConfirm($this->menuUrl . '/' . $id, [
+            'Mata Kuliah' => $data->mk_nama,
+            'Nama Dosen' => $data->nama_dosen,
+            'Deskripsi' => $data->deskripsi_rps,
+            'Tanggal Penyusunan' => $data->tanggal_penyusunan,
+        ]);
+}
+
+    public function destroy(Request $request, $id){
+        $this->authAction('delete', 'json');
+        if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+        if ($request->ajax() || $request->wantsJson()) {
+
+            $res = RpsModel::deleteData($id);
+
+            return response()->json([
+                'stat' => $res,
+                'mc' => $res, // close modal
+                'msg' => RpsModel::getDeleteMessage()
             ]);
         }
 

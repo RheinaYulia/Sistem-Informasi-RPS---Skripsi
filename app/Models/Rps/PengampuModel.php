@@ -3,7 +3,7 @@
 namespace App\Models\Rps;
 
 use App\Models\AppModel;
-
+use App\Models\Dosen\DosenModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -40,6 +40,11 @@ class PengampuModel extends AppModel
     public function rps()
     {
         return $this->belongsTo(RpsModel::class, 'rps_id', 'rps_id');
+    }
+
+    public function pengampu()
+    {
+        return $this->belongsTo(DosenModel::class, 'dosen_id', 'dosen_id');
     }
 
     public static function getDosenPengampu($rps_id){

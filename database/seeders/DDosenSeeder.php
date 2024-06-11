@@ -15,8 +15,12 @@ class DDosenSeeder extends Seeder
     public function run()
     {
         DB::table('d_dosen')->insert([
-            ['dosen_id' => 1, 'nama_dosen' => 'Coba'],
-            ['dosen_id' => 2, 'nama_dosen' => 'Tes'],
+            ['dosen_id' => 1, 'user_id'=> 2, 'nama_dosen' => 'Dosen 1'],
+            ['dosen_id' => 2, 'user_id'=> 2, 'nama_dosen' => 'Dosen 2'],
+            ['dosen_id' => 3, 'user_id'=> 3,'nama_dosen' => 'Dosen Kurikulum 1'],
+            ['dosen_id' => 4, 'user_id'=> 3,'nama_dosen' => 'Dosen Kurikulum 2'],
+            ['dosen_id' => 5, 'user_id'=> 4,'nama_dosen' => 'Kaprodi TI'],
+            ['dosen_id' => 6, 'user_id'=> 4,'nama_dosen' => 'Kaprodi SIB'],
         ]);
     }
 }

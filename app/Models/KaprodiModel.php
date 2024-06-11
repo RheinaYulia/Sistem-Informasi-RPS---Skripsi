@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class KaprodiModel extends Model
 {
@@ -19,6 +20,7 @@ class KaprodiModel extends Model
     protected $fillable = [
         'kaprodi_id',
         'prodi_id',
+        'dosen_id',
         'tahun',
         'created_at',
         'created_by',
@@ -33,5 +35,15 @@ class KaprodiModel extends Model
         //  Model => columnFK
         //'App\Models\Master\EmployeeModel' => 'jabatan_id'
     ];
+
+    public static function getKaprodiWithNamaDosen()
+    {
+        return DB::table('d_kaprodi as k')
+            ->join('d_dosen as d', 'k.dosen_id', '=', 'd.dosen_id')
+            ->select('k.kaprodi_id', 'd.nama_dosen')
+            ->get();
+    }
+
+    
 }
 

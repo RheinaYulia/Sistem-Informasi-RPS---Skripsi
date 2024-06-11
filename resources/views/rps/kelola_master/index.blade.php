@@ -11,13 +11,45 @@
                             {!! $page->title !!}
                         </h3>
 
-                        <div class="card-tools">
-    @if($allowAccess->create || $allowAccess->update)
-    
-        <button type="button" data-block="body" class="btn btn-sm btn-{{ $theme->button }} mt-1 ajax_modal" data-url="{{ $page->url }}/create"><i class="fas fa-plus"></i> Tambah</button>
-    @endif
-</div>
-                       
+                {{-- <style>
+                   .btn-app-small {
+                    margin-top: 7px;
+                    padding-top: 5px !important;
+                    font-size: 5px !important;
+                    width: auto !important;
+                    height: 30px !important;
+                    line-height: 1.0 !important;
+                    }
+
+                    .btn-app-small i {
+                        font-size: 12px !important; /* Sesuaikan ukuran ikon */
+                    }
+
+                    .btn-app-small .btn-text {
+                        font-size: 5px !important; /* Sesuaikan ukuran teks */
+                    }
+
+                    .btn-app-small .badge {
+                        font-size: 10px !important; /* Sesuaikan ukuran font dalam span */
+                        padding: 2px 3px !important; /* Sesuaikan padding dalam span */
+                    }
+
+                    .custom-btn-container {
+                        display: inline-block; /* Pastikan div mengikuti ukuran konten di dalamnya */
+                    }
+
+                    .custom-btn-container .btn-app {
+                        height: 50px !important; /* Ubah tinggi tombol */
+                        width: 30px !important;  /* Ubah lebar tombol */
+                        font-size: 12px !important; /* Ubah ukuran teks tombol */
+                        line-height: 1.5 !important; /* Sesuaikan tinggi garis jika diperlukan */
+                    } 
+
+                    .custom-btn-container .btn-app i {
+                        font-size: 12px !important; /* Ubah ukuran ikon */
+                    }
+                </style> --}}
+                
                     <div class="card-body p-0">
                         <div class="table-responsive">
                         <table class="table table-striped table-hover table-full-width" id="table_master">
@@ -25,7 +57,9 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Mata Kuliah</th>
-                                    <th>#</th>
+                                    <th>Pengembang</th>
+                                    <th> Edit Bab </th>
+                                    <th>Edit Master</th>
                                 </tr>
                             </thead>
                         </table>
@@ -70,16 +104,31 @@
                         
                     },
                     {
-                        "mData": "rps_id",
+                    "mData": "rps_id",
                         "sClass": "text-center pr-2",
-                        "sWidth": "8%",
+                        "sWidth": "10%",
                         "bSortable": false,
                         "bSearchable": false,
                         "mRender": function(data, type, row, meta) {
-                            return ''
-                                @if($allowAccess->update) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/showi" class="ajax_modal btn btn-xs btn-info tooltips text-light text-xs" data-placement="left" data-original-title="RPS" ><i class="fa fa-th"></i> Detail</a> ` @endif
+                            return  ''
+                                    @if($allowAccess->update) + `<a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/edit1" class="ajax_modal btn btn-xs btn-primary tooltips text-white" data-placement="left" data-original-title="Edit Data" ><i class="fas fa-users"></i></a> ` @endif
+                            ;
                         }
                     },
+                    {
+                    "mData": "rps_id",
+                        "sClass": "text-center pr-2",
+                        "sWidth": "10%",
+                        "bSortable": false,
+                        "bSearchable": false,
+                        "mRender": function(data, type, row, meta) {
+                            return  ''
+                            @if($allowAccess->update) 
+                            + '<a href="{{ $page->url }}/bab_rps/kelola-data' + '/' + data + '" class="btn btn-xs btn-info tooltips text-light" data-placement="left" data-original-title="Kelola Data"><i class="fa fa-cogs"></i></a>' @endif
+                            ;
+                        }
+                    },
+                    
                     {
                         "mData": "rps_id",
                         "sClass": "text-center pr-2",
@@ -88,9 +137,27 @@
                         "bSearchable": false,
                         "mRender": function(data, type, row, meta) {
                             return  ''
-                                    @if($allowAccess->update) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/edit" class="ajax_modal btn btn-xs btn-warning tooltips text-secondary" data-placement="left" data-original-title="Edit Data" ><i class="fa fa-edit"></i></a> ` @endif
-                                    @if($allowAccess->delete) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/delete" class="ajax_modal btn btn-xs btn-danger tooltips text-light" data-placement="left" data-original-title="Hapus Data" ><i class="fa fa-trash"></i></a> ` @endif
-                            ;
+                                    // @if($allowAccess->update) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/edit" class="ajax_modal btn btn-xs btn-warning tooltips text-secondary" data-placement="left" data-original-title="Edit Data" ><i class="fa fa-edit"></i></a> ` @endif
+                                    // @if($allowAccess->delete) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/delete" class="ajax_modal btn btn-xs btn-danger tooltips text-light" data-placement="left" data-original-title="Hapus Data" ><i class="fa fa-trash"></i></a> ` @endif
+                                    // + '<a href="{{ $page->url }}/master_rps/kelola-data' + '/' + data + '" class="btn btn-xs btn-primary tooltips text-light" data-placement="left" data-original-title="Kelola Data"><i class="fa fa-cogs"></i></a>'
+                                    @if($allowAccess->update)
+                                    + `<div class="btn-group">
+                                            <button type="button" class="btn btn-warning">Edit Master</button>
+                                            <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu" role="menu">
+                                            {{-- <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/edit1" class="dropdown-item ajax_modal" data-original-title="Dosen Pengembang">Dosen Pengembang</a> --}}
+                                            <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editCplProdi" class="dropdown-item ajax_modal" data-original-title="CPL Prodi">CPL Prodi</a>
+                                            <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editCPMK" class="dropdown-item ajax_modal" data-original-title="CPMK">CPMK</a>
+                                            <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editBk" class="dropdown-item ajax_modal" data-original-title="Materi Pembelajaran">Materi Pembelajaran</a>
+                                            <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editPengampu" class="dropdown-item ajax_modal" data-original-title="Dosen Pengampu">Dosen Pengampu</a>
+                                            <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editMedia" class="dropdown-item ajax_modal" data-original-title="Media">Media</a>
+                                            <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editPustaka" class="dropdown-item ajax_modal" data-original-title="Pustaka">Pustaka</a>
+                                        
+                                            </div>
+                                        </div>` @endif
+                                    ;
                         }
                     }
                 ],

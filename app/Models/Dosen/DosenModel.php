@@ -3,7 +3,7 @@
 namespace App\Models\Dosen;
 
 use App\Models\AppModel;
-
+use App\Models\Rps\PengampuModel;
 use App\Models\Setting\UserModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,9 +24,9 @@ class DosenModel extends AppModel
 
     protected $fillable = [
         'user_id',
-        'group_id',
         'dosen_id',
         'nama_dosen',
+        'is_pengembang',
         'created_at',
         'created_by',
         'updated_at',
@@ -40,6 +40,16 @@ class DosenModel extends AppModel
         //  Model => columnFK
         //'App\Models\Master\EmployeeModel' => 'jabatan_id'
     ];
+
+    public function pengampu()
+    {
+        return $this->belongsTo(PengampuModel::class, 'dosen_id', 'dosen_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class, 'user_id', 'user_id');
+    }
 
     public static function getDosenMap( $tag = ''){
         $dosenData = DB::table('d_dosen')

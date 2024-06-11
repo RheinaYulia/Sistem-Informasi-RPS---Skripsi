@@ -70,22 +70,22 @@ class UserModel extends Authenticatable
 
     public function isSuperAdmin()
     {
-        return ($this->role->group_code == 'SPR' && $this->role->group_id == 1);
+        return ($this->role->group_code == 'ADM' && $this->role->group_id == 1);
     }
 
     public function isAdmin()
     {
-        return ($this->role->group_code == 'ADM' && $this->role->group_id == 2);
+        return ($this->role->group_code == 'DSN' && $this->role->group_id == 2);
     }
 
     public function isDosen()
     {
-        return ($this->role->group_code == 'DSN' && $this->role->group_id == 3);
+        return ($this->role->group_code == 'DKR' && $this->role->group_id == 3);
     }
 
     public function isMahasiswa()
     {
-        return ($this->role->group_code == 'MHS' && $this->role->group_id == 4);
+        return ($this->role->group_code == 'KPR' && $this->role->group_id == 4);
     }
 
 

@@ -12,16 +12,23 @@
                 <h5 class="modal-title" id="exampleModalLabel">{!! $page->title !!}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
+                <style>
+                    .option-frozen {
+                        color: grey;
+                    }
+                </style>
             </div>
             <div class="modal-body">
                 <div class="form-message text-center"></div>
                 <div class="form-group required row mb-2">
                     <label for="kaprodi_id" class="col-sm-3 control-label col-form-label">Kaprodi</label>
                     <div class="col-sm-9">
-                        <select select type="text" id="kaprodi_id" name="kaprodi_id" class="form-control form-control-sm select2_combobox">
-                            <option value=""> -</option>
-                            @foreach ($kaprodi as $r)
-                                <option value="{{ $r->kaprodi_id }}">{{ $r->prodi_id}} - {{$r->tahun }}</option>
+                        <select type="text" class="form-control form-control-sm select2_combobox" id="kaprodi_id" name="kaprodi_id">
+                            <option value="">-</option>
+                            @foreach ($kaprodi as $k)
+                                <option value="{{ $k->kaprodi_id }}" {{ $is_edit && isset($data->kaprodi_id) && $k->kaprodi_id == $data->kaprodi_id ? 'selected' : '' }}>
+                                    {{ $k->kaprodi_id }} - {{ $k->nama_dosen }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -32,11 +39,15 @@
                         <select type="text" class="form-control form-control-sm select2_combobox" id="kurikulum_mk_id" name="kurikulum_mk_id">
                             <option value="">-</option>
                             @foreach ($kurikulumk as $k)
-                                <option value="{{ $k->kurikulum_mk_id }}">{{ $k->kurikulum_mk_id }} - {{ $k->mk_nama }}</option>
+                                <option value="{{ $k->kurikulum_mk_id }}" {{ $is_edit && isset($data->kurikulum_mk_id) && $k->kurikulum_mk_id == $data->kurikulum_mk_id ? 'selected' : '' }}  {{ $k->is_frozen ? 'disabled' : '' }}>
+                                    {{ $k->kurikulum_mk_id }} - {{ $k->mk_nama }} 
+                                </option>
                             @endforeach
                         </select>
                     </div>
                 </div>
+                
+                           
                 <div class="form-group required row mb-2">
                     <label class="col-sm-3 control-label col-form-label">Deskripsi Rps</label>
                     <div class="col-sm-9">
@@ -80,9 +91,6 @@
     $(document).ready(function () {
         unblockUI();
 
-        @if($is_edit)
-            $('#jurusan_id').val('{{ $data->jurusan_id }}').trigger('change');
-        @endif
 
         $("#form-master").validate({
             rules: {

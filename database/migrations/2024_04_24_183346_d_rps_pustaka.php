@@ -16,6 +16,7 @@ class DRpsPustaka extends Migration
         Schema::create('d_rps_pustaka', function (Blueprint $table) {
             $table->id('rps_pustaka_id');
             $table->unsignedBigInteger('rps_id')->index();
+            $table->unsignedBigInteger('pustaka_id')->index();
             $table->tinyInteger('jenis_pustaka')->default(0);
             $table->string('referensi', 255)->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();

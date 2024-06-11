@@ -12,6 +12,8 @@ class SpInsertOrUpdateRPS extends Migration
      *
      * @return void
      */
+
+     
     public function up()
     {
         DB::unprepared("DROP procedure IF EXISTS sp_InsertOrUpdateRPS");

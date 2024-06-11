@@ -45,15 +45,34 @@ class KurikulumMKModel extends AppModel
     ];
 
     
-    public static function getMks(){
-        $map = DB::table('d_kurikulum_mk AS m')
-            ->selectRaw('m.kurikulum_mk_id, k.mk_nama')
-            ->join('m_mk AS k', function ($join) {
-                $join->on('m.mk_id', '=', 'k.mk_id');
-            })
-            ->get();
-        
-        return $map;
-    }
+    public static function getMks()
+{
+    $map = DB::table('d_kurikulum_mk AS m')
+        ->selectRaw('m.kurikulum_mk_id, k.mk_nama, COUNT(r.kurikulum_mk_id) > 0 AND r.deleted_at IS NULL AS is_frozen')
+        ->join('m_mk AS k', 'm.mk_id', '=', 'k.mk_id')
+        ->leftJoin('m_rps AS r', 'm.kurikulum_mk_id', '=', 'r.kurikulum_mk_id')
+        ->groupBy('m.kurikulum_mk_id', 'k.mk_nama')
+        ->get();
+
+    return $map;
+}
+
+public static function getMksWithSelected($selectedId)
+{
+    $map = DB::table('d_kurikulum_mk AS m')
+        ->selectRaw('m.kurikulum_mk_id, k.mk_nama, COUNT(r.kurikulum_mk_id) > 0 AND r.deleted_at IS NULL AS is_frozen')
+        ->join('m_mk AS k', 'm.mk_id', '=', 'k.mk_id')
+        ->leftJoin('m_rps AS r', 'm.kurikulum_mk_id', '=', 'r.kurikulum_mk_id')
+        ->groupBy('m.kurikulum_mk_id', 'k.mk_nama')
+        ->get()
+        ->map(function($item) use ($selectedId) {
+            $item->selected = $item->kurikulum_mk_id == $selectedId;
+            return $item;
+        });
+
+    return $map;
+}
+
+
 }
 

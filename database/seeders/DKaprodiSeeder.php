@@ -15,8 +15,8 @@ class DKaprodiSeeder extends Seeder
     public function run()
     {
         DB::table('d_kaprodi')->insert([
-            ['kaprodi_id' => 1, 'prodi_id' => 1,'dosen_id'=>1,'tahun'=>'2023'],
-            ['kaprodi_id' => 2, 'prodi_id' => 2,'dosen_id'=>2,'tahun'=>'2024'],
+            ['kaprodi_id' => 1, 'prodi_id' => 1,'dosen_id'=>5,'tahun'=>'2023'],
+            ['kaprodi_id' => 2, 'prodi_id' => 2,'dosen_id'=>6,'tahun'=>'2024'],
         ]);
     }
 }

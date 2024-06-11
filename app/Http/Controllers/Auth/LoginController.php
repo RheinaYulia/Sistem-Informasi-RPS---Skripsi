@@ -15,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Ramsey\Uuid\Uuid;
 
@@ -92,6 +93,7 @@ class LoginController extends Controller
 
             $this->_getUserMenu($db->group_id);
             //$periode = PeriodeModel::where('is_active', 1)->selectRaw('periode_id, periode_name')->first();
+            
 
             $this->redirectTo = url('/');
 
@@ -147,12 +149,22 @@ class LoginController extends Controller
 
     // get menu dinamis
     private function _getUserMenu($group_id, $parent_id = null){
+        // $dosen = DB::table('d_dosen')->where('user_id', $user_id)->first();
+
         $menu = DB::table('s_group_menu AS gm')
             ->join('s_menu AS m', 'gm.menu_id', '=', 'm.menu_id')
             ->where('gm.group_id', '=', $group_id)
             ->where('m.is_active', '=', 1)
             ->whereNull('gm.deleted_at')
             ->orderBy('m.order_no');
+
+
+        // if ($dosen && $dosen->is_pengembang == 0) {
+            
+        //     $menu->whereNotIn('gm.menu_id', [15,16,17,18,19]);
+        // }
+        // dd($user_id, $menu->toSql(), $menu->getBindings(), $menu->get());
+        
 
         if (empty($parent_id)) {
             $menu->where(function ($query) {
@@ -182,6 +194,7 @@ class LoginController extends Controller
 
                     $this->_getUserMenu($group_id, $d->menu_id);
                     $this->userMenu .= '</ul>';
+                   
                 }
             }
         }

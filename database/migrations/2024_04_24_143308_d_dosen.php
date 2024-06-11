@@ -16,12 +16,16 @@ class DDosen extends Migration
         Schema::create('d_dosen', function (Blueprint $table) {
             $table->id('dosen_id');
             $table->string('nama_dosen',50)->nullable();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->tinyInteger('is_pengembang')->default(0);
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();
             $table->integer('updated_by')->nullable()->index();
             $table->dateTime('deleted_at')->nullable()->index();
             $table->integer('deleted_by')->nullable()->index();
+
+            $table->foreign('user_id')->references('user_id')->on('s_user');
         });
     }
 

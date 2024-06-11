@@ -61,7 +61,7 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/daterangepicker/daterangepicker.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/datepicker/css/bootstrap-datepicker.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/plugins/datepicker/css/bootstrap-datepicker.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.css') }}">
@@ -164,7 +164,7 @@
     <script src="{{ asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    
+    <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
     
     
     <script src="{{ asset('assets/plugins/jquery-ui/jquery.blockUI.min.js') }}"></script>
@@ -175,7 +175,7 @@
     <script src="{{ asset('assets/plugins/jquery-validation/jquery.form.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/inputmask/min/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datepicker/css/bootstrap-datepicker.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/plugins/datepicker/css/bootstrap-datepicker.min.js') }}"></script> --}}
     <script src="{{ asset('assets/plugins/jquery-file-download/ajaxdownloader.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/store-js/store.everything.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>

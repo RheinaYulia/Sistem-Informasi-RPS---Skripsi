@@ -18,7 +18,6 @@ class DRpsBabMateri extends Migration
             $table->unsignedBigInteger('bab_id')->index();
             $table->string('judul_materi', 255)->nullable();
             $table->string('file_url', 255)->nullable();
-            $table->string('filr_dir', 255)->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();
