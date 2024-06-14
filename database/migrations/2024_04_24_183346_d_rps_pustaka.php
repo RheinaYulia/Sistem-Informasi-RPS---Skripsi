@@ -17,8 +17,6 @@ class DRpsPustaka extends Migration
             $table->id('rps_pustaka_id');
             $table->unsignedBigInteger('rps_id')->index();
             $table->unsignedBigInteger('pustaka_id')->index();
-            $table->tinyInteger('jenis_pustaka')->default(0);
-            $table->string('referensi', 255)->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();

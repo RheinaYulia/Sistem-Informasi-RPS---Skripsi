@@ -21,24 +21,45 @@
                     @foreach ($data as $d)
                         <input type="hidden" class="form-control form-control-sm" id="rps_id" name="rps_id" value="{{ $d->rps_id }}">
                     @endforeach
-                    <div class="col-sm-8">
+                </div>
+                    <div class="form-group required row mb-10">
+                        <div style="display: flex; justify-content: center; width: 100%;">
+                        <table border="1" style="border-collapse: collapse; width: 80%;">
+                            <tr>
+                                <th style="width: 45px;"></th>
+                                <th style="text-align: center; width: 60px;">Kode</th>
+                                <th style="text-align: center;">Deskripsi</th>
+                            </tr>
                         @foreach ($cpl as $c)
+                        <tr>
+                            <td style="text-align: center;">
                             @php
                                 // Cek apakah cpl_prodi_id ada di dalam selectCpl
                                 $isSelected = $selectCpl->firstWhere('cpl_prodi_id', $c->cpl_prodi_id);
                                 // Tentukan apakah checkbox harus dicentang
                                 $isChecked = $isSelected && $isSelected->is_selected;
                             @endphp
-                            <div class="icheck-success mb-3">
+                            <div class="icheck-success mb-9">
                                 <input type="checkbox" id="checkbox{{ $c->cpl_prodi_id }}" name="cpl_prodi_id[]" value="{{ $c->cpl_prodi_id }}" 
                                     @if ($isChecked) checked @endif>
+                                    <label for="checkbox{{ $c->cpl_prodi_id }}"></label>
+                                </div>
+                            </td>
+                            <td style="padding-left: 10px;">
+                                <label for="checkbox{{ $c->cpl_prodi_id }}">
+                                    {{ $c->cpl_prodi_kode }}
+                                </label>
+                            </td>
+                            <td style="padding-left: 10px;">
                                 <label for="checkbox{{ $c->cpl_prodi_id }}">
                                     {{ $c->cpl_prodi_deskripsi }}
                                 </label>
-                            </div>
+                            </td>
+                        </tr>
                         @endforeach
-                    </div>
+                    </table>
                 </div>
+            </div>
             
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>

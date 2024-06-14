@@ -6,7 +6,7 @@ use App\Http\Controllers\Dosen\DosenController;
 use App\Http\Controllers\Master\JurusanController;
 use App\Http\Controllers\Master\KategoriController;
 use App\Http\Controllers\Master\MahasiswaController;
-use App\Http\Controllers\Master\PeriodeController;
+use App\Http\Controllers\Setting\PeriodeController;
 use App\Http\Controllers\Master\ProdiController;
 use App\Http\Controllers\Master\TahapanProposalController;
 use App\Http\Controllers\Proposal\AdminHasilSeminarProposalController;
@@ -23,18 +23,6 @@ use App\Http\Controllers\Setting\UserController;
 use App\Http\Controllers\Transaction\QuotaDosenController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix' => 'master', 'middleware' => ['auth']], function () {
-
-    // Jurusan
-    Route::resource('jurusan', JurusanController::class)->parameter('jurusan', 'id');
-    Route::post('jurusan/list', [JurusanController::class, 'list']);
-    Route::get('jurusan/{id}/delete', [JurusanController::class, 'confirm']);
-
-    // Prodi
-    Route::resource('prodi', ProdiController::class)->parameter('prodi', 'id');
-    Route::post('prodi/list', [ProdiController::class, 'list']);
-    Route::get('prodi/{id}/delete', [ProdiController::class, 'confirm']);
-});
 
 Route::group(['prefix' => 'dosen', 'middleware' => ['auth']], function () {
 
@@ -65,4 +53,9 @@ Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
     Route::resource('user', UserController::class)->parameter('user', 'id');
     Route::post('user/list', [UserController::class, 'list']);
     Route::get('user/{id}/delete', [UserController::class, 'confirm']);
+
+    // User
+    Route::resource('periode', PeriodeController::class)->parameter('periode', 'id');
+    Route::post('periode/list', [PeriodeController::class, 'list']);
+    Route::get('periode/{id}/delete', [PeriodeController::class, 'confirm']);
 });

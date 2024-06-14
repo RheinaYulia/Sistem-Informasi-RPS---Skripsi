@@ -196,7 +196,7 @@ class VerifikasiController extends Controller
 
         $page = [
             'url' => $this->menuUrl . '/'.$id,
-            'title' => 'Edit ' . $this->menuTitle
+            'title' => 'Proses Verifikasi'
         ];
 
         $data  = VerifikasiModel::find($id);
@@ -214,35 +214,44 @@ class VerifikasiController extends Controller
     }
 
 
-    public function update(Request $request, $id){
-        $this->authAction('update', 'json');
-        if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+    public function update(Request $request, $id)
+{
+    $this->authAction('update', 'json');
+    if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        if ($request->ajax() || $request->wantsJson()) {
+    if ($request->ajax() || $request->wantsJson()) {
 
-            $rules = [
-                'verifikasi' => 'required|integer'
-            ];
-            $validator = Validator::make($request->all(), $rules);
+        $rules = [
+            'verifikasi' => 'required|integer',
+            'pengesahan' => 'required|integer',
+            'keterangan_ditolak' => 'nullable|string',
+        ];
+        $validator = Validator::make($request->all(), $rules);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'stat'     => false,
-                    'mc'       => false,
-                    'msg'      => 'Terjadi kesalahan.',
-                    'msgField' => $validator->errors()
-                ]);
-            }
-
-            $res = VerifikasiModel::updateData($id, $request);
-
+        if ($validator->fails()) {
             return response()->json([
-                'stat' => $res,
-                'mc' => $res, // close modal
-                'msg' => ($res)? $this->getMessage('update.success') : $this->getMessage('update.failed')
+                'stat'     => false,
+                'mc'       => false,
+                'msg'      => 'Terjadi kesalahan.',
+                'msgField' => $validator->errors()
             ]);
         }
 
-        return redirect('/');
+        // Update pengesahan to 0 if verifikasi is 3
+        if ($request->input('verifikasi') == 3) {
+            $request->merge(['pengesahan' => 0]);
+        }
+
+        $res = VerifikasiModel::updateData($id, $request);
+
+        return response()->json([
+            'stat' => $res,
+            'mc' => $res, // close modal
+            'msg' => ($res) ? $this->getMessage('update.success') : $this->getMessage('update.failed')
+        ]);
     }
+
+    return redirect('/');
+}
+
 }

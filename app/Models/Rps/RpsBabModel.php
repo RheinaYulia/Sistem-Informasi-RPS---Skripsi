@@ -44,8 +44,9 @@ class RpsBabModel extends AppModel
         //'App\Models\Master\EmployeeModel' => 'jabatan_id'
     ];
 
-    public static function spInsertOrUpdateBab($rps_id, array $bab_id, array $rps_bab, array $sub_cpmk, 
-    array $materi, array $estimasi_waktu, array $pengalaman_belajar, array $indikator_penilaian, array $bobot_penilaian, array $bentuk_pembelajaran, array $metode_pembelajaran)
+    public static function spInsertOrUpdateBab($rps_id,array $cpmk_detail_id, array $bab_id, array $rps_bab, array $sub_cpmk, 
+    array $materi, array $estimasi_waktu, array $pengalaman_belajar, array $indikator_penilaian, array $bobot_penilaian, array $bentuk_pembelajaran, array $metode_pembelajaran,
+    array $kriteria_penilaian, array $bentuk_penilaian)
 {
     DB::beginTransaction();
 
@@ -94,6 +95,48 @@ class RpsBabModel extends AppModel
                     'metode_pembelajaran' => $metode_pembelajaran[$index]
                 ]);
             }
+
+            $existingMetode = DB::table('d_rps_sub_cpmk')
+                                ->where('bab_id', $bab)
+                                ->first();
+
+            if ($existingMetode) {
+                // Jika sudah ada, lakukan pembaruan pada d_rps_metode
+                DB::table('d_rps_sub_cpmk')
+                    ->where('bab_id', $bab)
+                    ->update([
+                        'cpmk_detail_id' => $cpmk_detail_id[$index]
+                    ]);
+            } else {
+                // Jika belum ada, lakukan penambahan pada d_rps_metode
+                DB::table('d_rps_sub_cpmk')->insert([
+                    'bab_id' => $bab,
+                    'cpmk_detail_id' => $cpmk_detail_id[$index]
+                ]);
+            }
+            // Cek apakah bab_id sudah ada dalam tabel d_rps_metode
+            $existingMetode = DB::table('d_rps_kb')
+                                ->where('bab_id', $bab)
+                                ->first();
+
+            if ($existingMetode) {
+                // Jika sudah ada, lakukan pembaruan pada d_rps_metode
+                DB::table('d_rps_kb')
+                    ->where('bab_id', $bab)
+                    ->update([
+                        'kriteria_penilaian' => $kriteria_penilaian[$index],
+                        'bentuk_penilaian' => $bentuk_penilaian[$index]
+                    ]);
+            } else {
+                // Jika belum ada, lakukan penambahan pada d_rps_metode
+                DB::table('d_rps_kb')->insert([
+                    'bab_id' => $bab,
+                    'kriteria_penilaian' => $kriteria_penilaian[$index],
+                    'bentuk_penilaian' => $bentuk_penilaian[$index]
+                ]);
+            }
+
+        
         }
 
         DB::commit();
@@ -144,7 +187,6 @@ public static function spBabMateri($bab_id, $judul_materi, $file_url, $file_dir)
 
 
 
-
     public static function getRpsBab($p_rps_id) {
         $rpsData = DB::table('m_rps')
                     ->select('m_rps.*', 
@@ -157,9 +199,12 @@ public static function spBabMateri($bab_id, $judul_materi, $file_url, $file_dir)
                              'd_rps_bab.indikator_penilaian AS indikator_penilaian',
                              'd_rps_bab.bobot_penilaian AS bobot_penilaian',
                              'd_rps_metode.bentuk_pembelajaran AS bentuk_pembelajaran',
-                             'd_rps_metode.metode_pembelajaran AS metode_pembelajaran')
+                             'd_rps_metode.metode_pembelajaran AS metode_pembelajaran',
+                             'd_rps_kb.kriteria_penilaian AS kriteria_penilaian',
+                             'd_rps_kb.bentuk_penilaian AS bentuk_penilaian')
                      ->leftJoin('d_rps_bab', 'm_rps.rps_id', '=', 'd_rps_bab.rps_id')
                      ->leftJoin('d_rps_metode', 'd_rps_bab.bab_id', '=', 'd_rps_metode.bab_id')
+                     ->leftJoin('d_rps_kb', 'd_rps_bab.bab_id', '=', 'd_rps_kb.bab_id')
                      ->where('m_rps.rps_id', $p_rps_id)
                      ->get();
      
@@ -177,6 +222,34 @@ public static function spBabMateri($bab_id, $judul_materi, $file_url, $file_dir)
         
         return $map;
     }
+
+    public static function getSubCpmk($rps_id) {
+        $subCpmk = DB::table('d_cpmk_detail')
+            ->select('d_cpmk_detail.cpmk_detail_id','d_rps_cpmk.rps_cpmk_id','d_cpmk_detail.sub_cpmk_kode', 'd_cpmk_detail.uraian_sub_cpmk')
+            ->join('d_cpmk', 'd_cpmk_detail.cpmk_id', '=', 'd_cpmk.cpmk_id')
+            ->join('t_cpl_cpmk', 'd_cpmk.cpmk_id', '=', 't_cpl_cpmk.cpmk_id')
+            ->join('d_rps_cpmk', 't_cpl_cpmk.cpl_cpmk_id', '=', 'd_rps_cpmk.cpl_cpmk_id')
+            ->join('m_rps', 'd_rps_cpmk.rps_id', '=', 'm_rps.rps_id')
+            ->where('m_rps.rps_id', $rps_id)
+            ->whereNull('d_rps_cpmk.deleted_at')
+            ->groupBy('d_cpmk_detail.sub_cpmk_kode', 'd_cpmk_detail.uraian_sub_cpmk')
+            ->orderBy('d_cpmk_detail.sub_cpmk_kode')
+            ->get();
+    
+        return $subCpmk;
+    }
+    
+    public static function getRpsSubCpmk($p_rps_id, $bab_id) {
+        // Ambil data media terkait RPS
+        $mediaData = DB::table('d_rps_sub_cpmk')
+                    ->select('bab_id','cpmk_detail_id')
+                    ->where('bab_id', $bab_id)
+                    ->whereNull('deleted_at')
+                    ->get();
+    
+        return $mediaData;
+    }
+    
 
     public static function getPertemuan($bab_id){
         $map = DB::table('d_rps_bab AS b')
@@ -201,6 +274,7 @@ public static function spBabMateri($bab_id, $judul_materi, $file_url, $file_dir)
         return $mediaData;
     }
 
+
     public static function getBabById($rps_id, $bab_id)
 {
     $result= DB::table('d_rps_bab AS b')
@@ -214,10 +288,13 @@ public static function spBabMateri($bab_id, $judul_materi, $file_url, $file_dir)
         'b.indikator_penilaian',
         'b.bobot_penilaian',
         'd_rps_metode.bentuk_pembelajaran AS bentuk_pembelajaran',
-        'd_rps_metode.metode_pembelajaran AS metode_pembelajaran'
+        'd_rps_metode.metode_pembelajaran AS metode_pembelajaran',
+        'd_rps_kb.kriteria_penilaian AS kriteria_penilaian',
+        'd_rps_kb.bentuk_penilaian AS bentuk_penilaian',
         )
         ->join('m_rps AS m', 'm.rps_id', '=', 'b.rps_id')
         ->leftJoin('d_rps_metode', 'b.bab_id', '=', 'd_rps_metode.bab_id')
+        ->leftJoin('d_rps_kb', 'b.bab_id', '=', 'd_rps_kb.bab_id')
         ->where('b.rps_id', '=', $rps_id)
         ->where('b.bab_id', '=', $bab_id)
         ->whereNull('m.deleted_at')
@@ -246,5 +323,7 @@ public static function getBabMateri($rps_id, $bab_id)
 
     return $result;
 }
+
+
 
 }

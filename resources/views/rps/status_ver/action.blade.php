@@ -43,22 +43,19 @@
                     <button type="button" data-dismiss="modal" class="btn btn-primary">Oke</button>
                 </div>
                 @else
+
                 <div class="form-group required row mb-2">
-                    <label class="col-sm-3 control-label col-form-label">Status</label>
-                <div class="col-sm-9 mt-2">
-                <div class="icheck-success d-inline mr-3">
-                    <input type="radio" id="radioActive" name="verifikasi" value="0" <?php echo isset($data->verifikasi)? (($data->verifikasi == 0)? 'checked' : '') : 'checked' ?>>
-                    <label for="radioActive">Draft </label>
+                    <input type="hidden" id="verifikasi" name="verifikasi" value="1">
                 </div>
-                <div class="icheck-danger d-inline mr-3">
-                    <input type="radio" id="radioFailed" name="verifikasi" value="1" <?php echo isset($data->verifikasi)? (($data->verifikasi == 1)? 'checked' : '') : '' ?>>
-                    <label for="radioFailed">Ajukan</label>
+                <div class="form-group required row mb-2">
+                    <label class="col-sm-10 col-form-label" >Apakah Anda Yakin Ingin Verifikasi RPS {{ $kurikulumkId->mk_nama }} ini ? </label>
+                        
+                    </div> 
                 </div>
-            </div> 
-        </div>
+
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-            <button type="submit" class="btn btn-primary">Simpan</button>
+            <button type="submit" class="btn btn-primary">Ya, Verifikasi</button>
         </div>
                 @endif
                     
@@ -82,10 +79,6 @@
 
     $(document).ready(function () {
         unblockUI();
-
-        @if($is_edit)
-            $('#jurusan_id').val('{{ $data->jurusan_id }}').trigger('change');
-        @endif
 
         $("#form-master").validate({
             rules: {

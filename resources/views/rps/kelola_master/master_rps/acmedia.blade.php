@@ -49,21 +49,6 @@
                     </div>
                 </div>
 
-                <div class="form-group required row mb-3 mt-5">
-                    <label for="dosen_pengembang_id" class="col-sm-2 control-label col-form-label">Referensi</label>
-                    <div class="col-sm-10">
-                        <table>
-                            <th>
-                                @foreach ($mediaview->unique('media_id') as $d)
-                            <ul>
-                                <li>{{ $d->nama_media }}</li>
-                            </ul>
-                            @endforeach
-                            </th>
-                        </table>
-                    </div>
-                </div>
-
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>

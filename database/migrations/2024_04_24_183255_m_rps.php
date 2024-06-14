@@ -17,10 +17,12 @@ class MRps extends Migration
             $table->id('rps_id');
             $table->unsignedBigInteger('kaprodi_id')->index();
             $table->unsignedBigInteger('kurikulum_mk_id')->index();
-            $table->text('deskripsi_rps')->index();
+            $table->text('deskripsi_rps')->nullable();
             $table->date('tanggal_penyusunan')->nullable();
             $table->tinyInteger('verifikasi')->default(0);
             $table->tinyInteger('pengesahan')->default(0);
+            $table->text('keterangan_ditolak')->nullable();
+            $table->text('keterangan_rps')->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();

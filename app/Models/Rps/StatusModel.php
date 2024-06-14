@@ -26,6 +26,7 @@ class StatusModel extends AppModel
         'deskripsi_rps',
         'tanggal_penyusunan',
         'pengesahan',
+        'keterangan_ditolak',
         'created_at',
         'created_by',
         'updated_at',
@@ -55,7 +56,7 @@ class StatusModel extends AppModel
         
         return $map;
     }
-    public static function getStatusVer(){
+    public static function getStatusVer1(){
         $map = DB::table('m_rps AS m')
             ->selectRaw('m.rps_id, m.deskripsi_rps,m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama,m.verifikasi, m.pengesahan')
             ->join('d_kurikulum_mk AS p', function ($join) {
@@ -66,6 +67,61 @@ class StatusModel extends AppModel
             })
             ->whereIn('m.verifikasi', [0, 1, 2, 3])
             ->whereIn('m.pengesahan', [0, 1,2])
+            ->get();
+        
+        return $map;
+    }
+
+    public static function getKetVer($rps_id){
+        $map = DB::table('m_rps AS m')
+            ->selectRaw('m.rps_id, m.deskripsi_rps,m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama,m.verifikasi, m.pengesahan, m.keterangan_ditolak')
+            ->join('d_kurikulum_mk AS p', function ($join) {
+                $join->on('m.kurikulum_mk_id', '=', 'p.kurikulum_mk_id');
+            })
+            ->join('m_mk AS k', function ($join) {
+                $join->on('p.mk_id', '=', 'k.mk_id');
+            })
+            ->where('m.rps_id', $rps_id)
+            ->get();
+        
+        return $map;
+    }
+
+    public static function getStatusVer($userId){
+        $map = DB::table('m_rps AS m')
+            ->selectRaw('m.rps_id, m.deskripsi_rps, m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama, ds.nama_dosen, m.verifikasi, m.pengesahan')
+            ->join('d_kurikulum_mk AS p', function ($join) {
+                $join->on('m.kurikulum_mk_id', '=', 'p.kurikulum_mk_id');
+            })
+            ->join('m_mk AS k', function ($join) {
+                $join->on('p.mk_id', '=', 'k.mk_id');
+            })
+            ->join('d_kaprodi AS d', function ($join) {
+                $join->on('m.kaprodi_id', '=', 'd.kaprodi_id');
+            })
+            ->join('d_dosen AS ds', function ($join) {
+                $join->on('d.dosen_id', '=', 'ds.dosen_id');
+            })
+            ->leftJoin('d_rps_pengembang AS rp', function ($join) {
+                $join->on('m.rps_id', '=', 'rp.rps_id');
+            })
+            ->leftJoin('d_rps_pengampu AS ra', function ($join) {
+                $join->on('m.rps_id', '=', 'ra.rps_id');
+            })
+            ->leftJoin('d_dosen AS dp_pengembang', function ($join) {
+                $join->on('rp.dosen_id', '=', 'dp_pengembang.dosen_id');
+            })
+            ->leftJoin('s_user AS su_pengembang', 'dp_pengembang.user_id', '=', 'su_pengembang.user_id')
+            ->where(function ($query) use ($userId) {
+                $query->where('su_pengembang.user_id', $userId)
+                        ->whereNull('rp.deleted_at')
+                      ->orWhere('m.created_by', $userId)
+                      ->orWhereRaw('? = 1', [$userId]);
+            })
+            ->whereIn('m.verifikasi', [0, 1, 2, 3])
+            ->whereIn('m.pengesahan', [0, 1,2])
+            ->whereNull('m.deleted_at')
+            ->groupBy('m.rps_id')
             ->get();
         
         return $map;

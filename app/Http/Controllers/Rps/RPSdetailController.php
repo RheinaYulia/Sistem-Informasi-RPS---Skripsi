@@ -83,11 +83,11 @@ class RPSdetailController extends Controller
     public function kelolaData($id)
     {
         // Ambil data berdasarkan ID
-        $data = RpsModel::find($id);
+        $data = RpsModel::getRpsDescription($id);
 
         $breadcrumb = [
-            'title' => $this->menuTitle,
-            'list'  => ['RPS', 'Kelola Master']
+            'title' => 'Kelola '.$data->mk_nama,
+            'list'  => ['RPS', 'Kelola '.$data->mk_nama]
         ];
 
         $activeMenu = [
@@ -98,7 +98,7 @@ class RPSdetailController extends Controller
 
         $page = [
             'url' => $this->menuUrl,
-            'title' => 'Daftar '. $this->menuTitle
+            'title' => 'Daftar Pertemuan '.$data->mk_nama,
         ];
 
         // Tampilkan view yang sesuai dengan data
@@ -441,14 +441,14 @@ class RPSdetailController extends Controller
                 $this->deleteMedia($request->input('elements_media'), $request->input('rps_id'));
             }
     
-            $pustakaIds = array_merge(
+            $mediaIds = array_merge(
                 $request->input('software', []),
                 $request->input('hardware', [])
             );
     
             $res = RpsModel::spMedia(
                 $request->input('rps_id'),
-                $pustakaIds
+                $mediaIds
             );
     
             return response()->json([
@@ -488,6 +488,77 @@ class RPSdetailController extends Controller
     }
 
     public function updatePengampu(Request $request, $id){
+
+        
+        $this->authAction('create || update', 'json');
+        if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+    
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'rps_id' => 'required|integer',
+                'dosen_pengampu_id.*' => 'required|integer',
+                'elements_to_remove.*' => 'nullable|integer',
+                'elements_to_remove1.*' => 'nullable|integer',
+            ];
+    
+            $validator = Validator::make($request->all(), $rules);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'stat' => false,
+                    'mc' => false,
+                    'msg' => 'Terjadi kesalahan.',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+        
+
+        if ($request->has('elements_pengampu')) {
+            $this->deletePengampu($request->input('elements_pengampu'), $request->input('rps_id'));
+        }
+    
+            // Panggil fungsi spInsertOrUpdateRPS dari model RpsModel untuk melakukan transaksi database
+            $res = RpsModel::spPengampu(
+                $request->input('rps_id'),
+                $request->input('dosen_pengampu_id'),
+            );
+           
+            return response()->json([
+                'stat' => $res,
+                'mc' => $res, // close modal
+                'msg' => ($res) ? $this->getMessage('update.success') : $this->getMessage('update.failed')
+            ]);
+            
+        }
+    
+        return redirect('/');
+    }
+
+    public function editMkSyarat($id){
+        
+        $this->authAction('create || update', 'modal');
+        if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+        $page = [
+            'url' => $this->menuUrl . '/'.$id,
+            'title' => 'Edit ' . $this->menuTitle
+        ];
+        $data = RpsModel::getRpsData($id);
+        $pengampu = DosenModel::selectRaw('dosen_id, nama_dosen')->get();
+        $pengampuview = RpsModel::getRpsPengampu($id);
+       
+
+        return (!$data)? $this->showModalError() :
+            view($this->viewPath . 'master_rps.acpengampu')
+                ->with('page', (object) $page)
+                ->with('id', $id)
+                ->with('data', $data)
+                ->with('pengampu', $pengampu)
+                ->with('pengampuview', $pengampuview)
+                ;
+    }
+
+    public function updateMkSyarat(Request $request, $id){
 
         
         $this->authAction('create || update', 'json');
@@ -821,26 +892,28 @@ class RPSdetailController extends Controller
 
     
     
-    private function deleteMedia($mediaIds) {
+    private function deleteMedia($mediaIds, $rpsId) {
         foreach ($mediaIds as $mediaId) {
-            DB::table('d_rps_media')
+           $deleted= DB::table('d_rps_media')
                 ->where('rps_media_id', $mediaId)
+                ->where('rps_id', $rpsId)
                 ->update([
                     'deleted_at' => now(),
                     'deleted_by' => auth()->user()->id
                 ]);
                 // Logging untuk melihat ID yang dihapus dan status penghapusan
-        // Log::info("Media ID: $mediaId, Deleted Status: " . ($deleted ? 'Success' : 'Failed'));
+        Log::info("Media ID: $mediaId, Deleted Status: " . ($deleted ? 'Success' : 'Failed'));
         }
 
         return true;
 
     }
 
-    private function deletePustaka($pustakaIds) {
+    private function deletePustaka($pustakaIds, $rpsId) {
         foreach ($pustakaIds as $pustakaId) {
             DB::table('d_rps_pustaka')
                 ->where('rps_pustaka_id', $pustakaId)
+                ->where('rps_id', $rpsId)
                 ->update([
                     'deleted_at' => now(),
                     'deleted_by' => auth()->user()->id
@@ -878,19 +951,35 @@ class RPSdetailController extends Controller
 
     private function deleteCplProdi($CplProdiIds, $rpsId) {
         foreach ($CplProdiIds as $CplProdiId) {
-            $deleted=DB::table('d_rps_cpl_prodi')
+            // Update the d_rps_cpl_prodi table
+            $deleted = DB::table('d_rps_cpl_prodi')
                 ->where('cpl_prodi_id', $CplProdiId)
                 ->where('rps_id', $rpsId)
                 ->update([
                     'deleted_at' => now(),
                     'deleted_by' => auth()->user()->id
                 ]);
-                // Logging untuk melihat ID yang dihapus dan status penghapusan
-        
+    
+            // If the deletion is successful, proceed to update the related d_rps_cpmk entries
+            if ($deleted) {
+                // Get all cpl_cpmk_id related to the deleted cpl_prodi_id from t_cpl_cpmk
+                $cplCpmkIds = DB::table('t_cpl_cpmk')
+                    ->where('cpl_prodi_id', $CplProdiId)
+                    ->pluck('cpl_cpmk_id');
+    
+                // Update the d_rps_cpmk table where cpl_cpmk_id is in the retrieved list
+                DB::table('d_rps_cpmk')
+                    ->whereIn('cpl_cpmk_id', $cplCpmkIds)
+                    ->update([
+                        'deleted_at' => now(),
+                        'deleted_by' => auth()->user()->id
+                    ]);
+            }
         }
-
+    
         return true;
     }
+    
 
     private function deleteCpmk($CplCpmkIds, $rpsId) {
         foreach ($CplCpmkIds as $CplCpmkId) {
@@ -939,6 +1028,9 @@ class RPSdetailController extends Controller
     
         
         $data = RpsBabModel::getBabById($id,$bab_id);
+        $subcpmk = RpsBabModel::getSubCpmk($id);
+        $subcpmkrps = RpsBabModel::getRpsSubCpmk($id,$bab_id);
+        $materi = RpsModel::getBkView($id);
     
         // Log untuk memastikan parameter diterima dengan benar
         Log::info('edit1 parameters:', ['id' => $id, 'bab_id' => $bab_id]);
@@ -947,7 +1039,11 @@ class RPSdetailController extends Controller
             view($this->viewPath . 'bab_rps.acpertemuan')
                 ->with('page', (object) $page)
                 ->with('id', $id)
-                ->with('data', $data);
+                ->with('data', $data)
+                ->with('subcpmk', $subcpmk)
+                ->with('subcpmkrps', $subcpmkrps)
+                ->with('materi', $materi)
+                ;
     }
     
     
@@ -969,7 +1065,10 @@ class RPSdetailController extends Controller
                 'indikator_penilaian.*' => 'nullable|string',
                 'bobot_penilaian.*' => 'nullable|numeric|regex:/^\d*(\.\d{1,2})?$/',
                 'bentuk_pembelajaran.*' => 'nullable|string',
-                'metode_pembelajaran.*' => 'nullable|string'
+                'metode_pembelajaran.*' => 'nullable|string',
+                'cpmk_detail_id.*' => 'nullable|integer',
+                'kriteria_penilaian.*' => 'nullable|string',
+                'bentuk_penilaian.*' => 'nullable|string',
             ];
     
             $validator = Validator::make($request->all(), $rules);
@@ -986,6 +1085,7 @@ class RPSdetailController extends Controller
             // Panggil fungsi spInsertOrUpdateRPS dari model RpsModel untuk melakukan transaksi database
             $res = RpsBabModel::spInsertOrUpdateBab(
                 $request->input('rps_id'),
+                $request->input('cpmk_detail_id'),
                 $request->input('bab_id'),
                 $request->input('rps_bab'),
                 $request->input('sub_cpmk'),
@@ -995,7 +1095,9 @@ class RPSdetailController extends Controller
                 $request->input('indikator_penilaian'),
                 $request->input('bobot_penilaian'),
                 $request->input('bentuk_pembelajaran'),
-                $request->input('metode_pembelajaran')
+                $request->input('metode_pembelajaran'),
+                $request->input('kriteria_penilaian'),
+                $request->input('bentuk_penilaian')
             );
     
             return response()->json([

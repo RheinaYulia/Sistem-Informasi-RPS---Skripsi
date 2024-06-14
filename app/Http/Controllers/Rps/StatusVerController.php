@@ -56,7 +56,8 @@ class StatusVerController extends Controller
         $this->authAction('read', 'json');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        $data  = StatusModel::getStatusVer();
+        $userId = $request->user()->user_id;
+        $data  = StatusModel::getStatusVer($userId);
 
         return DataTables::of($data)
             ->addIndexColumn()
@@ -119,7 +120,7 @@ class StatusVerController extends Controller
         return redirect('/');
     }
 
-    public function showi($id){
+    public function show($id){
         $this->authAction('create || update', 'json');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
@@ -130,7 +131,7 @@ class StatusVerController extends Controller
             'title' => 'Detail Hak Akses'
         ];
         
-        $data = DB::select('CALL sp_get_rps_data(?)', array($id));
+        $data  = StatusModel::find($id);
 
 
         return (!$data)? $this->showModalError() :
@@ -198,13 +199,14 @@ class StatusVerController extends Controller
 
         $page = [
             'url' => $this->menuUrl . '/'.$id,
-            'title' => 'Edit ' . $this->menuTitle
+            'title' => 'Ajukan Verifikasi '
         ];
 
         $data  = StatusModel::find($id);
         
         $kaprodi = KaprodiModel::selectRaw("kaprodi_id, prodi_id, tahun")->get();
         $kurikulumk  = KurikulumMKModel::getMks();
+        $kurikulumkId = KurikulumMKModel::getMksId($id)->first(); // Ambil elemen pertama
 
         return (!$data)? $this->showModalError() :
             view($this->viewPath . 'action')
@@ -212,7 +214,8 @@ class StatusVerController extends Controller
                 ->with('id', $id)
                 ->with('data', $data)
                 ->with('kaprodi', $kaprodi)
-            ->with('kurikulumk', $kurikulumk);
+            ->with('kurikulumk', $kurikulumk)
+            ->with('kurikulumkId', $kurikulumkId);
     }
 
 

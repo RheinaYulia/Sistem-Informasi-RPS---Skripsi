@@ -57,9 +57,22 @@ class KurikulumMKModel extends AppModel
     return $map;
 }
 
-public static function getMksWithSelected($selectedId)
+public static function getMksId($rps_id)
 {
     $map = DB::table('d_kurikulum_mk AS m')
+        ->selectRaw('m.kurikulum_mk_id, k.mk_nama')
+        ->join('m_mk AS k', 'm.mk_id', '=', 'k.mk_id')
+        ->leftJoin('m_rps AS r', 'm.kurikulum_mk_id', '=', 'r.kurikulum_mk_id')
+        ->groupBy('m.kurikulum_mk_id', 'k.mk_nama')
+        ->where('r.rps_id', $rps_id)
+        ->get();
+
+    return $map;
+}
+
+public static function getMksWithSelected($selectedId)
+{
+    return DB::table('d_kurikulum_mk AS m')
         ->selectRaw('m.kurikulum_mk_id, k.mk_nama, COUNT(r.kurikulum_mk_id) > 0 AND r.deleted_at IS NULL AS is_frozen')
         ->join('m_mk AS k', 'm.mk_id', '=', 'k.mk_id')
         ->leftJoin('m_rps AS r', 'm.kurikulum_mk_id', '=', 'r.kurikulum_mk_id')
@@ -69,8 +82,6 @@ public static function getMksWithSelected($selectedId)
             $item->selected = $item->kurikulum_mk_id == $selectedId;
             return $item;
         });
-
-    return $map;
 }
 
 

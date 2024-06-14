@@ -17,8 +17,6 @@ class DRpsMedia extends Migration
             $table->id('rps_media_id');
             $table->unsignedBigInteger('rps_id')->index();
             $table->unsignedBigInteger('media_id')->index();
-            $table->tinyInteger('jenis_media')->default(0);
-            $table->string('nama_media', 100)->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();

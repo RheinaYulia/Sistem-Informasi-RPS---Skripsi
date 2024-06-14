@@ -21,24 +21,45 @@
                                     @foreach ($data as $d )
                                     <input type="hidden" class="form-control form-control-sm" id="rps_id" name="rps_id" value="{{ $d->rps_id }}">
                                     @endforeach
-                                    <div class="form-group clearfix">
+                                </div>
+                                <div class="form-group required row mb-10">
+                                    <div style="display: flex; justify-content: center; width: 100%;">
+                                    <table border="1" style="border-collapse: collapse; width: 80%;">
+                                        <tr>
+                                            <th style="width: 45px;"></th>
+                                            <th style="text-align: center; width: 60px;">Kode</th>
+                                            <th style="text-align: center;">Deskripsi</th>
+                                        </tr>
                                         @foreach ($bk as $bks)
+                                        <tr>
+                                            <td style="text-align: center;">
                                             @php
                                                 // Cek apakah cpl_prodi_id ada di dalam selectCpl
                                                 $isSelected = $selectBk->firstWhere('mk_bk_id', $bks->mk_bk_id);
                                                 // Tentukan apakah checkbox harus dicentang
                                                 $isChecked = $isSelected && $isSelected->is_selected;
                                             @endphp
-                                        <div class="icheck-success d-inline col-sm-9">
+                                        <div class="icheck-success mb-9">
                                             <input type="checkbox" id="checkbox2{{ $bks->mk_bk_id }}" name="mk_bk_id[]" value="{{ $bks->mk_bk_id }}"
                                             @if ($isChecked) checked @endif>
-                                                <label for="checkbox2{{ $bks->mk_bk_id }}">
-                                            {{ $bks->bk_deskripsi }}
-                                        </label>
-                                        </div>
-                                    @endforeach
+                                                <label for="checkbox2{{ $bks->mk_bk_id }}"></label>
                                     </div>
-                                    </div>
+                                </td>
+                                <td style="padding-left: 10px;">
+                                    <label for="checkbox2{{ $bks->mk_bk_id }}"></label>
+                                        {{ $bks->bk_kode }}
+                                    </label>
+                                </td>
+                                <td style="padding-left: 10px;">
+                                    <label for="checkbox2{{ $bks->mk_bk_id }}"></label>
+                                        {{ $bks->bk_deskripsi }}
+                                    </label>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                </div>
 
 
             

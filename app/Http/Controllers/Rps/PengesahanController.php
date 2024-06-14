@@ -196,13 +196,13 @@ class PengesahanController extends Controller
 
         $page = [
             'url' => $this->menuUrl . '/'.$id,
-            'title' => 'Edit ' . $this->menuTitle
+            'title' => 'Proses Pengesahan'
         ];
 
         $data  = PengesahanModel::find($id);
         
         $kaprodi = KaprodiModel::selectRaw("kaprodi_id, prodi_id, tahun")->get();
-        $kurikulumk  = KurikulumMKModel::getMks();
+        $kurikulumkId = KurikulumMKModel::getMksId($id)->first();
 
         return (!$data)? $this->showModalError() :
             view($this->viewPath . 'action')
@@ -210,7 +210,7 @@ class PengesahanController extends Controller
                 ->with('id', $id)
                 ->with('data', $data)
                 ->with('kaprodi', $kaprodi)
-            ->with('kurikulumk', $kurikulumk);
+            ->with('kurikulumkId', $kurikulumkId);
     }
 
 

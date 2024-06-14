@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             MBkSeeder::class,
             TCplCpmkSeeder::class,
             TMkBkSeeder::class,
+            DCpmkDetailSeeder::class,
         ]);
     }
 }

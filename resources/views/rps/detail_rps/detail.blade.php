@@ -69,83 +69,80 @@
                 </button>
             </div>
             <div class="modal-body">
-                <a href="{{ route('rps.shows', ['id' => $id]) }}" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-                <div class="header">
-                    <img src="path/to/logo.png" alt="Politeknik Negeri Malang" style="float: left; width: 80px; height: auto;">
-                    <h1>POLITEKNIK NEGERI MALANG</h1>
-                    <h2>JURUSAN TEKNOLOGI INFORMASI</h2>
-                    <h2>PROGRAM STUDI: D4 SISTEM INFORMASI BISNIS</h2>
-                    <h3>RENCANA PEMBELAJARAN SEMESTER (RPS)</h3>
-                </div>
-            
+                <a href="{{ route('rps.shows', ['id' => $id]) }}" target="_blank" class="btn btn-default"><i class="fas fa-download"></i> Print</a>
                 <table class="main-table">
                     <tr>
-                        <th>Mata Kuliah</th>
+                        <td rowspan="3" colspan="2" style="text-align: center; vertical-align: middle;">
+                            <img src="{{ asset('images/logopolinema.png') }}" alt="Logo" style="width: 100px; height: auto;">
+                        </td>
+                        <td colspan="6"> <h5 style="font-weight: bold;">POLITEKNIK NEGERI MALANG</h5> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"> <h6>JURUSAN TEKNOLOGI INFORMASI</h6> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"> <h6>PROGRAM STUDI: D4 SISTEM INFORMASI BISNIS</h6> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="9"> <h4 style="text-align: center;">RENCANA PEMBELAJARAN SEMESTER (RPS) </h4> </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Mata Kuliah</th>
                         <th>Kode</th>
-                        <th>Rumpun Mata Kuliah</th>
+                        <th colspan="2">Rumpun Mata Kuliah</th>
                         <th>Bobot (SKS)/jam</th>
                         <th>Semester</th>
-                        <th>Tgl. Penyusunan</th>
+                        <th colspan="2">Tgl. Penyusunan</th>
                     </tr>
                     <tr>
-                        <td>{{ $data->mk_nama}}</td>
+                        <td colspan="2">{{ $data->mk_nama}}</td>
                         <td>{{ $data->kode_mk}}</td>
-                        <td>{{ $data->rumpun_mk}}</td>
+                        <td colspan="2">{{ $data->rumpun_mk}}</td>
                         <td>{{ $data->sks }} SKS / {{ $data->jumlah_jam }} Jam</td>
                         <td>{{ $data->semester }}</td>
-                        <td>{{ $data->tanggal_penyusunan }}</td>
+                        <td colspan="2">{{ $data->tanggal_penyusunan }}</td>
                     </tr>
                     <tr>
-                        <th> Otorisasi </th>
+                        <th colspan="2"> Otorisasi </th>
                         <th colspan="2">Dosen Pengembang RPS</th>
-                        
                         <th>Koordinator RMK</th>
-                        <th colspan="2">Ka PRODI</th>
+                        <th colspan="4">Ka PRODI</th>
                         
                     </tr>
                     <tr>
-                        <td> </td>
+                        <td colspan="2"> </td>
                         <td colspan="2">
-                            Farid Angga Pribadi. S.Kom. M.Kom. <br>
-                            Indra Dharma Wijaya ST.M.MT.
+                            @foreach ($pengembang as $p )
+                            {{ $p->nama_dosen }} <br>
+                            @endforeach
+                                    
                         </td>
                         <td> </td>
-                        <td colspan="2">Hendra Pradibta SE. M.Sc</td>
+                        <td colspan="4">{{ $data->nama_dosen }}</td>
                     </tr>
-                
-            
-                    
                         <tr>
-                            <th rowspan="4">Capaian Pembelajaran (CP)</th>
-                            <th colspan="5">Capaian Pembelajaran Lulusan Program Studi (CPL-Prodi)</th>
+                            <th rowspan="4" colspan="2">Capaian Pembelajaran (CP)</th>
+                            <th colspan="6">Capaian Pembelajaran Lulusan Program Studi (CPL-Prodi)</th>
                         </tr>
                         <tr>
                             <td colspan="6">
                                 <ul>
-                                    <li>S8: Memiliki pengetahuan sesuai dengan capaian pembelajaran program studi D4 Sistem Informasi Bisnis.</li>
-                                    <li>S9: Menunjukkan sikap bertanggung jawab atas pekerjaan di bidang keahliannya secara mandiri.</li>
-                                    <li>PP2: Menguasai metode pengembangan produk TIK untuk memberikan solusi yang tepat melalui satu atau lebih domain aplikasi.</li>
-                                    <li>KK1: Mampu mengembangkan teori dan konsep terhadap Tata Kelola TI.</li>
-                                    <li>KU1: Mampu menerapkan pemikiran logis, kritis, inovatif, bermutu, dan terukur dalam melakukan pekerjaan yang spesifik di bidang keahliannya serta sesuai dengan standar kompetensi kerja bidang yang bersangkutan.</li>
-                                    <li>KU2: Mampu menunjukkan kinerja mandiri bermutu dan terukur.</li>
+                                    @foreach ($cplprodi as $cpl )
+                                    <li> {{ $cpl->cpl_prodi_kode}} : {{ $cpl->cpl_prodi_deskripsi }}</li>
+                                    @endforeach
+                                    
                                 </ul>
                             </td>
                         </tr>
-
                 <tr>
-                    <th colspan="5">Capaian Pembelajaran Lulusan yang dibebankan pada mata kuliah (CPL-MK)</th>
+                    <th colspan="6">Capaian Pembelajaran Lulusan yang dibebankan pada mata kuliah (CPL-MK)</th>
                 </tr>
                 <tr>
                 <td colspan="6">
                     <ul>
-                        <li>Memahami konsep tata kelola Teknologi informasi</li>
-                        <li>Memahami Pondasi Tata Kelola Teknologi Informasi</li>
-                        <li>Memahami Elemen dan Tujuan Tata Kelola Teknologi Informasi</li>
-                        <li>Memahami Kerangka Kerja dan Standard Tata Kelola</li>
-                        <li>Memahami COBIT and the IT Governance Institute</li>
-                        <li>Memahami ITIL and IT Service Management Guidance</li>
-                        <li>Memahami IT Governance Standards: ISO 9001, 27002, dan 38500</li>
-                        <li>Mampu menerapkan penggunaan Framework</li>
+                        @foreach ($cpmkview as $cpmk )
+                        <li> {{ $cpmk->cpmk_kode}} : {{ $cpmk->cpmk_deskripsi }}</li>
+                        @endforeach
                     </ul>
                 </td>
             </tr>
@@ -154,86 +151,89 @@
                 <div class="additional-sections">
                     
                         <tr>
-                            <th class="section-title" >Diskripsi Singkat <br>Mata Kuliah</th>
-                            <td colspan="5">Mata kuliah ini memberikan wawasan kepada mahasiswa tentang peran, fungsi dan tata cara dalam melakukan Tata Kelola Teknologi Informasi serta penerapan tata kelola teknologi informasi dalam sebuah organisasi sesuai standar maupun kerangka kerja internasional.</td>
+                            <th class="section-title" colspan="2">Diskripsi Singkat <br>Mata Kuliah</th>
+                            <td colspan="6">{{ $data->deskripsi_rps }}</td>
                         </tr>
                         <tr>
-                            <th class="section-title">Materi Pembelajaran / Pokok Bahasan</th>
-                            <td colspan="5">
+                            <th class="section-title" colspan="2">Materi Pembelajaran / Pokok Bahasan</th>
+                            <td colspan="6">
                                 <ol>
-                                    <li>Konsep Tata Kelola Teknologi Informasi</li>
-                                    <li>Pondasi Tata Kelola Teknologi Informasi</li>
-                                    <li>Elemen dan Tujuan Tata Kelola Teknologi Informasi</li>
-                                    <li>Kerangka Kerja dan Standard Tata Kelola</li>
-                                    <li>COBIT and the IT Governance Institute</li>
-                                    <li>ITIL and IT Service Management Guidance</li>
-                                    <li>IT Governance Standards: ISO 9001, 27002, dan 38500</li>
-                                    <li>Memahami dan menetapkan kerangka kerja Tata Kelola Teknologi Informasi</li>
-                                    <li>Penerapan Framework Tata kelola Teknologi Informasi</li>
+                                    @foreach ($bkview as $bk )
+                                    <li> {{ $bk->bk_kode}} : {{ $bk->bk_deskripsi }}</li>
+                                    @endforeach
                                 </ol>
                             </td>
                         </tr>
                         <tr>
-                            <th class="section-title" rowspan="4">Pustaka</th>
-                            <th class="section-title"> Utama</th>
-                            <th colspan="4" > </th>
+                            <th class="section-title" rowspan="4" colspan="2">Pustaka</th>
+                            <th class="section-title" > Utama</th>
+                            <th colspan="6" > </th>
                         </tr>
                         <tr>
-                            <td colspan="5">
-                                <p>Utama:</p>
+                            <td colspan="6">
                                 <ul>
-                                    <li>Information Technology Governance and Service Management: Framework and Adaptations, Aileen Cater Steel, 2009</li>
-                                </ul>
-                                
+                                @foreach ($pustaka as $utm)
+                                    @if ($utm->jenis_pustaka == 1)
+                                        <li> {{ $utm->referensi }}</li>
+                                    @endif
+                                @endforeach 
+                                </ul>         
                             </td>
                         </tr>
                         <tr>
                             <th class="section-title"> Pendukung</th>
-                            <th colspan="4" > </th>
+                            <th colspan="6" > </th>
                         </tr>
                         <tr>
-                            <td colspan="5">
-                                <p>Pendukung:</p>
+                            <td colspan="6">
                                 <ul>
-                                    <li>Moeller, Robert R (2013). Executive’s Guide to IT Governance Improving System Processes with Service Management, COBIT and ITIL. Canada: John Wiley & Sons Inc</li>
-                                </ul>
+                                    @foreach ($pustaka as $utm)
+                                        @if ($utm->jenis_pustaka == 0)
+                                            <li> {{ $utm->referensi }}</li>
+                                        @endif
+                                    @endforeach 
+                                    </ul>    
                             </td>
                         </tr>
                         <tr>
-                            <th class="section-title" rowspan="2">Media Pembelajaran</th>
+                            <th class="section-title" rowspan="2" colspan="2">Media Pembelajaran</th>
                             <th class="section-title">Software</th>
                             <th class="section-title" colspan="5">Hardware</th>
                         </tr>
                         <tr>
                                     <td>
                                         @foreach ($mediaview as $media )
-                                            @if ($media->jenis_media == 0)
-                                                    {{ $media->nama_media }}
+                                            @if ($media->jenis_media == 1)
+                                                    {{ $media->nama_media }},
                                             @endif
                                         @endforeach
                                     </td>
-                                    <td colspan="5">Hardware: PC/Laptop</td>
+                                    <td colspan="5">@foreach ($mediaview as $media )
+                                        @if ($media->jenis_media == 0)
+                                                {{ $media->nama_media }},
+                                        @endif
+                                    @endforeach</td>
                         </tr>
                         <tr>
-                            <th class="section-title">Nama Dosen Pengampu</th>
+                            <th class="section-title" colspan="2">Nama Dosen Pengampu</th>
                             <td colspan="6">
                                 <ol>
-                                    <li>Farid Angga Pribadi, S.Kom., M.Kom.</li>
-                                    <li>Indra Dharma Wijaya, ST., M.MT.</li>
-                                    <li>Dimas Wahyu Wibowo, S.T., M.T.</li>
-                                    <li>Meyti Eka Apriyani, S.T., M.T.</li>
-                                    <li>Hendra Pradipta, SE., M.Sc.</li>
+                                    @foreach ($pengampuview as $pengampu )
+                                    <li>
+                                        {{ $pengampu->nama_dosen }}
+                                    </li>
+                                    @endforeach
                                 </ol>
                             </td>
                         </tr>
-                    </table>
+                  
                 </div>
-
-                <div class="extended-table">
-                    <table>
+                </table>
+                <table class="main-table">
                         <tr>
-                            <th>Minggu Ke</th>
-                            <th>Kemampuan Akhir Yang Diharapkan (Sub-CP-MK)</th>
+                            <th >Minggu <br>Ke</th>
+                            <th>Kemampuan Akhir 
+                            <br>Yang Direncakan (Sub-CP-MK)</th>
                             <th>Bahan Kajian (Materi Pembelajaran)</th>
                             <th>Bentuk dan Metode Pembelajaran</th>
                             <th>Estimasi Waktu</th>
@@ -242,41 +242,26 @@
                             <th>Indikator Penilaian</th>
                             <th>Bobot Penilaian (%)</th>
                         </tr>
+                        @foreach ($bab as $b)
                         <tr>
-                            <td>1</td>
-                            <td>Mahasiswa mampu menjelaskan Konsep tata kelola Teknologi informasi</td>
-                            <td>Mempelajari Konsep tata kelola Teknologi informasi</td>
+                            <td width="15px">{{ $b->rps_bab }}</td>
+                            <td>{!! $b->sub_cpmk !!}</td>
+                            <td>{!! $b->materi !!}</td>
                             <td>
                                 Bentuk: <br> 
-                                @foreach ($bab as $b)
-                                    @if ($b->bab_id == 2)
-                                        {!! $b->bentuk_pembelajaran !!}
-                                    @endif
-                                @endforeach
+                                {!! $b->bentuk_pembelajaran !!}
+                                
                                 <br>
-                                Metode Pembelajaran: Contextual Teaching and Learning (CTL) <br> Penugasan: Pembentukan grup
+                                Metode Pembelajaran: <br>     
+                                {!! $b->metode_pembelajaran !!}
                             </td>
-                            <td>4 X 50”</td>
-                            <td>Dengan mempelajari konsep tata kelola Teknologi informasi mahasiswa dapat memahami konsep tata kelola Teknologi informasi</td>
-                            <td>Kriteria: Ketepatan dan penguasaan <br> Bentuk penilaian: Presentasi, Keaktifan diskusi kelompok meliputi bertanya dan menjawab (afektif)</td>
-                            <td>Mampu memahami konsep tata kelola Teknologi informasi</td>
-                            <td>2,86%</td>
+                            <td>{!! $b->estimasi_waktu !!}</td>
+                            <td>{!! $b->pengalaman_belajar !!}</td>
+                            <td>Kriteria: {!! $b->kriteria_penilaian !!} <br> Bentuk penilaian: {!! $b->bentuk_penilaian !!}</td>
+                            <td>{!! $b->indikator_penilaian !!}</td>
+                            <td>{!! $b->bobot_penilaian !!}</td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Mahasiswa mampu menjelaskan Pondasi Tata Kelola Teknologi Informasi</td>
-                            <td>Mempelajari Pondasi Tata Kelola Teknologi Informasi</td>
-                            <td>
-                                Bentuk: <br> a. Kuliah Luring (2x50’) Penyampaian materi dan diskusi. <br> b. Penugasan terstruktur (2x50’)
-                                <br><br>
-                                Metode Pembelajaran: Contextual Teaching and Learning (CTL) <br> Penugasan:
-                            </td>
-                            <td>4 X 50”</td>
-                            <td>Dengan mempelajari Pondasi Tata Kelola Teknologi Informasi mahasiswa dapat memahami Pondasi Tata Kelola Teknologi Informasi</td>
-                            <td>Kriteria: Ketepatan dan penguasaan <br> Bentuk penilaian: Presentasi, Keaktifan diskusi kelompok meliputi bertanya dan menjawab (afektif)</td>
-                            <td>Mampu memahami Pondasi Tata Kelola Teknologi Informasi</td>
-                            <td>2,86%</td>
-                        </tr>
+                        @endforeach
                         <!-- Tambahkan baris sesuai kebutuhan -->
                     </table>
                 </div>

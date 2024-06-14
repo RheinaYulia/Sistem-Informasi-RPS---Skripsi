@@ -8,6 +8,7 @@ use App\Models\KurikulumMKModel;
 use App\Models\Rps\RpsBabModel;
 use App\Models\Rps\RpsModel;
 use App\Models\View\RpsView;
+use PDF as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -96,6 +97,7 @@ class RpsController extends Controller
                 'kurikulum_mk_id' => 'required|integer',
                 'deskripsi_rps' => 'required|string',
                 'tanggal_penyusunan' => 'required|date',
+                'keterangan_rps' => 'nullable|string',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -130,6 +132,12 @@ class RpsController extends Controller
         $mediaview = RpsModel::getRpsMedia($id);
         $bab = RpsBabModel::getRpsBab($id);
         $pengembang = RpsModel::getPengembang($id);
+        $cplprodi = RpsModel::getCplProdiview($id);
+        $pengampuview = RpsModel::getRpsPengampuView($id);
+        $cpmkview = RpsModel::getCpmkView($id);
+        $bkview = RpsModel::getBkView($id);
+        $pustaka = RpsModel::getRpsPustaka($id);
+
 
         $page = [
             'title' => 'Detail ' . $this->menuTitle
@@ -142,6 +150,11 @@ class RpsController extends Controller
                 ->with('data', $data)
                 ->with('mediaview', $mediaview)
                 ->with('pengembang', $pengembang)
+                ->with('cplprodi', $cplprodi)
+                ->with('pengampuview', $pengampuview)
+                ->with('cpmkview', $cpmkview)
+                ->with('bkview', $bkview)
+                ->with('pustaka', $pustaka)
                 ->with('bab', $bab);
     }
 
@@ -152,6 +165,13 @@ class RpsController extends Controller
         $data = RpsModel::getRpsDescription($id);
         $mediaview = RpsModel::getRpsMedia($id);
         $bab = RpsBabModel::getRpsBab($id);
+        $pengembang = RpsModel::getPengembang($id);
+        $cplprodi = RpsModel::getCplProdiview($id);
+        $pengampuview = RpsModel::getRpsPengampuView($id);
+        $cpmkview = RpsModel::getCpmkView($id);
+        $bkview = RpsModel::getBkView($id);
+        $pustaka = RpsModel::getRpsPustaka($id);
+
 
         $page = [
             'title' => 'Detail ' . $this->menuTitle
@@ -163,8 +183,68 @@ class RpsController extends Controller
                 ->with('id', $id)
                 ->with('data', $data)
                 ->with('mediaview', $mediaview)
+                ->with('pengembang', $pengembang)
+                ->with('cplprodi', $cplprodi)
+                ->with('pengampuview', $pengampuview)
+                ->with('cpmkview', $cpmkview)
+                ->with('bkview', $bkview)
+                ->with('pustaka', $pustaka)
                 ->with('bab', $bab);
     }
+
+    // public function shows1($id){
+    //     $this->authAction('read', 'modal');
+    //     if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+    //     $data = RpsModel::getRpsDescription($id);
+    //     $mediaview = RpsModel::getRpsMedia($id);
+    //     $bab = RpsBabModel::getRpsBab($id);
+    //     $pengembang = RpsModel::getPengembang($id);
+    //     $cplprodi = RpsModel::getCplProdiview($id);
+    //     $pengampuview = RpsModel::getRpsPengampuView($id);
+    //     $cpmkview = RpsModel::getCpmkView($id);
+    //     $bkview = RpsModel::getBkView($id);
+    //     $pustaka = RpsModel::getRpsPustaka($id);
+
+    //     $page = [
+    //         'title' => 'Detail ' . $this->menuTitle
+    //     ];
+
+    //     $pdf = PDF::loadView($this->viewPath .'cetak-rps', compact(
+    //         'page', 'id', 'data', 'mediaview', 'pengembang', 'cplprodi', 'pengampuview', 'cpmkview', 'bkview', 'pustaka', 'bab'
+    //     ));
+
+    //     return $pdf->download('RPS.pdf');
+    // }
+
+    // public function shows2($id){
+    //     $this->authAction('read', 'modal');
+    //     if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+    //     $data = RpsModel::getRpsDescription($id);
+    //     $mediaview = RpsModel::getRpsMedia($id);
+    //     $bab = RpsBabModel::getRpsBab($id);
+    //     $pengembang = RpsModel::getPengembang($id);
+    //     $cplprodi = RpsModel::getCplProdiview($id);
+    //     $pengampuview = RpsModel::getRpsPengampuView($id);
+    //     $cpmkview = RpsModel::getCpmkView($id);
+    //     $bkview = RpsModel::getBkView($id);
+    //     $pustaka = RpsModel::getRpsPustaka($id);
+
+    //     $page = [
+    //         'title' => 'Detail ' . $this->menuTitle
+    //     ];
+
+    //     $html = view($this->viewPath .'cetak-rps', compact(
+    //         'page', 'id', 'data', 'mediaview', 'pengembang', 'cplprodi', 'pengampuview', 'cpmkview', 'bkview', 'pustaka', 'bab'
+    //     ))->render();
+    
+    //     $mpdf = new \Mpdf\Mpdf([
+    //         'orientation' => 'L'
+    //     ]);
+    //     $mpdf->WriteHTML($html);
+    //     $mpdf->Output('RPS.pdf', \Mpdf\Output\Destination::DOWNLOAD);
+    // }
 
 
 
@@ -201,8 +281,9 @@ class RpsController extends Controller
             $rules = [
                 'kaprodi_id' => 'required|integer',
                 'kurikulum_mk_id' => 'required|integer',
-                'deskripsi_rps' => 'required|string',
+                'deskripsi_rps' => 'nullable|string',
                 'tanggal_penyusunan' => 'required|date',
+                'keterangan_rps'=>'nullable|string',
             ];
             $validator = Validator::make($request->all(), $rules);
 

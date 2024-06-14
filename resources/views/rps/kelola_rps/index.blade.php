@@ -10,13 +10,19 @@
                             <i class="fas fa-angle-double-right text-md text-{{ $theme->card_outline }} mr-1"></i>
                             {!! $page->title !!}
                         </h3>
-
+                        <style>
+                            a.disabled {
+                                pointer-events: none;
+                                opacity: 0.6;
+                            }
+                        </style>
                         <div class="card-tools">
     @if($allowAccess->create || $allowAccess->update)
     
         <button type="button" data-block="body" class="btn btn-sm btn-{{ $theme->button }} mt-1 ajax_modal" data-url="{{ $page->url }}/create"><i class="fas fa-plus"></i> Tambah</button>
     @endif
 </div>
+
                        
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -39,6 +45,14 @@
 @endsection
 @push('content-js')
     <script>
+
+$(document).ready(function() {
+    $(document).on('click', 'a.disabled', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    });
+});
         $(document).ready(function() {
 
             $('.filter_combobox').select2();
@@ -82,18 +96,31 @@
                         }
                     },
                     {
-                        "mData": "rps_id",
+                    "mData": "rps_id",
                         "sClass": "text-center pr-2",
                         "sWidth": "10%",
                         "bSortable": false,
                         "bSearchable": false,
                         "mRender": function(data, type, row, meta) {
-                            return  ''
-                                    @if($allowAccess->update) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/edit" class="ajax_modal btn btn-xs btn-warning tooltips text-secondary" data-placement="left" data-original-title="Edit Data" ><i class="fa fa-edit"></i></a> ` @endif
-                                    @if($allowAccess->delete) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/delete" class="ajax_modal btn btn-xs btn-danger tooltips text-light" data-placement="left" data-original-title="Hapus Data" ><i class="fa fa-trash"></i></a> ` @endif
-                            ;
+                            let disabledClass = '';
+                            let disabledAttr = '';
+
+                            // Periksa jika verifikasi bernilai 1 atau 2, dan pengesahan bernilai 0 atau 1
+                            if ((row.verifikasi == 1 || row.verifikasi == 2) && (row.pengesahan == 0 || row.pengesahan == 1)) {
+                                disabledClass = 'disabled';
+                                disabledAttr = 'disabled';
+                            }
+
+                            return ''
+                                @if($allowAccess->update) 
+                                +`<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/edit" class="ajax_modal btn btn-xs btn-warning tooltips text-secondary ${disabledClass}" data-placement="left" data-original-title="Edit Data" ${disabledAttr} ><i class="fa fa-edit"></i></a> ` @endif
+                                @if($allowAccess->delete) 
+                                + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/delete" class="ajax_modal btn btn-xs btn-danger tooltips text-light ${disabledClass}" data-placement="left" data-original-title="Hapus Data"${disabledAttr} ><i class="fa fa-trash"></i></a> ` @endif
+                                
+                                ;
                         }
-                    }
+                    },
+                    
                 ],
                 "fnDrawCallback": function ( nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     $( 'a', this.fnGetNodes() ).tooltip();

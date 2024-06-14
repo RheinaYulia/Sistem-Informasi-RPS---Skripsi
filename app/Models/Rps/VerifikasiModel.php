@@ -26,6 +26,8 @@ class VerifikasiModel extends AppModel
         'deskripsi_rps',
         'tanggal_penyusunan',
         'verifikasi',
+        'pengesahan',
+        'keterangan_ditolak',
         'created_at',
         'created_by',
         'updated_at',
@@ -42,7 +44,7 @@ class VerifikasiModel extends AppModel
 
     public static function getMkRpsVer(){
         $map = DB::table('m_rps AS m')
-            ->selectRaw('m.rps_id, m.deskripsi_rps,m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama,m.verifikasi')
+            ->selectRaw('m.rps_id, m.deskripsi_rps,m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama,m.verifikasi,m.pengesahan')
             ->join('d_kurikulum_mk AS p', function ($join) {
                 $join->on('m.kurikulum_mk_id', '=', 'p.kurikulum_mk_id');
             })

@@ -50,16 +50,33 @@
                 </div>
 
                 <div class="form-group required row mb-3 mt-5">
-                    <label for="dosen_pengembang_id" class="col-sm-2 control-label col-form-label">Referensi</label>
+                    <label for="dosen_pengembang_id" class="col-sm-2 control-label col-form-label">Utama</label>
                     <div class="col-sm-10">
                         <table>
                             <th>
-                                @foreach ($pustakaview->unique('pustaka_id') as $d)
-                            <ul>
-                                <li>{{ $d->referensi }}</li>
-                            </ul>
-                            @endforeach
+                                @foreach ($pustakaview->where('jenis_pustaka', 1)->unique('pustaka_id')->unique('referensi') as $d)
+                                    <ul>
+                                        <li>{{ $d->referensi }}</li>
+                                    </ul>
+                                @endforeach
                             </th>
+                            
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group required row mb-3 mt-5">
+                    <label for="dosen_pengembang_id" class="col-sm-2 control-label col-form-label">Pendukung</label>
+                    <div class="col-sm-10">
+                        <table>
+                            <th>
+                                @foreach ($pustakaview->where('jenis_pustaka', 0)->unique('pustaka_id')->unique('referensi') as $d)
+                                    <ul>
+                                        <li>{{ $d->referensi }}</li>
+                                    </ul>
+                                @endforeach
+                            </th>
+                            
                         </table>
                     </div>
                 </div>

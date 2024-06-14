@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DCpmkDetail extends Migration
+class MPeriode extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,16 @@ class DCpmkDetail extends Migration
      */
     public function up()
     {
-        Schema::create('d_cpmk_detail', function (Blueprint $table) {
-            $table->id('cpmk_detail_id');
-            $table->unsignedBigInteger('cpmk_id')->index();
-            $table->string('sub_cpmk_kode')->nullable();
-            $table->text('uraian_sub_cpmk')->nullable();
+        Schema::create('m_periode', function (Blueprint $table) {
+            $table->id('periode_id');
+            $table->string('periode_name', 100)->unique();
+            $table->tinyInteger('is_active')->default(0);
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();
             $table->integer('updated_by')->nullable()->index();
             $table->dateTime('deleted_at')->nullable()->index();
             $table->integer('deleted_by')->nullable()->index();
-
-            $table->foreign('cpmk_id')->references('cpmk_id')->on('d_cpmk');
         });
     }
 
@@ -36,6 +33,6 @@ class DCpmkDetail extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('d_cpmk_detail');
+        Schema::dropIfExists('m_periode');
     }
 }

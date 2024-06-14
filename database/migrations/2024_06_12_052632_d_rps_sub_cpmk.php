@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DCpmkDetail extends Migration
+class DRpsSubCpmk extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class DCpmkDetail extends Migration
      */
     public function up()
     {
-        Schema::create('d_cpmk_detail', function (Blueprint $table) {
-            $table->id('cpmk_detail_id');
-            $table->unsignedBigInteger('cpmk_id')->index();
-            $table->string('sub_cpmk_kode')->nullable();
-            $table->text('uraian_sub_cpmk')->nullable();
+        Schema::create('d_rps_sub_cpmk', function (Blueprint $table) {
+            $table->id('rps_sub_cpmk_id');
+            $table->unsignedBigInteger('bab_id')->index();
+            $table->unsignedBigInteger('cpmk_detail_id')->index();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();
@@ -25,7 +24,8 @@ class DCpmkDetail extends Migration
             $table->dateTime('deleted_at')->nullable()->index();
             $table->integer('deleted_by')->nullable()->index();
 
-            $table->foreign('cpmk_id')->references('cpmk_id')->on('d_cpmk');
+            $table->foreign('bab_id')->references('bab_id')->on('d_rps_bab');
+            $table->foreign('cpmk_detail_id')->references('cpmk_detail_id')->on('d_cpmk_detail');
         });
     }
 
@@ -36,6 +36,7 @@ class DCpmkDetail extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('d_cpmk_detail');
+        Schema::dropIfExists('d_rps_kb');
     }
 }
+

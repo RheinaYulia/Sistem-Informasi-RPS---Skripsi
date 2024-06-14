@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Master;
+namespace App\Http\Controllers\Setting;
 
 use App\Http\Controllers\Controller;
 use App\Models\Master\JurusanModel;
-use App\Models\Master\MediaModel;
-use App\Models\Master\ProdiModel;
+use App\Models\Setting\PeriodeModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class MediaController extends Controller
+class PeriodeController extends Controller
 {
     public function __construct(){
-        $this->menuCode  = 'MASTER.MEDIA';
-        $this->menuUrl   = url('master/media');     // set URL untuk menu ini
-        $this->menuTitle = 'Kelola Media RPS';                       // set nama menu
-        $this->viewPath  = 'master.media.';         // untuk menunjukkan direktori view. Diakhiri dengan tanda titik
+        $this->menuCode  = 'SETTING.PERIODE';
+        $this->menuUrl   = url('setting/periode');     // set URL untuk menu ini
+        $this->menuTitle = 'Periode';                       // set nama menu
+        $this->viewPath  = 'setting.periode.';         // untuk menunjukkan direktori view. Diakhiri dengan tanda titik
     }
 
     public function index(){
@@ -25,12 +25,12 @@ class MediaController extends Controller
 
         $breadcrumb = [
             'title' => $this->menuTitle,
-            'list'  => ['Data Master', 'Media']
+            'list'  => ['Setting', 'Periode']
         ];
 
         $activeMenu = [
-            'l1' => 'master',
-            'l2' => 'master-media',
+            'l1' => 'setting',
+            'l2' => 'setting-periode',
             'l3' => null
         ];
 
@@ -38,6 +38,8 @@ class MediaController extends Controller
             'url' => $this->menuUrl,
             'title' => 'Daftar '. $this->menuTitle
         ];
+
+        $this->setPeriodeSession();
 
         return view($this->viewPath . 'index')
             ->with('breadcrumb', (object) $breadcrumb)
@@ -50,7 +52,7 @@ class MediaController extends Controller
         $this->authAction('read', 'json');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        $data  = MediaModel::selectRaw("media_id, jenis_media, nama_media");
+        $data  = PeriodeModel::selectRaw("periode_id, periode_name, is_active");
 
         return DataTables::of($data)
             ->addIndexColumn()
@@ -81,8 +83,8 @@ class MediaController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
 
             $rules = [
-                'jenis_media' => 'required|in:0,1',
-                'nama_media' => 'required|string|max:100',
+                'periode_name' => ['required', 'string', 'max:100', PeriodeModel::setUniqueInsert()],
+                'is_active' => 'required|in:0,1',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -96,7 +98,7 @@ class MediaController extends Controller
                 ]);
             }
 
-            $res = MediaModel::insertData($request);
+            $res = PeriodeModel::insertData($request);
 
             return response()->json([
                 'stat' => $res,
@@ -118,7 +120,7 @@ class MediaController extends Controller
             'title' => 'Edit ' . $this->menuTitle
         ];
 
-        $data = MediaModel::find($id);
+        $data = PeriodeModel::find($id);
 
         return (!$data)? $this->showModalError() :
             view($this->viewPath . 'action')
@@ -135,8 +137,8 @@ class MediaController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
 
             $rules = [
-                'jenis_media' => 'required|in:0,1',
-                'nama_media' => 'required|string|max:100',
+                'periode_name' => ['required', 'string', 'max:100', PeriodeModel::setUniqueInsertIgnore($id)],
+                'is_active' => 'required|in:0,1',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -150,7 +152,7 @@ class MediaController extends Controller
                 ]);
             }
 
-            $res = MediaModel::updateData($id, $request);
+            $res = PeriodeModel::updateData($id, $request);
 
             return response()->json([
                 'stat' => $res,
@@ -166,7 +168,7 @@ class MediaController extends Controller
         $this->authAction('read', 'modal');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        $data = ProdiModel::find($id);
+        $data = PeriodeModel::find($id);
         $page = [
             'title' => 'Detail ' . $this->menuTitle
         ];
@@ -183,11 +185,11 @@ class MediaController extends Controller
         $this->authAction('delete', 'modal');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        $data = MediaModel::find($id);
+        $data = PeriodeModel::find($id);
 
         return (!$data)? $this->showModalError() :
             $this->showModalConfirm($this->menuUrl.'/'.$id, [
-                'Nama_media' => $data->nama_media,
+                'Periode' => $data->periode_name,
             ]);
     }
 
@@ -197,15 +199,22 @@ class MediaController extends Controller
 
         if ($request->ajax() || $request->wantsJson()) {
 
-            $res = MediaModel::deleteData($id);
+            $res = PeriodeModel::deleteData($id);
 
             return response()->json([
                 'stat' => $res,
                 'mc' => $res, // close modal
-                'msg' => ProdiModel::getDeleteMessage()
+                'msg' => PeriodeModel::getDeleteMessage()
             ]);
         }
 
         return redirect('/');
+    }
+
+    private function setPeriodeSession() {
+        $periode = PeriodeModel::where('is_active', 1)->first();
+        if ($periode) {
+            Session::put('periode', $periode);
+        }
     }
 }

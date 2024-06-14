@@ -34,24 +34,24 @@
                     </div>
                 </div>
                 <div class="form-group required row mb-2">
-                    <label for="kurikulum_mk_id" class="col-sm-3 control-label col-form-label">Kurikulum MK</label>
+                    <label for="kurikulum_mk_id" class="col-sm-3 control-label col-form-label">Mata Kuliah</label>
                     <div class="col-sm-9">
                         <select type="text" class="form-control form-control-sm select2_combobox" id="kurikulum_mk_id" name="kurikulum_mk_id">
                             <option value="">-</option>
                             @foreach ($kurikulumk as $k)
-                                <option value="{{ $k->kurikulum_mk_id }}" {{ $is_edit && isset($data->kurikulum_mk_id) && $k->kurikulum_mk_id == $data->kurikulum_mk_id ? 'selected' : '' }}  {{ $k->is_frozen ? 'disabled' : '' }}>
-                                    {{ $k->kurikulum_mk_id }} - {{ $k->mk_nama }} 
+                                <option value="{{ $k->kurikulum_mk_id }}" class="{{ $k->is_frozen ? 'option-frozen' : '' }}" data-is-frozen="{{ $k->is_frozen }}" 
+                                    {{ $is_edit && isset($data->kurikulum_mk_id) && $k->kurikulum_mk_id == $data->kurikulum_mk_id ? 'selected' : ($k->is_frozen ? 'disabled' : '') }}>
+                                    {{ $k->kurikulum_mk_id }} - {{ $k->mk_nama }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
                 </div>
-                
                            
                 <div class="form-group required row mb-2">
                     <label class="col-sm-3 control-label col-form-label">Deskripsi Rps</label>
                     <div class="col-sm-9">
-                        <input type="textarea" class="form-control form-control-sm" id="deskripsi_rps" name="deskripsi_rps" value="{{ isset($data->deskripsi_rps) ? $data->deskripsi_rps : '' }}"/>
+                        <textarea class="form-control form-control-sm" rows="3" name="deskripsi_rps" id="deskripsi_rps">{{ isset($data->deskripsi_rps) ? $data->deskripsi_rps : '' }}</textarea>
                     </div>
                 </div>
 
@@ -66,6 +66,13 @@
                           </div>
                         </div>
                       </div>
+                </div>
+
+                <div class="form-group required row mb-2">
+                    <label class="col-sm-3 control-label col-form-label">Keterangan RPS</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control form-control-sm" rows="3" name="keterangan_rps" id="keterangan_rps">{{ isset($data->keterangan_rps) ? $data->keterangan_rps : '' }}</textarea>
+                    </div>
                 </div>
        
             <div class="modal-footer">
@@ -106,7 +113,10 @@
                 },
                 tanggal_penyusunan: {
                     required: true
-                }
+                },
+                keterangan_rps: {
+                    
+                },
             },
             submitHandler: function (form) {
                 $('.form-message').html('');

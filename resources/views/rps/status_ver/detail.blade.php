@@ -1,11 +1,4 @@
-<?php
-    // jika $data ada ISI-nya maka actionnya adalah edit, jika KOSONG : insert
-    $is_edit = isset($data);
-?>
-
 <form method="post" action="{{ $page->url }}" role="form" class="form-horizontal" id="form-master">
-    @csrf
-    {!! ($is_edit)? method_field('PUT') : '' !!}
     <div id="modal-master" class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,39 +7,35 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-message text-center"></div>
-
-                @if ($data->pengesahan == 1)
-                <div class="form-group required row mb-2">
+            <div class="form-group required row mb-2">
                     <label class="col-sm-3 col-form-label">Status</label>
                     <style>
                         #badge1 {
                                     font-size: 18px; /* Sesuaikan ukuran teks sesuai kebutuhan */
                                 }
                     </style>
-                        <span class="badge badge-success col-sm-3 " style="font-size: 15px">Sudah di Sahkan</span>
+                        <span class="badge badge-danger col-sm-3 " style="font-size: 15px">Ditolak Admin</span>
                     </div> 
+                <div class="form-group required row mb-2">
+                    <div style="display: flex; justify-content: center; width: 100%;">
+                        <table style="border-collapse: collapse; width: 80%; ">
+                        <label class="col-sm-3 col-form-label">Keterangan</label>
+                        <th style="padding: 10px; padding-top: 5px;  text-align: left;"> 
+                            <span>{{ $data->keterangan_ditolak }}</span>
+                        </th>
+                    </table>
+                    </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-primary">Oke</button>
+                <div class="form-group required row mb-2">
+                    
                 </div>
-                @else
 
-                <div class="form-group required row mb-2">
-                    <input type="hidden" id="pengesahan" name="pengesahan" value="1">
-                </div>
-                <div class="form-group required row mb-2">
-                    <label class="col-sm-10 col-form-label" >Apakah Anda Yakin Ingin Mengesahkan RPS {{ $kurikulumkId->mk_nama }} ini ? </label>
-                        
-                    </div> 
-                </div>
-       
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </div>
-            @endif
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-primary">Batal</button>
+        </div>
+               
+           
         </div>
     </div>
 </form>
@@ -68,7 +57,7 @@
 
         $("#form-master").validate({
             rules: {
-                pengesahan:{
+                verifikasi: {
                     required: true
                 }
             },

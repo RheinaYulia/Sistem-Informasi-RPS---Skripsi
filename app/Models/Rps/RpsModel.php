@@ -27,6 +27,7 @@ class RpsModel extends AppModel
         'kurikulum_mk_id',
         'deskripsi_rps',
         'tanggal_penyusunan',
+        'keterangan_rps',
         'created_at',
         'created_by',
         'updated_at',
@@ -59,7 +60,7 @@ class RpsModel extends AppModel
 
         $id = self::insertGetId($data);
         $bab = array();
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 17; $i++) {
             $bab[$i] = [
                 'rps_id' => $id,
                 'rps_bab' => $i,
@@ -72,7 +73,7 @@ class RpsModel extends AppModel
 
     public static function getMkRps($userId){
         $map = DB::table('m_rps AS m')
-            ->selectRaw('m.rps_id, m.deskripsi_rps, m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama, ds.nama_dosen')
+            ->selectRaw('m.rps_id, m.deskripsi_rps, m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama, ds.nama_dosen, m.verifikasi, m.pengesahan')
             ->join('d_kurikulum_mk AS p', function ($join) {
                 $join->on('m.kurikulum_mk_id', '=', 'p.kurikulum_mk_id');
             })
@@ -932,7 +933,7 @@ public static function getRpsData($p_rps_id) {
 public static function getRpsMedia($p_rps_id) {
     // Ambil data media terkait RPS
     $mediaData = DB::table('d_rps_media')
-                ->select('d_rps_media.rps_media_id as rps_media_id','d_rps_media.media_id as media_id','d_media.nama_media as nama_media')
+                ->select('d_rps_media.rps_media_id as rps_media_id','d_rps_media.media_id as media_id','d_media.nama_media as nama_media','d_media.jenis_media as jenis_media')
                 ->leftJoin('d_media', 'd_media.media_id', '=', 'd_rps_media.media_id')
                 ->where('d_rps_media.rps_id', $p_rps_id)
                 ->whereNull('d_rps_media.deleted_at')
@@ -944,7 +945,7 @@ public static function getRpsMedia($p_rps_id) {
 public static function getRpsPustaka($p_rps_id) {
     // Ambil data media terkait RPS
     $pustakaData = DB::table('d_rps_pustaka')
-                ->select('d_rps_pustaka.rps_pustaka_id as rps_pustaka_id','d_rps_pustaka.pustaka_id as pustaka_id','d_pustaka.referensi as referensi')
+                ->select('d_rps_pustaka.rps_pustaka_id as rps_pustaka_id','d_rps_pustaka.pustaka_id as pustaka_id','d_pustaka.referensi as referensi','d_pustaka.jenis_pustaka as jenis_pustaka')
                 ->leftJoin('d_pustaka', 'd_pustaka.pustaka_id', '=', 'd_rps_pustaka.pustaka_id')
                 ->where('d_rps_pustaka.rps_id', $p_rps_id)
                 ->whereNull('d_rps_pustaka.deleted_at')
@@ -959,6 +960,18 @@ public static function getRpsPengampu($p_rps_id) {
                 ->select('dosen_id as dosen_pengampu_id')
                 ->where('rps_id', $p_rps_id)
                 ->whereNull('deleted_at')
+                ->get();
+
+    return $mediaData;
+}
+
+public static function getRpsPengampuView($p_rps_id) {
+    // Ambil data media terkait RPS
+    $mediaData = DB::table('d_rps_pengampu')
+                ->select('d_rps_pengampu.dosen_id','d_dosen.dosen_id as dosen_id','d_dosen.nama_dosen as nama_dosen')
+                ->leftJoin('d_dosen', 'd_dosen.dosen_id', '=', 'd_rps_pengampu.dosen_id')
+                ->where('d_rps_pengampu.rps_id', $p_rps_id)
+                ->whereNull('d_rps_pengampu.deleted_at')
                 ->get();
 
     return $mediaData;
@@ -993,10 +1006,16 @@ public static function getRpsDescription($p_rps_id) {
                                     'm_rps.tanggal_penyusunan','m_mk.mk_nama',
                                      'd_kurikulum_mk.kode_mk','d_kurikulum_mk.mk_id',
                                     'd_kurikulum_mk.semester', 'd_kurikulum_mk.jumlah_jam', 'd_kurikulum_mk.sks',
-                                    'm_rumpun_mk.rumpun_mk_id', 'm_rumpun_mk.rumpun_mk',)
+                                    'm_rumpun_mk.rumpun_mk_id', 'm_rumpun_mk.rumpun_mk',
+                                    'd_kaprodi.kaprodi_id', 'd_dosen.dosen_id', 'd_dosen.nama_dosen',
+                                    'm_prodi.prodi_id', 'm_prodi.nama_prodi',
+                                    'm_rps.keterangan_rps')
                         ->leftJoin('d_kurikulum_mk', 'm_rps.kurikulum_mk_id', '=', 'd_kurikulum_mk.kurikulum_mk_id')
                         ->leftJoin('m_mk', 'd_kurikulum_mk.mk_id', '=', 'm_mk.mk_id')
                         ->leftJoin('m_rumpun_mk', 'd_kurikulum_mk.rumpun_mk_id', '=', 'm_rumpun_mk.rumpun_mk_id')
+                        ->leftJoin('d_kaprodi', 'm_rps.kaprodi_id', '=', 'd_kaprodi.kaprodi_id')
+                        ->leftJoin('d_dosen', 'd_kaprodi.dosen_id', '=', 'd_dosen.dosen_id')
+                        ->leftJoin('m_prodi', 'd_kaprodi.prodi_id', '=', 'm_prodi.prodi_id')
                         ->where('m_rps.rps_id', $p_rps_id)
                         ->first();
     
@@ -1006,7 +1025,7 @@ public static function getRpsDescription($p_rps_id) {
 
 public static function getCplProdi($p_rps_id) {
     $cplProdi = DB::table('m_prodi')
-        ->select('m_cpl_prodi.cpl_prodi_id', 'm_cpl_prodi.cpl_prodi_deskripsi')
+        ->select('m_cpl_prodi.cpl_prodi_id', 'm_cpl_prodi.cpl_prodi_kode','m_cpl_prodi.cpl_prodi_deskripsi')
         ->join('d_kurikulum_mk', 'm_prodi.prodi_id', '=', 'd_kurikulum_mk.prodi_id')
         ->join('m_cpl_prodi', 'm_prodi.prodi_id', '=', 'm_cpl_prodi.prodi_id')
         ->join('m_rps', 'd_kurikulum_mk.kurikulum_mk_id', '=', 'm_rps.kurikulum_mk_id')
@@ -1029,9 +1048,25 @@ public static function getSelectedCplProdi($p_rps_id) {
     return $selectedCplProdi;
 }
 
+public static function getCplProdiview($p_rps_id) {
+    $cplProdi = DB::table('m_prodi')
+        ->select('m_cpl_prodi.cpl_prodi_id', 'd_rps_cpl_prodi.cpl_prodi_id', 'm_cpl_prodi.cpl_prodi_kode','m_cpl_prodi.cpl_prodi_deskripsi')
+        ->join('d_kurikulum_mk', 'm_prodi.prodi_id', '=', 'd_kurikulum_mk.prodi_id')
+        ->join('m_cpl_prodi', 'm_prodi.prodi_id', '=', 'm_cpl_prodi.prodi_id')
+        ->join('m_rps', 'd_kurikulum_mk.kurikulum_mk_id', '=', 'm_rps.kurikulum_mk_id')
+        ->join('d_rps_cpl_prodi', 'm_cpl_prodi.cpl_prodi_id', '=', 'd_rps_cpl_prodi.cpl_prodi_id')
+        ->where('m_rps.rps_id', $p_rps_id)
+        ->whereNull('d_rps_cpl_prodi.deleted_at')
+        ->groupBy('m_cpl_prodi.cpl_prodi_id', 'm_cpl_prodi.cpl_prodi_deskripsi')
+        ->orderBy('m_cpl_prodi.cpl_prodi_id')
+        ->get();
+
+    return $cplProdi;
+}
+
 public static function getCpmk($rps_id) {
     $cpmkKode = DB::table('t_cpl_cpmk')
-        ->select('t_cpl_cpmk.cpl_cpmk_id', 'd_cpmk.cpmk_kode')
+        ->select('t_cpl_cpmk.cpl_cpmk_id', 'd_cpmk.cpmk_kode', 'd_cpmk.cpmk_deskripsi')
         ->join('m_cpl_prodi', 't_cpl_cpmk.cpl_prodi_id', '=', 'm_cpl_prodi.cpl_prodi_id')
         ->join('d_cpmk', 't_cpl_cpmk.cpmk_id', '=', 'd_cpmk.cpmk_id')
         ->join('d_rps_cpl_prodi', function($join) use ($rps_id) {
@@ -1039,6 +1074,25 @@ public static function getCpmk($rps_id) {
                  ->where('d_rps_cpl_prodi.rps_id', '=', $rps_id)
                  ->whereNull('d_rps_cpl_prodi.deleted_at');
         })
+        ->where('d_rps_cpl_prodi.rps_id', $rps_id)
+        ->groupBy('t_cpl_cpmk.cpl_cpmk_id', 'd_cpmk.cpmk_kode')
+        ->orderBy('t_cpl_cpmk.cpl_cpmk_id')
+        ->get();
+
+    return $cpmkKode;
+}
+
+public static function getCpmkView($rps_id) {
+    $cpmkKode = DB::table('t_cpl_cpmk')
+        ->select('t_cpl_cpmk.cpl_cpmk_id','d_rps_cpmk.cpl_cpmk_id', 'd_cpmk.cpmk_kode', 'd_cpmk.cpmk_deskripsi')
+        ->join('m_cpl_prodi', 't_cpl_cpmk.cpl_prodi_id', '=', 'm_cpl_prodi.cpl_prodi_id')
+        ->join('d_cpmk', 't_cpl_cpmk.cpmk_id', '=', 'd_cpmk.cpmk_id')
+        ->join('d_rps_cpl_prodi', function($join) use ($rps_id) {
+            $join->on('m_cpl_prodi.cpl_prodi_id', '=', 'd_rps_cpl_prodi.cpl_prodi_id')
+                 ->where('d_rps_cpl_prodi.rps_id', '=', $rps_id)
+                 ->whereNull('d_rps_cpl_prodi.deleted_at');
+        })
+        ->join('d_rps_cpmk', 't_cpl_cpmk.cpl_cpmk_id', '=', 'd_rps_cpmk.cpl_cpmk_id')
         ->where('d_rps_cpl_prodi.rps_id', $rps_id)
         ->groupBy('t_cpl_cpmk.cpl_cpmk_id', 'd_cpmk.cpmk_kode')
         ->orderBy('t_cpl_cpmk.cpl_cpmk_id')
@@ -1063,7 +1117,7 @@ public static function getSelectedCpmk($rps_id) {
 
 public static function getBk($rps_id) {
     $bkKode = DB::table('t_mk_bk')
-        ->select('t_mk_bk.mk_bk_id', 'm_bahan_kajian.bk_deskripsi')
+        ->select('t_mk_bk.mk_bk_id', 'm_bahan_kajian.bk_deskripsi','m_bahan_kajian.bk_kode')
         ->join('m_bahan_kajian', 't_mk_bk.bk_id', '=', 'm_bahan_kajian.bk_id')
         ->join('m_prodi', 'm_bahan_kajian.prodi_id', '=', 'm_prodi.prodi_id')
         ->join('m_mk', 't_mk_bk.mk_id', '=', 'm_mk.mk_id')
@@ -1072,6 +1126,30 @@ public static function getBk($rps_id) {
                  ->on('m_bahan_kajian.prodi_id', '=', 'd_kurikulum_mk.prodi_id');
         })
         ->join('m_rps', 'd_kurikulum_mk.kurikulum_mk_id', '=', 'm_rps.kurikulum_mk_id')
+        ->where('m_rps.rps_id', $rps_id)
+        ->groupBy('t_mk_bk.mk_bk_id', 'm_bahan_kajian.bk_deskripsi')
+        ->orderBy('t_mk_bk.mk_bk_id')
+        ->get();
+
+    return $bkKode;
+}
+
+public static function getBkView($rps_id) {
+    $bkKode = DB::table('t_mk_bk')
+        ->select('t_mk_bk.mk_bk_id','d_rps_bk.mk_bk_id', 'm_bahan_kajian.bk_deskripsi','m_bahan_kajian.bk_kode')
+        ->join('m_bahan_kajian', 't_mk_bk.bk_id', '=', 'm_bahan_kajian.bk_id')
+        ->join('m_prodi', 'm_bahan_kajian.prodi_id', '=', 'm_prodi.prodi_id')
+        ->join('m_mk', 't_mk_bk.mk_id', '=', 'm_mk.mk_id')
+        ->join('d_kurikulum_mk', function($join) {
+            $join->on('m_mk.mk_id', '=', 'd_kurikulum_mk.mk_id')
+                 ->on('m_bahan_kajian.prodi_id', '=', 'd_kurikulum_mk.prodi_id');
+        })
+        ->join('m_rps', 'd_kurikulum_mk.kurikulum_mk_id', '=', 'm_rps.kurikulum_mk_id')
+        ->join('d_rps_bk', function($join) use ($rps_id) {
+            $join->on('t_mk_bk.mk_bk_id', '=', 'd_rps_bk.mk_bk_id')
+                 ->where('d_rps_bk.rps_id', '=', $rps_id)
+                 ->whereNull('d_rps_bk.deleted_at');
+        })
         ->where('m_rps.rps_id', $rps_id)
         ->groupBy('t_mk_bk.mk_bk_id', 'm_bahan_kajian.bk_deskripsi')
         ->orderBy('t_mk_bk.mk_bk_id')
