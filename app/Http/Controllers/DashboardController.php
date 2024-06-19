@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Master\JurusanModel;
 use App\Models\Master\ProdiModel;
+use App\Models\Setting\PeriodeModel;
 use App\Models\View\BeritaView;
 use App\Models\View\DosenProposalView;
 use App\Models\View\DosenQuotaProdiView;
 use App\Models\View\DosenQuotaView;
 use App\Models\View\RekapDosenProdiView;
 use App\Models\View\RekapMahasiswaProdiView;
+use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use DataTables;
+use Illuminate\Support\Facades\Session;
 
 
 class DashboardController extends Controller
@@ -41,7 +43,8 @@ class DashboardController extends Controller
             'l2' => null,                   // menu aktif untuk level 2, berdasarkan class yang ada di sidebar
             'l3' => null                    // menu aktif untuk level 3, berdasarkan class yang ada di sidebar
         ];
-
+        
+        $this->setPeriodeSession();
 
         $page = [
             'url' => $this->menuUrl,
@@ -132,4 +135,6 @@ class DashboardController extends Controller
             view($this->viewPath . 'detail_berita')
                 ->with('data', $data);
     }
+
+    
 }

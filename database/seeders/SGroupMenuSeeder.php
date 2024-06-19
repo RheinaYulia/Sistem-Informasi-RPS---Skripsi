@@ -27,7 +27,7 @@ class SGroupMenuSeeder extends Seeder
                 $menu_dokur[] = ['group_id'  => 3, 'menu_id'   => $i, 'c'   => 1, 'r'    => 1, 'u'   => 1, 'd' => 1];
             } if($i >= 20 && $i <= 21) {
                 $menu_kaprodi[] = ['group_id'  => 4, 'menu_id'   => $i, 'c'   => 1, 'r'    => 1, 'u'   => 1, 'd' => 1];
-            } if($i === 3 || $i === 9) {
+            } if($i === 3 || $i === 9 || $i === 2 || $i === 4) {
                 $menu_admin[] = ['group_id'  => 2, 'menu_id'   => $i, 'c'   => 1, 'r'    => 1, 'u'   => 1, 'd' => 1];
                 $menu_kaprodi[] = ['group_id'  => 4, 'menu_id'   => $i, 'c'   => 1, 'r'    => 1, 'u'   => 1, 'd' => 1];
                 $menu_dokur[] = ['group_id'  => 3, 'menu_id'   => $i, 'c'   => 1, 'r'    => 1, 'u'   => 1, 'd' => 1];

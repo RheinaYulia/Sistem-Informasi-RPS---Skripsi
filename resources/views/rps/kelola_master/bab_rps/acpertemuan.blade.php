@@ -57,16 +57,22 @@
                         <div class="form-group required row mb-2">
                             <label for="subcpmk_id" class="col-sm-2 control-label col-form-label">Sub CPMK</label>
                             <div class="col-sm-9">
-                                <select type="text" class="form-control form-control-sm select2_combobox" id="subcpmk_id" name="cpmk_detail_id[]">
+                                <select type="text" class="form-control form-control-sm select2_combobox" id="subcpmk_id" name="unused_select">
                                     <option value="">-</option>
                                     @foreach ($subcpmk as $s)
-                                        <option value="{{ $s->cpmk_detail_id }}" data-uraian="{{ $s->uraian_sub_cpmk }}"
-                                            @foreach ($subcpmkrps as $d)
+                                        <option value="
+                                        {{-- {{ $s->cpmk_detail_id }} --}}
+                                         " 
+                                            data-uraian="{{ $s->uraian_sub_cpmk }}">
+                                            {{-- @foreach ($subcpmkrps as $d)
                                                 @if ($d->cpmk_detail_id == $s->cpmk_detail_id) selected @endif
-                                            @endforeach>
+                                            @endforeach> --}}
                                             {{ $s->sub_cpmk_kode }} - {{ $s->uraian_sub_cpmk }}
                                         </option>
                                     @endforeach
+                                    <option>Kuis</option>
+                                    <option>UTS</option>
+                                    <option>UAS</option>
                                 </select>
                             </div>
                         </div>
@@ -259,9 +265,9 @@ $(document).ready(function() {
                 metode_pembelajaran: {
 
                 },
-                cpmk_detail_id: {
-                    required: true
-                },
+                // cpmk_detail_id: {
+                //     required: true
+                // },
                 kriteria_penilaian: {
                     
                 },

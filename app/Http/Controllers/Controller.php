@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Setting\PeriodeModel;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -9,6 +10,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -244,5 +246,18 @@ class Controller extends BaseController
             $res[$crud[$k]] = (bool) $v;
         }
         return (object) $res;
+    }
+
+    public function index() {
+        $this->setPeriodeSession();
+    }
+
+    public function setPeriodeSession() {
+        $periode = PeriodeModel::where('is_active', 1)->first();
+        if ($periode) {
+            Session::put('periode', $periode);
+        } else {
+            Session::forget('periode');
+        }
     }
 }

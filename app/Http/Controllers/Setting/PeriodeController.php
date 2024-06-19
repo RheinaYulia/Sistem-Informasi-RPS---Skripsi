@@ -39,8 +39,6 @@ class PeriodeController extends Controller
             'title' => 'Daftar '. $this->menuTitle
         ];
 
-        $this->setPeriodeSession();
-
         return view($this->viewPath . 'index')
             ->with('breadcrumb', (object) $breadcrumb)
             ->with('activeMenu', (object) $activeMenu)
@@ -211,10 +209,5 @@ class PeriodeController extends Controller
         return redirect('/');
     }
 
-    private function setPeriodeSession() {
-        $periode = PeriodeModel::where('is_active', 1)->first();
-        if ($periode) {
-            Session::put('periode', $periode);
-        }
-    }
+
 }

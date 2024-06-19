@@ -81,6 +81,8 @@ Route::group(['prefix' => 'rps', 'middleware' => ['auth']], function() {
       Route::get('kelola_master/master_rps/{id}/editPustaka', [RPSdetailController::class, 'editPustaka'])->name('kelola_master.editPustaka');
       Route::match(['post', 'put'], 'kelola_master/{id}/updatePustaka', [RPSdetailController::class, 'updatePustaka'])->name('kelola_master.updatePustaka');
       Route::get('kelola_master/{id}/delete', [RPSdetailController::class, 'confirm']);
+      Route::get('kelola_master/master_rps/{id}/editMkSyarat', [RPSdetailController::class, 'editMkSyarat'])->name('kelola_master.editMkSyarat');
+      Route::match(['post', 'put'], 'kelola_master/{id}/updateMkSyarat', [RPSdetailController::class, 'updateMkSyarat'])->name('kelola_master.updateMkSyarat');
     //   Route::get('kelola_master/master_rps/kelola-data/{id}', [RPSdetailController::class, 'kelolaData'])->name('kelola.data');
 
       //BAB RPS

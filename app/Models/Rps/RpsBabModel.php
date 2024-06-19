@@ -44,7 +44,9 @@ class RpsBabModel extends AppModel
         //'App\Models\Master\EmployeeModel' => 'jabatan_id'
     ];
 
-    public static function spInsertOrUpdateBab($rps_id,array $cpmk_detail_id, array $bab_id, array $rps_bab, array $sub_cpmk, 
+    public static function spInsertOrUpdateBab($rps_id,
+    // array $cpmk_detail_id, 
+    array $bab_id, array $rps_bab, array $sub_cpmk, 
     array $materi, array $estimasi_waktu, array $pengalaman_belajar, array $indikator_penilaian, array $bobot_penilaian, array $bentuk_pembelajaran, array $metode_pembelajaran,
     array $kriteria_penilaian, array $bentuk_penilaian)
 {
@@ -96,24 +98,7 @@ class RpsBabModel extends AppModel
                 ]);
             }
 
-            $existingMetode = DB::table('d_rps_sub_cpmk')
-                                ->where('bab_id', $bab)
-                                ->first();
 
-            if ($existingMetode) {
-                // Jika sudah ada, lakukan pembaruan pada d_rps_metode
-                DB::table('d_rps_sub_cpmk')
-                    ->where('bab_id', $bab)
-                    ->update([
-                        'cpmk_detail_id' => $cpmk_detail_id[$index]
-                    ]);
-            } else {
-                // Jika belum ada, lakukan penambahan pada d_rps_metode
-                DB::table('d_rps_sub_cpmk')->insert([
-                    'bab_id' => $bab,
-                    'cpmk_detail_id' => $cpmk_detail_id[$index]
-                ]);
-            }
             // Cek apakah bab_id sudah ada dalam tabel d_rps_metode
             $existingMetode = DB::table('d_rps_kb')
                                 ->where('bab_id', $bab)

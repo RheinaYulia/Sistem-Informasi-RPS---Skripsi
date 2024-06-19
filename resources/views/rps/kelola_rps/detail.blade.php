@@ -136,7 +136,7 @@
                                 @endforeach
                                         
                             </td>
-                            <td> </td>
+                            <td>{{ $data->koordinator}} </td>
                             <td colspan="4">{{ $data->nama_dosen }}</td>
                         </tr>
                             <tr>
@@ -237,6 +237,19 @@
                                         @foreach ($pengampuview as $pengampu )
                                         <li>
                                             {{ $pengampu->nama_dosen }}
+                                        </li>
+                                        @endforeach
+                                    </ol>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th colspan="2">Mata Kuliah Syarat</th>
+                                <td colspan="6">
+                                    <ol>
+                                        @foreach ($mksyarat as $mk )
+                                        <li>
+                                            {{ $mk->mk_nama }}
                                         </li>
                                         @endforeach
                                     </ol>

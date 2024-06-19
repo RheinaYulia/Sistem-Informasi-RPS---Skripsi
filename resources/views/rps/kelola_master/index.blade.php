@@ -69,7 +69,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Mata Kuliah</th>
-                                    <th>Pengembang</th>
+                                    <th>Edit Dosen RPS</th>
                                     <th> Edit Bab </th>
                                     <th>Edit Master</th>
                                 </tr>
@@ -203,10 +203,9 @@
                                         <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editCplProdi" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="CPL Prodi">CPL Prodi</a>
                                         <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editCPMK" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="CPMK">CPMK</a>
                                         <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editBk" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="Materi Pembelajaran">Materi Pembelajaran</a>
-                                        <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editPengampu" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="Dosen Pengampu">Dosen Pengampu</a>
                                         <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editMedia" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="Media">Media</a>
                                         <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editPustaka" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="Pustaka">Pustaka</a>
-                                        
+                                        <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editMkSyarat" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="Matkul Syarat">Matkul Syarat</a>
                                     </div>
                                 </div>` 
                             @endif

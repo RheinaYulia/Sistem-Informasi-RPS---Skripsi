@@ -10,43 +10,82 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{!! $page->title !!}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="form-message text-center"></div>
-               
-                    <div class="form-group required row mb-3">
-                        <label for="dosen_pengembang_id" class="col-sm-2 control-label col-form-label">Nama Dosen</label>
-                        <div class="col-sm-8">
-                            @foreach ($data as $d )
-                            <input type="hidden" class="form-control form-control-sm" id="rps_id" name="rps_id" value="{{ $d->rps_id }}">
-                            @endforeach
-                            <select class="select2" multiple="multiple" data-placeholder="Select a State" style="width: 100%;" id="dosen_pengembang_id" name="dosen_pengembang_id[]">
-                                @foreach ($pengampu as $dosen)
-                                    <option value="{{ $dosen->dosen_id }}"
-                                        @foreach ($pengembangview as $d)
-                                            @if ($d->dosen_pengembang_id == $dosen->dosen_id) selected @endif
+                
+                <div class="form-group required row mb-1">
+                    <label class="col-sm-3 control-label col-form-label">CPL Prodi</label>
+                    @foreach ($data as $d)
+                        <input type="hidden" class="form-control form-control-sm" id="rps_id" name="rps_id" value="{{ $d->rps_id }}">
+                    @endforeach
+                </div>
+                
+                <div class="form-group required row mb-10">
+                    <div class="col-12 d-flex justify-content-center">
+                        <div class="table-responsive" style="width: 80%;">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="searchInput" placeholder="Search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-wrapper" style="height: 400px; overflow-y: auto;">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 45px;">#</th>
+                                            <th style="text-align: center; width: 60px;">Kode</th>
+                                            <th style="text-align: center;">Deskripsi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody">
+                                        @foreach ($mkview as $c)
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                @php
+                                                    // Cek apakah cpl_prodi_id ada di dalam selectCpl
+                                                    $isSelected = $mksyarat->firstWhere('kurikulum_mk_id', $c->kurikulum_mk_id);
+                                                    // Tentukan apakah checkbox harus dicentang
+                                                    $isChecked = $isSelected && $isSelected->is_selected;
+                                                @endphp
+                                                <div class="icheck-success mb-9">
+                                                    <input type="checkbox" id="checkbox{{ $c->kurikulum_mk_id }}" name="kurikulum_mk_id[]" value="{{ $c->kurikulum_mk_id }}" @if ($isChecked) checked @endif>
+                                                    <label for="checkbox{{ $c->kurikulum_mk_id }}"></label>
+                                                </div>
+                                            </td>
+                                            <td style="padding-left: 10px;">
+                                                <label for="checkbox{{ $c->kurikulum_mk_id }}">
+                                                    {{ $c->kode_mk }}
+                                                </label>
+                                            </td>
+                                            <td style="padding-left: 10px;">
+                                                <label for="checkbox{{ $c->kurikulum_mk_id }}">
+                                                    {{ $c->mk_nama }}
+                                                </label>
+                                            </td>
+                                        </tr>
                                         @endforeach
-                                    >{{ $dosen->nama_dosen }}</option>
-                                @endforeach
-                                  </select>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        </div>
-                 
-
-            
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
             </div>
         </div>
     </div>
 </form>
 
 <script>
-
-
 $(function () {
     //Initialize Select2 Elements
     $('.select2').select2()
@@ -57,52 +96,74 @@ $(function () {
     })
 });
 
-
-
-
 $(document).ready(function () {
     unblockUI();
     $('.select2_combobox').select2();
 
-    var elementsPengembang = [];
-
-    $('#dosen_pengembang_id').on('select2:unselect', function(e) {
-        var dosenId = e.params.data.id;
-        elementsPengembang.push(dosenId);
+    var elementsMkSyarat = [];
+    
+    $('input[type="checkbox"][name="kurikulum_mk_id[]"]').on('change', function() {
+        var cplMkId = $(this).val();
+        if (!$(this).is(':checked')) {
+            elementsMkSyarat.push(cplMkId);
+        }
     });
-    
-    
+
+    // Pencarian
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var tableBody = document.getElementById('tableBody');
+        var rows = tableBody.getElementsByTagName('tr');
+
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName('td');
+            var match = false;
+
+            for (var j = 0; j < cells.length; j++) {
+                if (cells[j].innerText.toLowerCase().indexOf(searchValue) > -1) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    });
 
     $("#form-master").validate({
         rules: {
             rps_id: { required: true },
-            dosen_pengembang_id: { required: true },
+            kurikulum_mk_id: { required: true },
         },
         submitHandler: function (form) {
-
-            elementsPengembang.forEach(function(id) {
+           
+            elementsMkSyarat.forEach(function(id) {
                 $('<input>').attr({
                     type: 'hidden',
-                    name: 'elements_pengembang[]',
+                    name: 'elements_mk_syarat[]',
                     value: id
                 }).appendTo(form);
             });
 
             blockUI(form);
-                $(form).ajaxSubmit({
-                    url: "{{ route('kelola_master.update1', $id) }}", // Ensure this URL is correct
-                    type: 'POST', // Ensure the request is POST
-                    dataType: 'json',
-                    success: function (data) {
-                        unblockUI(form);
-                        setFormMessage('.form-message', data);
-                        if (data.stat) {
-                            resetForm('#form-master');
-                            dataMaster.draw(false);
-                        }
-                        closeModal($modal, data);
+            $(form).ajaxSubmit({
+                url: "{{ route('kelola_master.updateMkSyarat', $id) }}", // Ensure this URL is correct
+                type: 'POST', // Ensure the request is POST
+                dataType: 'json',
+                success: function (data) {
+                    unblockUI(form);
+                    setFormMessage('.form-message', data);
+                    if (data.stat) {
+                        resetForm('#form-master');
+                        dataMaster.draw(false);
                     }
-                });
+                    closeModal($modal, data);
+                }
+            });
         },
         validClass: "valid-feedback",
         errorElement: "div",
@@ -114,3 +175,16 @@ $(document).ready(function () {
     });
 });
 </script>
+
+<style>
+.table-wrapper {
+    position: relative;
+}
+
+.table-wrapper thead th {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 2;
+}
+</style>

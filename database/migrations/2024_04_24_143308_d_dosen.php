@@ -15,9 +15,10 @@ class DDosen extends Migration
     {
         Schema::create('d_dosen', function (Blueprint $table) {
             $table->id('dosen_id');
-            $table->string('nama_dosen',50)->nullable();
+            $table->string('nama_dosen',150)->nullable();
             $table->unsignedBigInteger('user_id')->index();
-            $table->tinyInteger('is_pengembang')->default(0);
+            $table->string('nip',50)->nullable();
+            $table->string('nidn',50)->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();

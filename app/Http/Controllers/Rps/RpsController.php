@@ -137,6 +137,7 @@ class RpsController extends Controller
         $cpmkview = RpsModel::getCpmkView($id);
         $bkview = RpsModel::getBkView($id);
         $pustaka = RpsModel::getRpsPustaka($id);
+        $mksyarat = RpsModel::getRpsMkView($id);
 
 
         $page = [
@@ -155,7 +156,9 @@ class RpsController extends Controller
                 ->with('cpmkview', $cpmkview)
                 ->with('bkview', $bkview)
                 ->with('pustaka', $pustaka)
-                ->with('bab', $bab);
+                ->with('bab', $bab)
+                ->with('mksyarat',$mksyarat)
+                ;
     }
 
     public function shows($id){
@@ -171,6 +174,7 @@ class RpsController extends Controller
         $cpmkview = RpsModel::getCpmkView($id);
         $bkview = RpsModel::getBkView($id);
         $pustaka = RpsModel::getRpsPustaka($id);
+        $mksyarat = RpsModel::getRpsMkView($id);
 
 
         $page = [
@@ -189,7 +193,9 @@ class RpsController extends Controller
                 ->with('cpmkview', $cpmkview)
                 ->with('bkview', $bkview)
                 ->with('pustaka', $pustaka)
-                ->with('bab', $bab);
+                ->with('bab', $bab)
+                ->with('mksyarat',$mksyarat)
+                ;
     }
 
     // public function shows1($id){

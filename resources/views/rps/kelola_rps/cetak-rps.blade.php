@@ -247,6 +247,19 @@
                                 </ol>
                             </td>
                         </tr>
+
+                        <tr>
+                            <th colspan="2">Mata Kuliah Syarat</th>
+                            <td colspan="6">
+                                <ol>
+                                    @foreach ($mksyarat as $mk )
+                                    <li>
+                                        {{ $mk->mk_nama }}
+                                    </li>
+                                    @endforeach
+                                </ol>
+                            </td>
+                        </tr>
                   
                 </div>
                 </table>

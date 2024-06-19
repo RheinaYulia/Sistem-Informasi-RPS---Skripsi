@@ -1,8 +1,6 @@
 <?php
-    // jika $data ada ISI-nya maka actionnya adalah edit, jika KOSONG : insert
     $is_edit = isset($data);
 ?>
-
 <form method="post" action="{{$page->url}}" role="form" class="form-horizontal" id="form-master">
     @csrf
     {!! ($is_edit)? method_field('PUT') : '' !!}
@@ -10,35 +8,76 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{!! $page->title !!}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="form-message text-center"></div>
-                
-                
 
-               
-                    <div class="form-group required row mb-3">
-                        <label for="dosen_pengembang_id" class="col-sm-2 control-label col-form-label">Nama Dosen</label>
-                        <div class="col-sm-8">
-                            @foreach ($data as $d )
-                            <input type="hidden" class="form-control form-control-sm" id="rps_id" name="rps_id" value="{{ $d->rps_id }}">
-                            @endforeach
-                            <select class="select2" multiple="multiple" data-placeholder="Select a State" style="width: 100%;" id="dosen_pengembang_id" name="dosen_pengembang_id[]">
-                                @foreach ($pengampu as $dosen)
-                                    <option value="{{ $dosen->dosen_id }}"
-                                        @foreach ($pengembangview as $d)
-                                            @if ($d->dosen_pengembang_id == $dosen->dosen_id) selected @endif
+                <div class="form-group required row mb-10">
+                    @foreach ($data as $d )
+                        <input type="hidden" class="form-control form-control-sm" id="rps_id" name="rps_id" value="{{ $d->rps_id }}">
+                    @endforeach
+                    <div class="col-12 d-flex justify-content-center">
+                        <div class="table-responsive" style="width: 80%;">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="searchInput" placeholder="Search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-wrapper" style="height: 400px; overflow-y: auto;">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 45px;">#</th>
+                                            <th style="text-align: center;">Nama Dosen</th>
+                                            <th style="text-align: center; width: 45px;">Pengampu</th>
+                                            <th style="text-align: center; width: 45px;">Pengembang</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody">
+                                        @foreach ($pengampu as $kode)
+                                        <tr>
+                                            <td style="text-align: center;">
+                                                {{ $loop->iteration }}
+                                            </td>
+                                            <td style="padding-left: 10px;">
+                                                <label for="checkbox_pengampu{{ $kode->dosen_id }}">
+                                                    {{ $kode->nama_dosen }}
+                                                </label>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                @php
+                                                    $isPengampuSelected = $pengampuview->firstWhere('dosen_id', $kode->dosen_id);
+                                                    $isPengampuChecked = $isPengampuSelected && $isPengampuSelected->is_selected;
+                                                @endphp
+                                                <div class="icheck-success d-inline">
+                                                    <input type="checkbox" id="checkbox_pengampu{{ $kode->dosen_id }}" name="dosen_pengampu_id[]" value="{{ $kode->dosen_id }}" @if ($isPengampuChecked) checked @endif>
+                                                    <label for="checkbox_pengampu{{ $kode->dosen_id }}"></label>
+                                                </div>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                @php
+                                                    $isPengembangSelected = $pengembangview->firstWhere('dosen_id', $kode->dosen_id);
+                                                    $isPengembangChecked = $isPengembangSelected && $isPengembangSelected->is_selected;
+                                                @endphp
+                                                <div class="icheck-success d-inline">
+                                                    <input type="checkbox" id="checkbox_pengembang{{ $kode->dosen_id }}" name="dosen_pengembang_id[]" value="{{ $kode->dosen_id }}" @if ($isPengembangChecked) checked @endif>
+                                                    <label for="checkbox_pengembang{{ $kode->dosen_id }}"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
                                         @endforeach
-                                    >{{ $dosen->nama_dosen }}</option>
-                                @endforeach
-                                  </select>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        </div>
-                 
+                    </div>
+                </div>
 
-            
+            </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
@@ -48,40 +87,83 @@
 </form>
 
 <script>
+$(document).ready(function() {
+    // Inisialisasi DataTables dihapus karena tabel sekarang adalah tabel sederhana
 
+    // Pencarian
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        var searchValue = this.value.toLowerCase();
+        var tableBody = document.getElementById('tableBody');
+        var rows = tableBody.getElementsByTagName('tr');
 
-$(function () {
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName('td');
+            var match = false;
+
+            for (var j = 0; j < cells.length; j++) {
+                if (cells[j].innerText.toLowerCase().indexOf(searchValue) > -1) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    });
+
     //Initialize Select2 Elements
-    $('.select2').select2()
+    $('.select2').select2();
 
     //Initialize Select2 Elements
     $('.select2bs4').select2({
-      theme: 'bootstrap4'
-    })
-});
+        theme: 'bootstrap4'
+    });
 
-
-
-
-$(document).ready(function () {
     unblockUI();
+
     $('.select2_combobox').select2();
 
+    var elementsPengampu = [];
     var elementsPengembang = [];
 
-    $('#dosen_pengembang_id').on('select2:unselect', function(e) {
-        var dosenId = e.params.data.id;
-        elementsPengembang.push(dosenId);
+    $('input[type="checkbox"][name="dosen_pengampu_id[]"]').on('change', function() {
+        var dosenId = $(this).val();
+        
+        if (!$(this).is(':checked')) {
+            elementsPengampu.push(dosenId);
+        }
+        
     });
-    
-    
+
+    $('input[type="checkbox"][name="dosen_pengembang_id[]"]').on('change', function() {
+        var dosenId = $(this).val();
+        if ($(this).is(':checked')) {
+            $('#checkbox_pengampu' + dosenId).prop('checked', true);
+        }
+        // Remove dosenId from elementsPengembang if unchecked
+        if (!$(this).is(':checked')) {
+            elementsPengembang.push(dosenId);
+        }
+    });
 
     $("#form-master").validate({
         rules: {
             rps_id: { required: true },
+            dosen_pengampu_id: { required: true },
             dosen_pengembang_id: { required: true },
         },
         submitHandler: function (form) {
+            elementsPengampu.forEach(function(id) {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'elements_pengampu[]',
+                    value: id
+                }).appendTo(form);
+            });
 
             elementsPengembang.forEach(function(id) {
                 $('<input>').attr({
@@ -92,20 +174,20 @@ $(document).ready(function () {
             });
 
             blockUI(form);
-                $(form).ajaxSubmit({
-                    url: "{{ route('kelola_master.update1', $id) }}", // Ensure this URL is correct
-                    type: 'POST', // Ensure the request is POST
-                    dataType: 'json',
-                    success: function (data) {
-                        unblockUI(form);
-                        setFormMessage('.form-message', data);
-                        if (data.stat) {
-                            resetForm('#form-master');
-                            dataMaster.draw(false);
-                        }
-                        closeModal($modal, data);
+            $(form).ajaxSubmit({
+                url: "{{ route('kelola_master.update1', $id) }}", // Ensure this URL is correct
+                type: 'POST', // Ensure the request is POST
+                dataType: 'json',
+                success: function (data) {
+                    unblockUI(form);
+                    setFormMessage('.form-message', data);
+                    if (data.stat) {
+                        resetForm('#form-master');
+                        dataMaster.draw(false);
                     }
-                });
+                    closeModal($modal, data);
+                }
+            });
         },
         validClass: "valid-feedback",
         errorElement: "div",
@@ -117,3 +199,16 @@ $(document).ready(function () {
     });
 });
 </script>
+
+<style>
+.table-wrapper {
+    position: relative;
+}
+
+.table-wrapper thead th {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 2;
+}
+</style>

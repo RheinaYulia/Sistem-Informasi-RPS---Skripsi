@@ -15,9 +15,9 @@ class MatkulSeeder extends Seeder
     public function run()
     {
         DB::table('m_mk')->insert([
-            ['mk_id' => 1, 'mk_nama' => 'Etika dan Profesi','mk_jenis' => 'jenis1'],
-            ['mk_id' => 2, 'mk_nama' => 'Struktur Data','mk_jenis' => 'jenis2'],
-            ['mk_id' => 3, 'mk_nama' => 'Basis Data','mk_jenis' => 'jenis3'],
+            ['mk_id' => 1, 'mk_nama' => 'Tata Kelola Teknologi Informasi','mk_jenis' => 'jenis1'],
+            ['mk_id' => 2, 'mk_nama' => 'Komputasi Multimedia','mk_jenis' => 'jenis2'],
+            ['mk_id' => 3, 'mk_nama' => 'Audit Sistem Informasi ','mk_jenis' => 'jenis3'],
         ]);
     }
 }
