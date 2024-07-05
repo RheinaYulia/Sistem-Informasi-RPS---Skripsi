@@ -141,9 +141,10 @@ $(document).ready(function() {
 
     $('input[type="checkbox"][name="dosen_pengembang_id[]"]').on('change', function() {
         var dosenId = $(this).val();
-        if ($(this).is(':checked')) {
-            $('#checkbox_pengampu' + dosenId).prop('checked', true);
-        }
+        //pengampu otomatis ke ceklis
+        // if ($(this).is(':checked')) {
+        //     $('#checkbox_pengampu' + dosenId).prop('checked', true);
+        // }
         // Remove dosenId from elementsPengembang if unchecked
         if (!$(this).is(':checked')) {
             elementsPengembang.push(dosenId);

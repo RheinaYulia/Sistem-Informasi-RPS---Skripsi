@@ -24,6 +24,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nama Dosen</th>
+                                    <th>NIP</th>
+                                    <th>NIDN</th>
                                     {{-- <th>#</th> --}}
                                 </tr>
                             </thead>
@@ -56,6 +58,20 @@
                         "sWidth": "5%",
                         "bSortable": false,
                         "bSearchable": false
+                    },
+                    {
+                        "mData": "nama_dosen",
+                        "sClass": "",
+                        "sWidth": "30%",
+                        "bSortable": true,
+                        "bSearchable": true
+                    },
+                    {
+                        "mData": "nama_dosen",
+                        "sClass": "",
+                        "sWidth": "20%",
+                        "bSortable": true,
+                        "bSearchable": true
                     },
                     {
                         "mData": "nama_dosen",

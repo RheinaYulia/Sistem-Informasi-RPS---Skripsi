@@ -203,7 +203,7 @@ class PustakaController extends Controller
             return response()->json([
                 'stat' => $res,
                 'mc' => $res, // close modal
-                'msg' => ProdiModel::getDeleteMessage()
+                'msg' => PustakaModel::getDeleteMessage()
             ]);
         }
 

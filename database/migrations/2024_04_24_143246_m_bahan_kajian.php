@@ -16,7 +16,7 @@ class MBahanKajian extends Migration
         Schema::create('m_bahan_kajian', function (Blueprint $table) {
             $table->id('bk_id');
             $table->unsignedBigInteger('prodi_id')->index();
-            $table->string('bk_kode', 5)->index();
+            $table->string('bk_kode', 5)->index()->nullable();
             $table->string('bk_kategori', 100)->nullable();
             $table->text('bk_deskripsi')->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();

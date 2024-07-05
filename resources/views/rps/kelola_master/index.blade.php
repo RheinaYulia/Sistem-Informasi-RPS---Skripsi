@@ -71,7 +71,7 @@
                                     <th>Mata Kuliah</th>
                                     <th>Edit Dosen RPS</th>
                                     <th> Edit Bab </th>
-                                    <th>Edit Master</th>
+                                    <th>Edit RPS</th>
                                 </tr>
                             </thead>
                         </table>
@@ -195,14 +195,14 @@
                         return ''
                             @if($allowAccess->update)
                             + `<div class="btn-group">
-                                    <button type="button" class="btn btn-warning ${disabledClass}">Edit Master</button>
+                                    <button type="button" class="btn btn-warning ${disabledClass}">Edit RPS</button>
                                     <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon ${disabledClass}" data-toggle="dropdown" ${disabled}>
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu" role="menu">
                                         <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editCplProdi" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="CPL Prodi">CPL Prodi</a>
                                         <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editCPMK" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="CPMK">CPMK</a>
-                                        <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editBk" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="Materi Pembelajaran">Materi Pembelajaran</a>
+                                        <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editBk" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="Pokok Bahasan">Pokok Bahasan</a>
                                         <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editMedia" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="Media">Media</a>
                                         <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editPustaka" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="Pustaka">Pustaka</a>
                                         <a href="#" data-block="body" data-url="{{ $page->url }}/master_rps/${data}/editMkSyarat" class="dropdown-item ajax_modal ${disabledClass}" data-original-title="Matkul Syarat">Matkul Syarat</a>

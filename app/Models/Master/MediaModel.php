@@ -30,14 +30,9 @@ class MediaModel extends AppModel
         'deleted_by'
     ];
 
-    public static function destroyMedia($id)
-    {
-        $media = self::find($id);
-
-        if ($media) {
-            return $media->delete();
-        }
-
-        return false;
-    }
+    protected static $cascadeDelete = false;   //  True: Force Delete from Parent (cascade)
+    protected static $childModel = [
+        //  Model => columnFK
+        //'App\Models\Master\EmployeeModel' => 'jabatan_id'
+    ];
 }

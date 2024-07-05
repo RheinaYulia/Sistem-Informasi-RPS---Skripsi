@@ -139,6 +139,9 @@ class RpsController extends Controller
         $pustaka = RpsModel::getRpsPustaka($id);
         $mksyarat = RpsModel::getRpsMkView($id);
 
+        // Get show_percentage from session if available
+    $show_percentage = session('show_percentage', []);
+
 
         $page = [
             'title' => 'Detail ' . $this->menuTitle
@@ -158,6 +161,7 @@ class RpsController extends Controller
                 ->with('pustaka', $pustaka)
                 ->with('bab', $bab)
                 ->with('mksyarat',$mksyarat)
+                ->with('show_percentage', $show_percentage);
                 ;
     }
 

@@ -41,7 +41,7 @@
                             @foreach ($kurikulumk as $k)
                                 <option value="{{ $k->kurikulum_mk_id }}" class="{{ $k->is_frozen ? 'option-frozen' : '' }}" data-is-frozen="{{ $k->is_frozen }}" 
                                     {{ $is_edit && isset($data->kurikulum_mk_id) && $k->kurikulum_mk_id == $data->kurikulum_mk_id ? 'selected' : ($k->is_frozen ? 'disabled' : '') }}>
-                                    {{ $k->kurikulum_mk_id }} - {{ $k->mk_nama }}
+                                    {{ $k->kode_mk }} - {{ $k->mk_nama }}
                                 </option>
                             @endforeach
                         </select>
@@ -49,7 +49,7 @@
                 </div>
                            
                 <div class="form-group required row mb-2">
-                    <label class="col-sm-3 control-label col-form-label">Deskripsi Rps</label>
+                    <label class="col-sm-3 control-label col-form-label">Deskripsi Mata Kuliah</label>
                     <div class="col-sm-9">
                         <textarea class="form-control form-control-sm" rows="3" name="deskripsi_rps" id="deskripsi_rps">{{ isset($data->deskripsi_rps) ? $data->deskripsi_rps : '' }}</textarea>
                     </div>
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="form-group required row mb-2">
-                    <label class="col-sm-3 control-label col-form-label">Keterangan RPS</label>
+                    <label class="col-sm-3 col-form-label">Keterangan RPS</label>
                     <div class="col-sm-9">
                         <textarea class="form-control form-control-sm" rows="3" name="keterangan_rps" id="keterangan_rps">{{ isset($data->keterangan_rps) ? $data->keterangan_rps : '' }}</textarea>
                     </div>

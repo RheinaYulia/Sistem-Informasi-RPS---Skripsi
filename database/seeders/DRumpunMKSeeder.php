@@ -15,9 +15,9 @@ class DRumpunMKSeeder extends Seeder
     public function run()
     {
         DB::table('m_rumpun_mk')->insert([
-            ['rumpun_mk_id' => 1, 'dosen_id' => 29,'kurikulum_id'=> 2, 'rumpun_mk'=>'Sistem Informasi'],
-            ['rumpun_mk_id' => 2, 'dosen_id' => 28,'kurikulum_id'=> 1, 'rumpun_mk'=> 'Multimedia dan Game'],
-            ['rumpun_mk_id' => 3, 'dosen_id' => 44,'kurikulum_id'=> 2, 'rumpun_mk'=> 'MK Informatika Inti '],
+            ['rumpun_mk_id' => 1, 'dosen_id' => null,'kurikulum_id'=> 2, 'rumpun_mk'=>'Sistem Informasi'],
+            ['rumpun_mk_id' => 2, 'dosen_id' => null,'kurikulum_id'=> 1, 'rumpun_mk'=> 'Multimedia dan Game'],
+            ['rumpun_mk_id' => 3, 'dosen_id' => null,'kurikulum_id'=> 2, 'rumpun_mk'=> 'MK Informatika Inti '],
         ]);
     }
 }

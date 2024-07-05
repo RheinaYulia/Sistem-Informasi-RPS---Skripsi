@@ -38,5 +38,31 @@ class TCplCpmkSeeder extends Seeder
             ['cpl_cpmk_id' => 21, 'cpl_prodi_id' => 15, 'cpmk_id' => 21],
             ['cpl_cpmk_id' => 22, 'cpl_prodi_id' => 15, 'cpmk_id' => 22],
         ]);
+        
+        $cpl_prodi_ids = [1, 2, 3, 4, 5, 6, 12, 13, 14, 15];
+$cpmk_ids = [
+    23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
+    33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
+    43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
+    53, 54, 55, 56, 57, 58, 59, 60, 61, 62,
+    63, 64, 65, 66, 67, 68, 69, 70, 71, 72,
+    73, 74, 75, 76, 77, 78, 79, 80, 81
+];
+
+$insertData = [];
+$cpl_cpmk_id = 23; // Starting cpl_cpmk_id
+
+foreach ($cpmk_ids as $cpmk_id) {
+    foreach ($cpl_prodi_ids as $cpl_prodi_id) {
+        $insertData[] = [
+            'cpl_cpmk_id' => $cpl_cpmk_id++,
+            'cpl_prodi_id' => $cpl_prodi_id,
+            'cpmk_id' => $cpmk_id
+        ];
+    }
+}
+
+DB::table('t_cpl_cpmk')->insert($insertData);
+
     }
 }

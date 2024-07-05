@@ -96,6 +96,9 @@ class DDosenSeeder extends Seeder
             ['dosen_id' => 79, 'user_id'=> 80, 'nama_dosen' => 'Yan Watequlis Syaifudin, ST., M.MT., Ph.D.', 'nip' => '198101052005011005', 'nidn' => '0005018104', 'created_at' => now()],
             ['dosen_id' => 80, 'user_id'=> 81, 'nama_dosen' => 'Yuri Ariyanto, S.Kom., M.Kom.', 'nip' => '198007162010121002', 'nidn' => '0016078008', 'created_at' => now()],
             ['dosen_id' => 81, 'user_id'=> 82, 'nama_dosen' => 'Dodit Suprianto', 'nip' => '', 'nidn' => '716037502', 'created_at' => now()],
+            ['dosen_id' => 82, 'user_id'=> 83, 'nama_dosen' => 'Dosen Kurikulum', 'nip' => '', 'nidn' => '', 'created_at' => now()],
+            ['dosen_id' => 83, 'user_id'=> 84, 'nama_dosen' => 'Kaprodi TI', 'nip' => '', 'nidn' => '', 'created_at' => now()],
+            ['dosen_id' => 84, 'user_id'=> 85, 'nama_dosen' => 'Kaprodi SIB', 'nip' => '', 'nidn' => '', 'created_at' => now()],
         ]);
     }
 }

@@ -85,7 +85,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <a href="{{ route('rps.shows', ['id' => $id]) }}" target="_blank" class="btn btn-default"><i class="fas fa-download"></i> Print</a>
+                {{-- <a href="{{ route('rps.shows', ['id' => $id]) }}" target="_blank" class="btn btn-default"><i class="fas fa-download"></i> Print</a> --}}
                 <table class="main-table">
                     <div class="rps-section">
                     <tr>

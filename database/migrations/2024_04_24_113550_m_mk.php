@@ -15,7 +15,7 @@ class MMk extends Migration
     {
         Schema::create('m_mk', function (Blueprint $table) {
             $table->id('mk_id');
-            $table->string('mk_nama', 100)->unique();
+            $table->string('mk_nama', 100)->nullable();
             $table->string('mk_jenis', 100)->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();

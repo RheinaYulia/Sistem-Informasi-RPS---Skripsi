@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\KaprodiModel;
 use App\Models\KurikulumMKModel;
 use App\Models\Rps\PengesahanModel;
+use App\Models\Rps\RpsBabModel;
 use App\Models\Rps\RpsModel;
 use App\Models\View\RpsView;
 use Illuminate\Http\Request;
@@ -52,14 +53,37 @@ class PengesahanController extends Controller
     
     public function list(Request $request){
         $this->authAction('read', 'json');
-        if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+        if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+    
+        // Ambil prodi_id dari pengguna yang sedang login
+        $user = auth()->user(); // Pastikan Anda menggunakan mekanisme yang benar untuk mendapatkan user yang sedang login
+        $user_id = $user->user_id;
 
-        $data  = PengesahanModel::getMkRpsSah();
-
+        if ($user_id == 1) {
+            // Ambil semua data tanpa filter prodi_id jika user_id adalah 1
+            $data = PengesahanModel::getAllMkRpsSah();
+        } else {
+        $dosen = DB::table('d_dosen')->where('user_id', $user_id)->first();
+        if (!$dosen) {
+            return response()->json(['data' => []]); // Return empty data if no dosen record found
+        }
+    
+        $kaprodi = DB::table('d_kaprodi')->where('dosen_id', $dosen->dosen_id)->first();
+        if (!$kaprodi) {
+            return response()->json(['data' => []]); // Return empty data if no kaprodi record found
+        }
+    
+        $prodi_id = $kaprodi->prodi_id;
+    
+        $data = PengesahanModel::getMkRpsSah($prodi_id);
+    }
+    
         return DataTables::of($data)
             ->addIndexColumn()
             ->make(true);
     }
+    
+    
 
     public function create(){
         $this->authAction('create || update', 'modal');
@@ -117,25 +141,82 @@ class PengesahanController extends Controller
         return redirect('/');
     }
 
-    public function showi($id){
-        $this->authAction('create || update', 'json');
+    public function show($id){
+        $this->authAction('read', 'modal');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        
-        // untuk set konten halaman web
-        $page = [
-            'url' => $this->menuUrl . '/' . $id . '/detail',
-            'title' => 'Detail Hak Akses'
-        ];
-        
-        $data = DB::select('CALL sp_get_rps_data(?)', array($id));
+        $data = RpsModel::getRpsDescription($id);
+        $mediaview = RpsModel::getRpsMedia($id);
+        $bab = RpsBabModel::getRpsBab($id);
+        $pengembang = RpsModel::getPengembang($id);
+        $cplprodi = RpsModel::getCplProdiview($id);
+        $pengampuview = RpsModel::getRpsPengampuView($id);
+        $cpmkview = RpsModel::getCpmkView($id);
+        $bkview = RpsModel::getBkView($id);
+        $pustaka = RpsModel::getRpsPustaka($id);
+        $mksyarat = RpsModel::getRpsMkView($id);
 
+        // Get show_percentage from session if available
+    $show_percentage = session('show_percentage', []);
+
+
+        $page = [
+            'title' => 'Detail ' . $this->menuTitle
+        ];
 
         return (!$data)? $this->showModalError() :
             view($this->viewPath . 'detail')
                 ->with('page', (object) $page)
                 ->with('id', $id)
-                ->with('data', $data);
+                ->with('data', $data)
+                ->with('mediaview', $mediaview)
+                ->with('pengembang', $pengembang)
+                ->with('cplprodi', $cplprodi)
+                ->with('pengampuview', $pengampuview)
+                ->with('cpmkview', $cpmkview)
+                ->with('bkview', $bkview)
+                ->with('pustaka', $pustaka)
+                ->with('bab', $bab)
+                ->with('mksyarat',$mksyarat)
+                ->with('show_percentage', $show_percentage);
+                ;
+    }
+
+    public function shows($id){
+        $this->authAction('read', 'modal');
+        if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+        $data = RpsModel::getRpsDescription($id);
+        $mediaview = RpsModel::getRpsMedia($id);
+        $bab = RpsBabModel::getRpsBab($id);
+        $pengembang = RpsModel::getPengembang($id);
+        $cplprodi = RpsModel::getCplProdiview($id);
+        $pengampuview = RpsModel::getRpsPengampuView($id);
+        $cpmkview = RpsModel::getCpmkView($id);
+        $bkview = RpsModel::getBkView($id);
+        $pustaka = RpsModel::getRpsPustaka($id);
+        $mksyarat = RpsModel::getRpsMkView($id);
+
+
+        $page = [
+            'title' => 'Detail ' . $this->menuTitle
+        ];
+
+        return (!$data)? $this->showModalError() :
+            view($this->viewPath . 'cetak-rps')
+                ->with('page', (object) $page)
+                ->with('id', $id)
+                ->with('data', $data)
+                ->with('mediaview', $mediaview)
+                ->with('pengembang', $pengembang)
+                ->with('cplprodi', $cplprodi)
+                ->with('pengampuview', $pengampuview)
+                ->with('cpmkview', $cpmkview)
+                ->with('bkview', $bkview)
+                ->with('pustaka', $pustaka)
+                ->with('bab', $bab)
+                ->with('mksyarat',$mksyarat)
+                ;
     }
 
     public function menu_save(Request $request)

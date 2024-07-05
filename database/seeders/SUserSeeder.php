@@ -51,7 +51,7 @@ class SUserSeeder extends Seeder
             ['user_id' => 27, 'group_id'=> 2,'username'  => 'dianhanifudin', 'name' => 'Dian Hanifudin Subhi, S.Kom., M.Kom.', 'email'=> 'dianhanifudin@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 28, 'group_id'=> 2,'username'  => 'dikarizky', 'name' => 'Dika Rizky Yunianto, S.Kom, M.Kom', 'email'=> 'dikarizky@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 29, 'group_id'=> 2,'username'  => 'dimaswahyu', 'name' => 'Dimas Wahyu Wibowo, ST., MT.', 'email'=> 'dimaswahyu@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
-            ['user_id' => 30, 'group_id'=> 2,'username'  => 'elysetyo', 'name' => 'Dr. Ely Setyo Astuti, S.T., M.T.', 'email'=> 'elysetyo@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
+            ['user_id' => 30, 'group_id'=> 4,'username'  => 'elysetyo', 'name' => 'Dr. Ely Setyo Astuti, S.T., M.T.', 'email'=> 'elysetyo@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 31, 'group_id'=> 2,'username'  => 'rakhmatarianto', 'name' => 'Dr. Rakhmat Arianto, S.ST., M.Kom.', 'email'=> 'rakhmatarianto@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 32, 'group_id'=> 2,'username'  => 'ulladelfana', 'name' => 'Dr. Ulla Delfana Rosiani, ST., MT.', 'email'=> 'ulladelfana@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 33, 'group_id'=> 2,'username'  => 'dwipuspitasari', 'name' => 'Dwi Puspitasari, S.Kom., M.Kom.', 'email'=> 'dwipuspitasari@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
@@ -64,16 +64,16 @@ class SUserSeeder extends Seeder
             ['user_id' => 40, 'group_id'=> 2,'username'  => 'faridangga', 'name' => 'Farid Angga Pribadi, S.Kom.,M.Kom', 'email'=> 'faridangga@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 41, 'group_id'=> 2,'username'  => 'faridaulfa', 'name' => 'Farida Ulfa, S.Pd., M.Pd.', 'email'=> 'faridaulfa@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 42, 'group_id'=> 2,'username'  => 'gunawanbudi', 'name' => 'Gunawan Budi Prasetyo, ST., MMT., Ph.D.', 'email'=> 'gunawanbudi@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
-            ['user_id' => 43, 'group_id'=> 2,'username'  => 'hendrapradibta', 'name' => 'Hendra Pradibta, SE., M.Sc.', 'email'=> 'hendrapradibta@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
+            ['user_id' => 43, 'group_id'=> 4,'username'  => 'hendrapradibta', 'name' => 'Hendra Pradibta, SE., M.Sc.', 'email'=> 'hendrapradibta@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 44, 'group_id'=> 2,'username'  => 'ikakusumaning', 'name' => 'Ika Kusumaning Putri, MT.', 'email'=> 'ikakusumaning@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 45, 'group_id'=> 2,'username'  => 'imamfahrur', 'name' => 'Imam Fahrur Rozi, ST., MT.', 'email'=> 'imamfahrur@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 46, 'group_id'=> 2,'username'  => 'indradarma', 'name' => 'Indra Dharma Wijaya, ST., M.MT.', 'email'=> 'indradarma@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 47, 'group_id'=> 2,'username'  => 'irsyadarif', 'name' => 'Irsyad Arif Mashudi, M.Kom', 'email'=> 'irsyadarif@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 48, 'group_id'=> 2,'username'  => 'kadeksuarjuna', 'name' => 'Kadek Suarjuna Batubulan, S.Kom, MT', 'email'=> 'kadeksuarjuna@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 49, 'group_id'=> 2,'username'  => 'luqmanaffandi', 'name' => 'Luqman Affandi, S.Kom., MMSI', 'email'=> 'luqmanaffandi@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
-            ['user_id' => 50, 'group_id'=> 2,'username'  => 'mamluatulhaniah', 'name' => "Mamluatul Hani'ah, S.Kom., M.Kom.", 'email'=> 'mamluatulhaniah@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
+            ['user_id' => 50, 'group_id'=> 3,'username'  => 'mamluatulhaniah', 'name' => "Mamluatul Hani'ah, S.Kom., M.Kom.", 'email'=> 'mamluatulhaniah@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 51, 'group_id'=> 2,'username'  => 'arwindatumaya', 'name' => 'Marsma TNI Dr. Ir. Arwin Datumaya Wahyudi Sumari, S.T., M.T., IPU, ASEAN Eng., ACPE', 'email'=> 'arwindatumaya@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
-            ['user_id' => 52, 'group_id'=> 2,'username'  => 'meytieka', 'name' => 'Meyti Eka Apriyani ST., MT.', 'email'=> 'meytieka@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
+            ['user_id' => 52, 'group_id'=> 3,'username'  => 'meytieka', 'name' => 'Meyti Eka Apriyani ST., MT.', 'email'=> 'meytieka@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 53, 'group_id'=> 2,'username'  => 'milyunnima', 'name' => 'Milyun Nima Shoumi, S.Kom., M.Kom', 'email'=> 'milyunnima@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 54, 'group_id'=> 2,'username'  => 'afifhendrawan', 'name' => 'Muhammad Afif Hendrawan., S.Kom., M.T.', 'email'=> 'afifhendrawan@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
             ['user_id' => 55, 'group_id'=> 2,'username'  => 'shulhankhairy', 'name' => 'Muhammad Shulhan Khairy, S.Kom, M.Kom', 'email'=> 'shulhankhairy@admin.com','password'  => password_hash('12345', PASSWORD_DEFAULT)],
@@ -116,11 +116,20 @@ class SUserSeeder extends Seeder
             [
                 'user_id'   => 84, // Super Admin
                 'group_id'  => 4, // Super Admin
-                'username'  => 'kaprodi',
-                'name'      => 'Kaprodi',
-                'email'     => 'kaprodi@admin.com',
+                'username'  => 'kaproditi',
+                'name'      => 'Kaprodi TI',
+                'email'     => 'kaproditi@admin.com',
+                'password'  => password_hash('12345', PASSWORD_DEFAULT)
+            ],
+            [
+                'user_id'   => 85, // Super Admin
+                'group_id'  => 4, // Super Admin
+                'username'  => 'kaprodisib',
+                'name'      => 'Kaprodi SIB',
+                'email'     => 'kaprodisib@admin.com',
                 'password'  => password_hash('12345', PASSWORD_DEFAULT)
             ]
+            
             
         ]);
     }

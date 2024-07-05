@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PengesahanModel extends AppModel
 {
@@ -40,7 +41,22 @@ class PengesahanModel extends AppModel
         //'App\Models\Master\EmployeeModel' => 'jabatan_id'
     ];
 
-    public static function getMkRpsSah(){
+    public static function getMkRpsSah($prodi_id) {
+        $map = DB::table('m_rps AS m')
+            ->selectRaw('m.rps_id, m.deskripsi_rps, m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama, m.pengesahan')
+            ->join('d_kurikulum_mk AS p', 'm.kurikulum_mk_id', '=', 'p.kurikulum_mk_id')
+            ->join('m_mk AS k', 'p.mk_id', '=', 'k.mk_id')
+            ->join('d_kaprodi AS kp', 'm.kaprodi_id', '=', 'kp.kaprodi_id')
+            ->where('kp.prodi_id', $prodi_id)
+            ->whereIn('m.verifikasi', [2])
+            ->whereIn('m.pengesahan', [0, 1, 2])
+            ->get();
+
+    
+        return $map;
+    }
+
+    public static function getAllMkRpsSah(){
         $map = DB::table('m_rps AS m')
             ->selectRaw('m.rps_id, m.deskripsi_rps,m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama, m.pengesahan')
             ->join('d_kurikulum_mk AS p', function ($join) {
@@ -55,4 +71,7 @@ class PengesahanModel extends AppModel
         
         return $map;
     }
+    
+
+    
 }

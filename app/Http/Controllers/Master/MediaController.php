@@ -202,7 +202,7 @@ class MediaController extends Controller
             return response()->json([
                 'stat' => $res,
                 'mc' => $res, // close modal
-                'msg' => ProdiModel::getDeleteMessage()
+                'msg' => MediaModel::getDeleteMessage()
             ]);
         }
 

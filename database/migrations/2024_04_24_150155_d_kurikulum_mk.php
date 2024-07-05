@@ -16,7 +16,7 @@ class DKurikulumMk extends Migration
         Schema::create('d_kurikulum_mk', function (Blueprint $table) {
             $table->id('kurikulum_mk_id');
             $table->unsignedBigInteger('kurikulum_id')->index();
-            $table->unsignedBigInteger('rumpun_mk_id')->index();
+            $table->unsignedBigInteger('rumpun_mk_id')->index()->nullable();
             $table->unsignedBigInteger('mk_id')->index();
             $table->unsignedBigInteger('prodi_id')->index();
             $table->string('kode_mk', 10)->index();

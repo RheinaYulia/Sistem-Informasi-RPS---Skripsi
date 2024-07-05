@@ -40,7 +40,7 @@ class SMenuSeeder extends Seeder
             /////////////////////////////////
 
                 //Parent
-                ['menu_id' => '10','menu_scope' => 'DOSEN','menu_code' => 'MASTER','menu_name' => 'Data Master','menu_url' => NULL,'menu_level' => '1','order_no' => '3','parent_id' => NULL,'class_tag' => 'master','icon' => 'fas fa-solid fa-bars','is_active' => '1'],
+                ['menu_id' => '10','menu_scope' => 'DOSEN','menu_code' => 'MASTER','menu_name' => 'Data Master RPS','menu_url' => NULL,'menu_level' => '1','order_no' => '3','parent_id' => NULL,'class_tag' => 'master','icon' => 'fas fa-solid fa-bars','is_active' => '1'],
                 ['menu_id' => '11','menu_scope' => 'DOSEN','menu_code' => 'RPS','menu_name' => 'RPS','menu_url' => NULL,'menu_level' => '1','order_no' => '4','parent_id' => NULL,'class_tag' => 'rps','icon' => 'fas fa-list-alt','is_active' => '1'],
                 // ['menu_id' => '10','menu_scope' => 'DOSEN','menu_code' => 'KONTRAK','menu_name' => 'Kontrak Kuliah','menu_url' => NULL,'menu_level' => '1','order_no' => '4','parent_id' => NULL,'class_tag' => 'kontrak','icon' => 'fas fa-th','is_active' => '1'],
                 // ['menu_id' => '11','menu_scope' => 'DOSEN','menu_code' => 'RPSIKU','menu_name' => 'RPS IKU','menu_url' => NULL,'menu_level' => '1','order_no' => '5','parent_id' => NULL,'class_tag' => 'rpsiku','icon' => 'fas fa-th','is_active' => '1'],

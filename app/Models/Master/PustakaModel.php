@@ -30,6 +30,10 @@ class PustakaModel extends AppModel
         'deleted_by'
     ];
 
-    
+    protected static $cascadeDelete = false;   //  True: Force Delete from Parent (cascade)
+    protected static $childModel = [
+        //  Model => columnFK
+        //'App\Models\Master\EmployeeModel' => 'jabatan_id'
+    ];
 
 }

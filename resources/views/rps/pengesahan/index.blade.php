@@ -19,6 +19,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Mata Kuliah</th>
+                                    <th> Detail RPS</th>
                                     <th> Status </th>
                                     <th>#</th>
                                 </tr>
@@ -63,6 +64,17 @@
                             return data;
                         }
                         
+                    },
+                    {
+                        "mData": "rps_id",
+                        "sClass": "text-center pr-2",
+                        "sWidth": "8%",
+                        "bSortable": false,
+                        "bSearchable": false,
+                        "mRender": function(data, type, row, meta) {
+                            return ''
+                                @if($allowAccess->update) + `<a href="#" data-block="body" data-url="{{ $page->url }}/${data}/" class="ajax_modal btn btn-xs btn-info tooltips text-light text-xs" data-placement="left" data-original-title="RPS" ><i class="fa fa-th"></i> Detail</a> ` @endif
+                        }
                     },
                     {
                         "mData": "pengesahan",

@@ -122,6 +122,44 @@ class RpsTampilController extends Controller
         return redirect('/');
     }
 
+    public function show($id){
+        $this->authAction('read', 'modal');
+        if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+        $data = RpsModel::getRpsDescription($id);
+        $mediaview = RpsModel::getRpsMedia($id);
+        $bab = RpsBabModel::getRpsBab($id);
+        $pengembang = RpsModel::getPengembang($id);
+        $cplprodi = RpsModel::getCplProdiview($id);
+        $pengampuview = RpsModel::getRpsPengampuView($id);
+        $cpmkview = RpsModel::getCpmkView($id);
+        $bkview = RpsModel::getBkView($id);
+        $pustaka = RpsModel::getRpsPustaka($id);
+        $mksyarat = RpsModel::getRpsMkView($id);
+        $showPercentage = true;
+
+        $page = [
+            'title' => 'Detail ' . $this->menuTitle
+        ];
+
+        return (!$data)? $this->showModalError() :
+            view($this->viewPath . 'detail')
+                ->with('page', (object) $page)
+                ->with('id', $id)
+                ->with('data', $data)
+                ->with('mediaview', $mediaview)
+                ->with('pengembang', $pengembang)
+                ->with('cplprodi', $cplprodi)
+                ->with('pengampuview', $pengampuview)
+                ->with('cpmkview', $cpmkview)
+                ->with('bkview', $bkview)
+                ->with('pustaka', $pustaka)
+                ->with('bab', $bab)
+                ->with('mksyarat',$mksyarat)
+                ->with('showPercentage', $showPercentage);
+                ;
+    }
+
     public function shows($id){
         $this->authAction('read', 'modal');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
@@ -135,6 +173,7 @@ class RpsTampilController extends Controller
         $cpmkview = RpsModel::getCpmkView($id);
         $bkview = RpsModel::getBkView($id);
         $pustaka = RpsModel::getRpsPustaka($id);
+        $mksyarat = RpsModel::getRpsMkView($id);
 
 
         $page = [
@@ -153,41 +192,9 @@ class RpsTampilController extends Controller
                 ->with('cpmkview', $cpmkview)
                 ->with('bkview', $bkview)
                 ->with('pustaka', $pustaka)
-                ->with('bab', $bab);
-    }
-
-    public function show($id){
-        $this->authAction('read', 'modal');
-        if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
-
-        $data = RpsModel::getRpsDescription($id);
-        $mediaview = RpsModel::getRpsMedia($id);
-        $bab = RpsBabModel::getRpsBab($id);
-        $pengembang = RpsModel::getPengembang($id);
-        $cplprodi = RpsModel::getCplProdiview($id);
-        $pengampuview = RpsModel::getRpsPengampuView($id);
-        $cpmkview = RpsModel::getCpmkView($id);
-        $bkview = RpsModel::getBkView($id);
-        $pustaka = RpsModel::getRpsPustaka($id);
-
-
-        $page = [
-            'title' => 'Detail ' . $this->menuTitle
-        ];
-
-        return (!$data)? $this->showModalError() :
-            view($this->viewPath . 'detail')
-                ->with('page', (object) $page)
-                ->with('id', $id)
-                ->with('data', $data)
-                ->with('mediaview', $mediaview)
-                ->with('pengembang', $pengembang)
-                ->with('cplprodi', $cplprodi)
-                ->with('pengampuview', $pengampuview)
-                ->with('cpmkview', $cpmkview)
-                ->with('bkview', $bkview)
-                ->with('pustaka', $pustaka)
-                ->with('bab', $bab);
+                ->with('bab', $bab)
+                ->with('mksyarat',$mksyarat)
+                ;
     }
 
 
