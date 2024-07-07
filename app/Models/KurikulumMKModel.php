@@ -47,10 +47,22 @@ class KurikulumMKModel extends AppModel
     
     public static function getMks()
 {
+    $periode = session('periode');
+    
+    if (!$periode || !isset($periode->periode_id)) {
+        // Handle the case where periode is not set in session
+        return collect();
+    }
+
+    $selectedPeriodeId = $periode->periode_id;
+
     $map = DB::table('d_kurikulum_mk AS m')
         ->selectRaw('m.kurikulum_mk_id, m.kode_mk, k.mk_nama, COUNT(r.kurikulum_mk_id) > 0 AND r.deleted_at IS NULL AS is_frozen')
         ->join('m_mk AS k', 'm.mk_id', '=', 'k.mk_id')
         ->leftJoin('m_rps AS r', 'm.kurikulum_mk_id', '=', 'r.kurikulum_mk_id')
+        ->join('d_kurikulum AS dk', 'm.kurikulum_id', '=', 'dk.kurikulum_id')
+        ->join('m_periode AS p', 'dk.periode_id', '=', 'p.periode_id')
+        ->where('p.periode_id', $selectedPeriodeId)
         ->groupBy('m.kurikulum_mk_id', 'k.mk_nama')
         ->get();
 

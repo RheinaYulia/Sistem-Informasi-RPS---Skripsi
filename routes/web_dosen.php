@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardAdminController;
+use App\Http\Controllers\Master\BKController;
 use App\Http\Controllers\Master\MediaController;
 use App\Http\Controllers\Master\PustakaController;
 use App\Http\Controllers\Profile\DosenProfileController;
@@ -47,6 +48,10 @@ Route::group(['prefix' => 'master', 'middleware' => ['auth']], function() {
      Route::resource('pustaka', PustakaController::class)->parameter('pustaka', 'id');
      Route::post('pustaka/list', [PustakaController::class, 'list']);
      Route::get('pustaka/{id}/delete', [PustakaController::class, 'confirm']);
+
+     Route::resource('bk', BKController::class)->parameter('bk', 'id');
+     Route::post('bk/list', [BKController::class, 'list']);
+     Route::get('bk/{id}/delete', [BKController::class, 'confirm']);
 });
 
 Route::group(['prefix' => 'rps', 'middleware' => ['auth']], function() {

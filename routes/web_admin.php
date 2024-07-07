@@ -55,7 +55,9 @@ Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
     Route::get('user/{id}/delete', [UserController::class, 'confirm']);
 
     // User
-    Route::resource('periode', PeriodeController::class)->parameter('periode', 'id');
-    Route::post('periode/list', [PeriodeController::class, 'list']);
-    Route::get('periode/{id}/delete', [PeriodeController::class, 'confirm']);
+    Route::get('periode', [PeriodeController::class, 'index']);
+    // Route::resource('periode', PeriodeController::class)->parameter('periode', 'id');
+    // Route::post('periode/list', [PeriodeController::class, 'list']);
+    Route::post('periode/update', [PeriodeController::class, 'update'])->name('periode.update'); // Tambahkan ini
+    // Route::get('periode/{id}/delete', [PeriodeController::class, 'confirm']);
 });

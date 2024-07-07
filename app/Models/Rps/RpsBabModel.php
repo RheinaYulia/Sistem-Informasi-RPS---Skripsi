@@ -44,29 +44,54 @@ class RpsBabModel extends AppModel
         //'App\Models\Master\EmployeeModel' => 'jabatan_id'
     ];
 
-    public static function spInsertOrUpdateBab($rps_id,
-    // array $cpmk_detail_id, 
-    array $bab_id, array $rps_bab, array $sub_cpmk, 
-    array $materi, array $estimasi_waktu, array $pengalaman_belajar, array $indikator_penilaian, array $bobot_penilaian, array $bentuk_pembelajaran, array $metode_pembelajaran,
-    array $kriteria_penilaian, array $bentuk_penilaian)
-{
-    DB::beginTransaction();
-
-    try {
-        foreach ($bab_id as $index => $bab) {
-            // Cek apakah bab_id dan rps_id sudah ada dalam tabel d_rps_bab
-            $existingBab = DB::table('d_rps_bab')
-                            ->where('rps_id', $rps_id)
-                            ->where('bab_id', $bab) 
-                            ->first();
-
-            if ($existingBab) {
-                // Jika sudah ada, lakukan pembaruan pada d_rps_bab
-                DB::table('d_rps_bab')
+    public static function spInsertOrUpdateBab($rps_id, array $bab_id, array $rps_bab, array $sub_cpmk, array $materi, array $estimasi_waktu, array $pengalaman_belajar, array $indikator_penilaian, array $bobot_penilaian, array $bentuk_pembelajaran, array $metode_pembelajaran, array $kriteria_penilaian, array $bentuk_penilaian)
+    {
+        // Hitung total bobot penilaian yang sudah ada di database
+        $totalExistingBobot = DB::table('d_rps_bab')
+            ->where('rps_id', $rps_id)
+            ->sum('bobot_penilaian');
+    
+        // Hitung bobot penilaian baru yang diinput
+        $newBobot = array_sum($bobot_penilaian);
+    
+        // Jika total bobot melebihi 100, kembalikan pesan kesalahan
+        if ($totalExistingBobot + $newBobot > 100) {
+            return [
+                'status' => false,
+                'message' => 'Bobot penilaian sudah mencapai 100.'
+            ];
+        }
+    
+        DB::beginTransaction();
+    
+        try {
+            foreach ($bab_id as $index => $bab) {
+                // Cek apakah bab_id dan rps_id sudah ada dalam tabel d_rps_bab
+                $existingBab = DB::table('d_rps_bab')
                     ->where('rps_id', $rps_id)
                     ->where('bab_id', $bab)
-                    ->update([
-                        'rps_bab' => $rps_bab[$index], 
+                    ->first();
+    
+                if ($existingBab) {
+                    // Jika sudah ada, lakukan pembaruan pada d_rps_bab
+                    DB::table('d_rps_bab')
+                        ->where('rps_id', $rps_id)
+                        ->where('bab_id', $bab)
+                        ->update([
+                            'rps_bab' => $rps_bab[$index],
+                            'sub_cpmk' => $sub_cpmk[$index],
+                            'materi' => $materi[$index],
+                            'estimasi_waktu' => $estimasi_waktu[$index],
+                            'pengalaman_belajar' => $pengalaman_belajar[$index],
+                            'indikator_penilaian' => $indikator_penilaian[$index],
+                            'bobot_penilaian' => $bobot_penilaian[$index]
+                        ]);
+                } else {
+                    // Jika belum ada, lakukan penambahan pada d_rps_bab
+                    DB::table('d_rps_bab')->insert([
+                        'rps_id' => $rps_id,
+                        'bab_id' => $bab,
+                        'rps_bab' => $rps_bab[$index],
                         'sub_cpmk' => $sub_cpmk[$index],
                         'materi' => $materi[$index],
                         'estimasi_waktu' => $estimasi_waktu[$index],
@@ -74,63 +99,67 @@ class RpsBabModel extends AppModel
                         'indikator_penilaian' => $indikator_penilaian[$index],
                         'bobot_penilaian' => $bobot_penilaian[$index]
                     ]);
-            } 
-
-            // Cek apakah bab_id sudah ada dalam tabel d_rps_metode
-            $existingMetode = DB::table('d_rps_metode')
-                                ->where('bab_id', $bab)
-                                ->first();
-
-            if ($existingMetode) {
-                // Jika sudah ada, lakukan pembaruan pada d_rps_metode
-                DB::table('d_rps_metode')
+                }
+    
+                // Cek apakah bab_id sudah ada dalam tabel d_rps_metode
+                $existingMetode = DB::table('d_rps_metode')
                     ->where('bab_id', $bab)
-                    ->update([
+                    ->first();
+    
+                if ($existingMetode) {
+                    // Jika sudah ada, lakukan pembaruan pada d_rps_metode
+                    DB::table('d_rps_metode')
+                        ->where('bab_id', $bab)
+                        ->update([
+                            'bentuk_pembelajaran' => $bentuk_pembelajaran[$index],
+                            'metode_pembelajaran' => $metode_pembelajaran[$index]
+                        ]);
+                } else {
+                    // Jika belum ada, lakukan penambahan pada d_rps_metode
+                    DB::table('d_rps_metode')->insert([
+                        'bab_id' => $bab,
                         'bentuk_pembelajaran' => $bentuk_pembelajaran[$index],
                         'metode_pembelajaran' => $metode_pembelajaran[$index]
                     ]);
-            } else {
-                // Jika belum ada, lakukan penambahan pada d_rps_metode
-                DB::table('d_rps_metode')->insert([
-                    'bab_id' => $bab,
-                    'bentuk_pembelajaran' => $bentuk_pembelajaran[$index],
-                    'metode_pembelajaran' => $metode_pembelajaran[$index]
-                ]);
-            }
-
-
-            // Cek apakah bab_id sudah ada dalam tabel d_rps_metode
-            $existingMetode = DB::table('d_rps_kb')
-                                ->where('bab_id', $bab)
-                                ->first();
-
-            if ($existingMetode) {
-                // Jika sudah ada, lakukan pembaruan pada d_rps_metode
-                DB::table('d_rps_kb')
+                }
+    
+                // Cek apakah bab_id sudah ada dalam tabel d_rps_kb
+                $existingKb = DB::table('d_rps_kb')
                     ->where('bab_id', $bab)
-                    ->update([
+                    ->first();
+    
+                if ($existingKb) {
+                    // Jika sudah ada, lakukan pembaruan pada d_rps_kb
+                    DB::table('d_rps_kb')
+                        ->where('bab_id', $bab)
+                        ->update([
+                            'kriteria_penilaian' => $kriteria_penilaian[$index],
+                            'bentuk_penilaian' => $bentuk_penilaian[$index]
+                        ]);
+                } else {
+                    // Jika belum ada, lakukan penambahan pada d_rps_kb
+                    DB::table('d_rps_kb')->insert([
+                        'bab_id' => $bab,
                         'kriteria_penilaian' => $kriteria_penilaian[$index],
                         'bentuk_penilaian' => $bentuk_penilaian[$index]
                     ]);
-            } else {
-                // Jika belum ada, lakukan penambahan pada d_rps_metode
-                DB::table('d_rps_kb')->insert([
-                    'bab_id' => $bab,
-                    'kriteria_penilaian' => $kriteria_penilaian[$index],
-                    'bentuk_penilaian' => $bentuk_penilaian[$index]
-                ]);
+                }
             }
-
-        
+    
+            DB::commit();
+            return [
+                'status' => true,
+                'message' => 'Data berhasil disimpan.'
+            ];
+        } catch (\Exception $e) {
+            DB::rollback();
+            return [
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ];
         }
-
-        DB::commit();
-        return true; // Jika transaksi berhasil
-    } catch (\Exception $e) {
-        DB::rollback();
-        return false; // Jika terjadi kesalahan
     }
-}
+    
 
 public static function spBabMateri($bab_id, $judul_materi, $file_url, $file_dir)
 {

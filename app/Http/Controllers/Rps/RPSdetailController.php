@@ -1070,67 +1070,73 @@ class RPSdetailController extends Controller
     
     
     public function updateBab(Request $request, $id)
-    {
-        $this->authAction('create || update', 'json');
-        if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
-    
-        // cek untuk Insert/Update/Delete harus via AJAX
-        if ($request->ajax() || $request->wantsJson()) {
-            $rules = [
-                'rps_id' => 'required|integer',
-                'bab_id.*' => 'required|integer',
-                'rps_bab.*' => 'required|integer',
-                'sub_cpmk.*' => 'nullable|string',
-                'materi.*' => 'nullable|string',
-                'estimasi_waktu.*' => 'nullable|string',
-                'pengalaman_belajar.*' => 'nullable|string',
-                'indikator_penilaian.*' => 'nullable|string',
-                'bobot_penilaian.*' => 'nullable|numeric|regex:/^\d*(\.\d{1,2})?$/',
-                'bentuk_pembelajaran.*' => 'nullable|string',
-                'metode_pembelajaran.*' => 'nullable|string',
-                // 'cpmk_detail_id.*' => 'nullable|integer',
-                'kriteria_penilaian.*' => 'nullable|string',
-                'bentuk_penilaian.*' => 'nullable|string',
-            ];
-    
-            $validator = Validator::make($request->all(), $rules);
-    
-            if ($validator->fails()) {
-                return response()->json([
-                    'stat' => false,
-                    'mc' => false,
-                    'msg' => 'Terjadi kesalahan.',
-                    'msgField' => $validator->errors()
-                ]);
-            }
-    
-            // Panggil fungsi spInsertOrUpdateRPS dari model RpsModel untuk melakukan transaksi database
-            $res = RpsBabModel::spInsertOrUpdateBab(
-                $request->input('rps_id'),
-                // $request->input('cpmk_detail_id'),
-                $request->input('bab_id'),
-                $request->input('rps_bab'),
-                $request->input('sub_cpmk'),
-                $request->input('materi'),
-                $request->input('estimasi_waktu'),
-                $request->input('pengalaman_belajar'),
-                $request->input('indikator_penilaian'),
-                $request->input('bobot_penilaian'),
-                $request->input('bentuk_pembelajaran'),
-                $request->input('metode_pembelajaran'),
-                $request->input('kriteria_penilaian'),
-                $request->input('bentuk_penilaian')
-            );
-    
+{
+    $this->authAction('create || update', 'json');
+    if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+    if ($request->ajax() || $request->wantsJson()) {
+        $rules = [
+            'rps_id' => 'required|integer',
+            'bab_id.*' => 'required|integer',
+            'rps_bab.*' => 'required|integer',
+            'sub_cpmk.*' => 'nullable|string',
+            'materi.*' => 'nullable|string',
+            'estimasi_waktu.*' => 'nullable|string',
+            'pengalaman_belajar.*' => 'nullable|string',
+            'indikator_penilaian.*' => 'nullable|string',
+            'bobot_penilaian.*' => 'nullable|numeric|regex:/^\d*(\.\d{1,2})?$/',
+            'bentuk_pembelajaran.*' => 'nullable|string',
+            'metode_pembelajaran.*' => 'nullable|string',
+            'kriteria_penilaian.*' => 'nullable|string',
+            'bentuk_penilaian.*' => 'nullable|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
             return response()->json([
-                'stat' => $res,
-                'mc' => $res, // close modal
-                'msg' => $res ? $this->getMessage('update.success') : $this->getMessage('update.failed')
+                'stat' => false,
+                'mc' => false,
+                'msg' => 'Terjadi kesalahan.',
+                'msgField' => $validator->errors()
             ]);
         }
-    
-        return redirect('/');
+
+        // Panggil fungsi spInsertOrUpdateBab dari model RpsBabModel untuk melakukan transaksi database
+        $res = RpsBabModel::spInsertOrUpdateBab(
+            $request->input('rps_id'),
+            $request->input('bab_id'),
+            $request->input('rps_bab'),
+            $request->input('sub_cpmk'),
+            $request->input('materi'),
+            $request->input('estimasi_waktu'),
+            $request->input('pengalaman_belajar'),
+            $request->input('indikator_penilaian'),
+            $request->input('bobot_penilaian'),
+            $request->input('bentuk_pembelajaran'),
+            $request->input('metode_pembelajaran'),
+            $request->input('kriteria_penilaian'),
+            $request->input('bentuk_penilaian')
+        );
+
+        if (!$res['status']) {
+            return response()->json([
+                'stat' => false,
+                'mc' => false,
+                'msg' => $res['message']
+            ]);
+        }
+
+        return response()->json([
+            'stat' => true,
+            'mc' => true, // close modal
+            'msg' => $this->getMessage('update.success')
+        ]);
     }
+
+    return redirect('/');
+}
+
     
     public function editBabMateri($id,$bab_id){
         $this->authAction('create || update', 'modal');

@@ -15,8 +15,8 @@ class DKurikulumMKSeeder extends Seeder
     public function run()
     {
         DB::table('d_kurikulum_mk')->insert([
-            ['kurikulum_mk_id' => 1, 'kurikulum_id' => 1, 'rumpun_mk_id' => null, 'mk_id' => 1, 'prodi_id' => 2, 'kode_mk' => 'SIB208002', 'sks' => 3, 'semester' => 5, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4],
-            ['kurikulum_mk_id' => 2, 'kurikulum_id' => 2, 'rumpun_mk_id' => null, 'mk_id' => 2, 'prodi_id' => 1, 'kode_mk' => 'RTI186004', 'sks' => 2, 'semester' => 4, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4],
+            ['kurikulum_mk_id' => 1, 'kurikulum_id' => 2, 'rumpun_mk_id' => null, 'mk_id' => 1, 'prodi_id' => 2, 'kode_mk' => 'SIB208002', 'sks' => 3, 'semester' => 5, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4],
+            ['kurikulum_mk_id' => 2, 'kurikulum_id' => 1, 'rumpun_mk_id' => null, 'mk_id' => 2, 'prodi_id' => 1, 'kode_mk' => 'RTI186004', 'sks' => 2, 'semester' => 4, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4],
             ['kurikulum_mk_id' => 3, 'kurikulum_id' => 2, 'rumpun_mk_id' => null, 'mk_id' => 3, 'prodi_id' => 2, 'kode_mk' => 'SIB207104', 'sks' => 3, 'semester' => 5, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4],
             ['kurikulum_mk_id' => 4, 'kurikulum_id' => 2, 'rumpun_mk_id' => null, 'mk_id' => 4, 'prodi_id' => 2, 'kode_mk' => 'SIB231001', 'sks' => 2, 'semester' => 1, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 2],
             ['kurikulum_mk_id' => 5, 'kurikulum_id' => 2, 'rumpun_mk_id' => null, 'mk_id' => 5, 'prodi_id' => 2, 'kode_mk' => 'SIB231002', 'sks' => 2, 'semester' => 1, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4],
@@ -96,7 +96,9 @@ class DKurikulumMKSeeder extends Seeder
             ['kurikulum_mk_id' => 79, 'kurikulum_id' => 1, 'rumpun_mk_id' => null, 'mk_id' => 79, 'prodi_id' => 1, 'kode_mk' => '', 'sks' => 0, 'semester' => 0, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 0],
             ['kurikulum_mk_id' => 80, 'kurikulum_id' => 1, 'rumpun_mk_id' => null, 'mk_id' => 80, 'prodi_id' => 1, 'kode_mk' => 'RTI234003', 'sks' => 2, 'semester' => 2, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 0],
             ['kurikulum_mk_id' => 81, 'kurikulum_id' => 1, 'rumpun_mk_id' => null, 'mk_id' => 81, 'prodi_id' => 1, 'kode_mk' => 'RTI232002', 'sks' => 2, 'semester' => 2, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4],
-            ['kurikulum_mk_id' => 82, 'kurikulum_id' => 1, 'rumpun_mk_id' => null, 'mk_id' => 82, 'prodi_id' => 1, 'kode_mk' => 'RTI232008', 'sks' => 2, 'semester' => 2, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4]
+            ['kurikulum_mk_id' => 82, 'kurikulum_id' => 1, 'rumpun_mk_id' => null, 'mk_id' => 82, 'prodi_id' => 1, 'kode_mk' => 'RTI232008', 'sks' => 2, 'semester' => 2, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4],
+            ['kurikulum_mk_id' => 83, 'kurikulum_id' => 4, 'rumpun_mk_id' => null, 'mk_id' => 1, 'prodi_id' => 2, 'kode_mk' => 'SIB208002', 'sks' => 3, 'semester' => 5, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4],
+            ['kurikulum_mk_id' => 84, 'kurikulum_id' => 3, 'rumpun_mk_id' => null, 'mk_id' => 2, 'prodi_id' => 1, 'kode_mk' => 'RTI186004', 'sks' => 2, 'semester' => 4, 'kelompok_mk' => 'kelompok1', 'jumlah_jam' => 4],
         ]);        
     }
 }

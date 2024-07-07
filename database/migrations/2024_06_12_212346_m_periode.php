@@ -15,7 +15,8 @@ class MPeriode extends Migration
     {
         Schema::create('m_periode', function (Blueprint $table) {
             $table->id('periode_id');
-            $table->string('periode_name', 100)->unique();
+            $table->string('periode_name', 100);
+            $table->enum('periode_semester', ['Ganjil', 'Genap']);
             $table->tinyInteger('is_active')->default(0);
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
@@ -23,6 +24,9 @@ class MPeriode extends Migration
             $table->integer('updated_by')->nullable()->index();
             $table->dateTime('deleted_at')->nullable()->index();
             $table->integer('deleted_by')->nullable()->index();
+        });
+        Schema::table('d_kurikulum', function (Blueprint $table) {
+            $table->foreign('periode_id')->references('periode_id')->on('m_periode'); // Tambahkan FK yang baru
         });
     }
 

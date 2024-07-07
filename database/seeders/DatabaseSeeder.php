@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             MatkulSeeder::class,
             MProdiSeeder::class,
             DDosenSeeder::class,
+            MPeriode::class,
             DKurikulumSeeder::class,
             DRumpunMKSeeder::class,
             DKaprodiSeeder::class,

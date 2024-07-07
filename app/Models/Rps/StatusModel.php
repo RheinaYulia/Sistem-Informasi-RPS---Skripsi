@@ -88,58 +88,55 @@ class StatusModel extends AppModel
     }
 
     public static function getStatusVer($userId){
-        $map = DB::table('m_rps AS m')
-            ->selectRaw('m.rps_id, m.deskripsi_rps, m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama, ds.nama_dosen, m.verifikasi, m.pengesahan')
-            ->join('d_kurikulum_mk AS p', function ($join) {
-                $join->on('m.kurikulum_mk_id', '=', 'p.kurikulum_mk_id');
-            })
-            ->join('m_mk AS k', function ($join) {
-                $join->on('p.mk_id', '=', 'k.mk_id');
-            })
-            ->join('d_kaprodi AS d', function ($join) {
-                $join->on('m.kaprodi_id', '=', 'd.kaprodi_id');
-            })
-            ->join('d_dosen AS ds', function ($join) {
-                $join->on('d.dosen_id', '=', 'ds.dosen_id');
-            })
-            ->leftJoin('d_rps_pengembang AS rp', function ($join) {
-                $join->on('m.rps_id', '=', 'rp.rps_id');
-            })
-            ->leftJoin('d_rps_pengampu AS ra', function ($join) {
-                $join->on('m.rps_id', '=', 'ra.rps_id');
-            })
-            ->leftJoin('d_dosen AS dp_pengembang', function ($join) {
-                $join->on('rp.dosen_id', '=', 'dp_pengembang.dosen_id');
-            })
-            ->leftJoin('s_user AS su_pengembang', 'dp_pengembang.user_id', '=', 'su_pengembang.user_id')
-            ->where(function ($query) use ($userId) {
-                $query->where('su_pengembang.user_id', $userId)
-                        ->whereNull('rp.deleted_at')
-                      ->orWhere('m.created_by', $userId)
-                      ->orWhereRaw('? = 1', [$userId]);
-            })
-            ->whereIn('m.verifikasi', [0, 1, 2, 3])
-            ->whereIn('m.pengesahan', [0, 1,2])
-            ->whereNull('m.deleted_at')
-            ->groupBy('m.rps_id')
-            ->get();
-        
-        return $map;
+        $periode = session('periode');
+
+    if (!$periode || !isset($periode->periode_id)) {
+        // Handle the case where periode is not set in session
+        return collect();
     }
 
-    public static function getMkRpsVer(){
-        $map = DB::table('m_rps AS m')
-            ->selectRaw('m.rps_id, m.deskripsi_rps,m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama,m.verifikasi')
-            ->join('d_kurikulum_mk AS p', function ($join) {
-                $join->on('m.kurikulum_mk_id', '=', 'p.kurikulum_mk_id');
-            })
-            ->join('m_mk AS k', function ($join) {
-                $join->on('p.mk_id', '=', 'k.mk_id');
-            })
-            ->whereIn('m.verifikasi', [1, 2,3])
-            ->get();
-        
-        return $map;
+    $selectedPeriodeId = $periode->periode_id;
+
+    $map = DB::table('m_rps AS m')
+        ->selectRaw('m.rps_id, m.deskripsi_rps, m.kurikulum_mk_id, m.kaprodi_id, k.mk_nama, ds.nama_dosen, m.verifikasi, m.pengesahan')
+        ->join('d_kurikulum_mk AS p', function ($join) {
+            $join->on('m.kurikulum_mk_id', '=', 'p.kurikulum_mk_id');
+        })
+        ->join('m_mk AS k', function ($join) {
+            $join->on('p.mk_id', '=', 'k.mk_id');
+        })
+        ->join('d_kaprodi AS d', function ($join) {
+            $join->on('m.kaprodi_id', '=', 'd.kaprodi_id');
+        })
+        ->join('d_dosen AS ds', function ($join) {
+            $join->on('d.dosen_id', '=', 'ds.dosen_id');
+        })
+        ->leftJoin('d_rps_pengembang AS rp', function ($join) {
+            $join->on('m.rps_id', '=', 'rp.rps_id');
+        })
+        ->leftJoin('d_rps_pengampu AS ra', function ($join) {
+            $join->on('m.rps_id', '=', 'ra.rps_id');
+        })
+        ->leftJoin('d_dosen AS dp_pengembang', function ($join) {
+            $join->on('rp.dosen_id', '=', 'dp_pengembang.dosen_id');
+        })
+        ->leftJoin('s_user AS su_pengembang', 'dp_pengembang.user_id', '=', 'su_pengembang.user_id')
+        ->join('d_kurikulum AS dk', 'p.kurikulum_id', '=', 'dk.kurikulum_id') // Join dengan tabel d_kurikulum
+        ->join('m_periode AS pr', 'dk.periode_id', '=', 'pr.periode_id') // Join dengan tabel m_periode
+        ->where('pr.periode_id', $selectedPeriodeId) // Filter berdasarkan periode yang dipilih
+        ->where(function ($query) use ($userId) {
+            $query->where('su_pengembang.user_id', $userId)
+                ->whereNull('rp.deleted_at')
+                ->orWhere('m.created_by', $userId)
+                ->orWhereRaw('? = 1', [$userId]);
+        })
+        ->whereIn('m.verifikasi', [0, 1, 2, 3])
+        ->whereIn('m.pengesahan', [0, 1, 2])
+        ->whereNull('m.deleted_at')
+        ->groupBy('m.rps_id')
+        ->get();
+    
+    return $map;
     }
 
     public static function getMkRpsSah(){

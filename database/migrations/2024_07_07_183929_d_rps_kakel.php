@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DRpsBab extends Migration
+class DRpsKakel extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,10 @@ class DRpsBab extends Migration
      */
     public function up()
     {
-        Schema::create('d_rps_bab', function (Blueprint $table) {
-            $table->id('bab_id');
+        Schema::create('d_rps_kakel', function (Blueprint $table) {
+            $table->id('rps_kakel_id');
             $table->unsignedBigInteger('rps_id')->index();
-            $table->integer('rps_bab')->nullable();
-            $table->string('sub_cpmk',500)->nullable();
-            $table->text('materi')->nullable();
-            $table->string('estimasi_waktu',50)->nullable();
-            $table->text('pengalaman_belajar')->nullable();
-            $table->text('indikator_penilaian')->nullable();
-            $table->decimal('bobot_penilaian')->default(0);
-            $table->date('tanggal_penyusunan')->nullable();
+            $table->unsignedBigInteger('dosen_id')->index();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();
@@ -32,6 +25,7 @@ class DRpsBab extends Migration
             $table->integer('deleted_by')->nullable()->index();
 
             $table->foreign('rps_id')->references('rps_id')->on('m_rps');
+            $table->foreign('dosen_id')->references('dosen_id')->on('d_dosen');
         });
     }
 
@@ -42,6 +36,6 @@ class DRpsBab extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('d_rps_bab');
+        Schema::dropIfExists('d_rps_pengampu');
     }
 }

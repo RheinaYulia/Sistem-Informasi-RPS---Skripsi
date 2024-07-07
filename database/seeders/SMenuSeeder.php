@@ -48,11 +48,11 @@ class SMenuSeeder extends Seeder
                 //Level 2
                 ['menu_id' => '12','menu_scope' => 'DOSEN','menu_code' => 'MASTER.MEDIA','menu_name' => 'Kelola Media','menu_url' => 'master/media','menu_level' => '2','order_no' => '16','parent_id' => '10','class_tag' => 'master-media','icon' => 'fas fa-minus text-xs','is_active' => '1'],
                 ['menu_id' => '13','menu_scope' => 'DOSEN','menu_code' => 'MASTER.PUSTAKA','menu_name' => 'Kelola Pustaka','menu_url' => 'master/pustaka','menu_level' => '2','order_no' => '17','parent_id' => '10','class_tag' => 'master-pustaka','icon' => 'fas fa-minus text-xs','is_active' => '1'],
-                ['menu_id' => '14','menu_scope' => 'DOSEN','menu_code' => 'RPS.RPS','menu_name' => 'RPS','menu_url' => 'rps/detail_rps','menu_level' => '2','order_no' => '18','parent_id' => '11','class_tag' => 'rps-detail_rps','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '14','menu_scope' => 'DOSEN','menu_code' => 'RPS.RPS','menu_name' => 'RPS','menu_url' => 'rps/detail_rps','menu_level' => '2','order_no' => '19','parent_id' => '11','class_tag' => 'rps-detail_rps','icon' => 'fas fa-minus text-xs','is_active' => '1'],
                 // ['menu_id' => '13','menu_scope' => 'DOSEN','menu_code' => 'KONTRAK.KULIAH','menu_name' => 'Kelola Kontrak Kuliah','menu_url' => 'kontrak/kelola_kontrak','menu_level' => '2','order_no' => '21','parent_id' => '10','class_tag' => 'kontrak-kelola_kontrak','icon' => 'fas fa-minus text-xs','is_active' => '1'],
                 // ['menu_id' => '14','menu_scope' => 'DOSEN','menu_code' => 'RPSIKU.RPSIKU','menu_name' => 'Kelola RPS IKU','menu_url' => 'rpsiku/kelola_rpsiku','menu_level' => '2','order_no' => '22','parent_id' => '11','class_tag' => 'rpsiku-kelola_rpsiku','icon' => 'fas fa-minus text-xs','is_active' => '1'],
-                ['menu_id' => '15','menu_scope' => 'DOSEN','menu_code' => 'RPS.KELOLARPS','menu_name' => 'Kelola RPS','menu_url' => 'rps/kelola_rps','menu_level' => '2','order_no' => '19','parent_id' => '11','class_tag' => 'rps-kelola_rps','icon' => 'fas fa-minus text-xs','is_active' => '1'],
-                ['menu_id' => '16','menu_scope' => 'DOSEN','menu_code' => 'RPS.KELOLAMASTER','menu_name' => 'Kelola Data RPS','menu_url' => 'rps/kelola_master','menu_level' => '2','order_no' => '20','parent_id' => '11','class_tag' => 'rps-kelola_master','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '15','menu_scope' => 'DOSEN','menu_code' => 'RPS.KELOLARPS','menu_name' => 'Kelola RPS','menu_url' => 'rps/kelola_rps','menu_level' => '2','order_no' => '20','parent_id' => '11','class_tag' => 'rps-kelola_rps','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+                ['menu_id' => '16','menu_scope' => 'DOSEN','menu_code' => 'RPS.KELOLAMASTER','menu_name' => 'Kelola Data RPS','menu_url' => 'rps/kelola_master','menu_level' => '2','order_no' => '21','parent_id' => '11','class_tag' => 'rps-kelola_master','icon' => 'fas fa-minus text-xs','is_active' => '1'],
                 // ['menu_id' => '17','menu_scope' => 'DOSEN','menu_code' => 'RPS.KELOLABAB','menu_name' => 'Kelola Bab RPS','menu_url' => 'rps/kelola_bab','menu_level' => '2','order_no' => '21','parent_id' => '11','class_tag' => 'rps-kelola_bab','icon' => 'fas fa-minus text-xs','is_active' => '1'],
                 ['menu_id' => '17','menu_scope' => 'DOSEN','menu_code' => 'RPS.STATUSVER','menu_name' => 'Status RPS','menu_url' => 'rps/status_ver','menu_level' => '2','order_no' => '22','parent_id' => '11','class_tag' => 'rps-status_ver','icon' => 'fas fa-minus text-xs','is_active' => '1'],
                 // ['menu_id' => '19','menu_scope' => 'DOSEN','menu_code' => 'RPS.STATUSSAH','menu_name' => 'Ajukan Pengesahan','menu_url' => 'rps/status_sah','menu_level' => '2','order_no' => '23','parent_id' => '11','class_tag' => 'rps-status_sah','icon' => 'fas fa-minus text-xs','is_active' => '1'],
@@ -79,7 +79,7 @@ class SMenuSeeder extends Seeder
             ['menu_id' => '21','menu_scope' => 'KAPRODI','menu_code' => 'PENGESAHAN.RPS','menu_name' => 'Pengesahan RPS','menu_url' => 'rps/pengesahan','menu_level' => '2','order_no' => '25','parent_id' => '20','class_tag' => 'pengesahan-rps','icon' => 'fas fa-minus text-xs','is_active' => '1'],
 
 
-            
+            ['menu_id' => '22','menu_scope' => 'DOSEN','menu_code' => 'MASTER.BK','menu_name' => 'Kelola Bahan Kajian','menu_url' => 'master/bk','menu_level' => '2','order_no' => '18','parent_id' => '10','class_tag' => 'master-bk','icon' => 'fas fa-minus text-xs','is_active' => '1'],
             
 
 

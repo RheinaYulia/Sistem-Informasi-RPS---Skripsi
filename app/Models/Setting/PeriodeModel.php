@@ -12,14 +12,13 @@ class PeriodeModel extends AppModel
 
     protected $table = 'm_periode';
     protected $primaryKey = 'periode_id';
-    protected $uniqueKey = 'periode_name';
 
     protected static $_table = 'm_periode';
     protected static $_primaryKey = 'periode_id';
-    protected static $_uniqueKey = 'periode_name';
 
     protected $fillable = [
         'periode_name',
+        'periode_semester',
         'is_active',
         'created_at',
         'created_by',

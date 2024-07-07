@@ -10,19 +10,26 @@ class ProdiModel extends AppModel
 {
     use SoftDeletes;
 
+    // protected $table = 'm_prodi';
+    // protected $primaryKey = 'prodi_id';
+    // protected $uniqueKey = 'prodi_code';
+
+    // protected static $_table = 'm_prodi';
+    // protected static $_primaryKey = 'prodi_id';
+    // protected static $_uniqueKey = 'prodi_code';
+
     protected $table = 'm_prodi';
     protected $primaryKey = 'prodi_id';
-    protected $uniqueKey = 'prodi_code';
 
     protected static $_table = 'm_prodi';
     protected static $_primaryKey = 'prodi_id';
-    protected static $_uniqueKey = 'prodi_code';
 
     protected $fillable = [
-        'jurusan_id',
-        'prodi_code',
-        'prodi_name',
-        'is_active',
+        // 'jurusan_id',
+        // 'prodi_code',
+        // 'prodi_name',
+        // 'is_active',
+        'nama_prodi',
         'created_at',
         'created_by',
         'updated_at',

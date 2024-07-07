@@ -156,7 +156,7 @@
                         </div>
                         
                         <div class="form-group required row mb-2">
-                            <label class="col-sm-2 control-label col-form-label">Bobot Penilaian</label>
+                            <label class="col-sm-2 col-form-label">Bobot Penilaian</label>
                             <div class="col-sm-9">
                                 <input type="number" class="form-control form-control-sm" id="bobot_penilaian" step="any" name="bobot_penilaian[]" value="{{ isset($data->bobot_penilaian) ? $data->bobot_penilaian : '' }}"/>
                             </div>
@@ -229,7 +229,7 @@ $(document).ready(function() {
             });
         });
        
-    $(document).ready(function () {
+        $(document).ready(function () {
         unblockUI();
 
         $("#form-master").validate({
@@ -239,44 +239,38 @@ $(document).ready(function() {
                 },
                 rps_bab: {
                     required: true,
-                   
                 },
-                sub_cpmk: {
-                    
-                },
-                materi: {
-                    
-                },
-                estimasi_waktu: {
-                    
-                },
-                pengalaman_balajar: {
-                    
-                },
-                indikator_penilaian: {
-                    
-                },
+                sub_cpmk: {},
+                materi: {},
+                estimasi_waktu: {},
+                pengalaman_balajar: {},
+                indikator_penilaian: {},
                 bobot_penilaian: {
-                    
+                    required: true,
+                    number: true
                 },
-                bentuk_pembelajaran: {
-                    
-                },
-                metode_pembelajaran: {
-
-                },
-                // cpmk_detail_id: {
-                //     required: true
-                // },
-                kriteria_penilaian: {
-                    
-                },
-                bentuk_penilaian: {
-
-                },
+                bentuk_pembelajaran: {},
+                metode_pembelajaran: {},
+                kriteria_penilaian: {},
+                bentuk_penilaian: {}
             },
             submitHandler: function (form) {
                 $('.form-message').html('');
+
+                // Periksa total bobot penilaian
+                let totalBobot = 0;
+                $('input[name="bobot_penilaian[]"]').each(function() {
+                    totalBobot += parseFloat($(this).val()) || 0;
+                });
+
+                if (totalBobot > 100) {
+                    $('#bobot-error').text('Bobot penilaian sudah mencapai 100.').show();
+                    unblockUI(form);
+                    return false;
+                } else {
+                    $('#bobot-error').text('').hide();
+                }
+
                 blockUI(form);
                 $(form).ajaxSubmit({
                     url: "{{ route('kelola_master.updateBab', $id) }}", // Ensure this URL is correct

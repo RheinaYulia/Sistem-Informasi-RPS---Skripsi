@@ -19,9 +19,7 @@ class AddForeignKeysPustaka extends Migration
         Schema::table('s_user', function (Blueprint $table) {
             $table->foreign('prodi_id')->references('prodi_id')->on('m_prodi'); // Tambahkan FK yang baru
         });
-        Schema::table('d_kurikulum', function (Blueprint $table) {
-            $table->foreign('periode_id')->references('periode_id')->on('m_periode'); // Tambahkan FK yang baru
-        });
+        
     }
 
     /**
