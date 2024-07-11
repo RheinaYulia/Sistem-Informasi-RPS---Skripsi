@@ -94,68 +94,80 @@ class KakelModel extends AppModel
         $periode = session('periode');
 
         if (!$periode || !isset($periode->periode_id)) {
+            Log::error('Periode session is not set.');
             return false;
         }
 
         $periodeId = $periode->periode_id;
 
         DB::beginTransaction();
-        try {
-            // Update dosen_id di tabel d_kakel
-            DB::table('d_kakel')
-                ->updateOrInsert(
-                    ['m_kakel_id' => $id],
-                    [
-                        'dosen_id' => $request->dosen_id,
-                        'periode_id' => $periodeId
-                    ]
-                );
+try {
+    // Update dosen_id di tabel d_kakel
+    DB::table('d_kakel')
+        ->updateOrInsert(
+            ['m_kakel_id' => $id, 'periode_id' => $periodeId],
+            ['dosen_id' => $request->dosen_id]
+        );
 
-            // Ambil data existing di t_kakel_mk berdasarkan m_kakel_id
-            $existingKakelMK = DB::table('t_kakel_mk')
-                ->where('d_kakel_id', $id)
-                ->get();
-            $existingKakelMKIds = $existingKakelMK->pluck('kurikulum_mk_id')->toArray();
+    // Ambil d_kakel_id dari tabel d_kakel
+    $d_kakel_id = DB::table('d_kakel')
+        ->where('m_kakel_id', $id)
+        ->where('periode_id', $periodeId)
+        ->value('d_kakel_id');
 
-            // Handle insert/update data kurikulum_mk_id jika ada dalam request
-            if ($request->has('kurikulum_mk_id')) {
-                foreach ($request->kurikulum_mk_id as $kurikulum_mk_id) {
-                    if (in_array($kurikulum_mk_id, $existingKakelMKIds)) {
-                        // Update existing data
-                        DB::table('t_kakel_mk')
-                            ->where('d_kakel_id', $id)
-                            ->where('kurikulum_mk_id', $kurikulum_mk_id)
-                            ->update(['deleted_at' => null, 'updated_at' => now()]);
-                    } else {
-                        // Insert new data
-                        DB::table('t_kakel_mk')->insert([
-                            'd_kakel_id' => $id,
-                            'kurikulum_mk_id' => $kurikulum_mk_id,
-                            'created_at' => now(),
-                            'updated_at' => now()
-                        ]);
-                    }
-                }
+    Log::info('d_kakel_id', ['d_kakel_id' => $d_kakel_id]);
 
-                // Hapus data yang tidak ada dalam request
+    if (!$d_kakel_id) {
+        throw new \Exception('d_kakel_id not found');
+    }
+
+    // Ambil data existing di t_kakel_mk berdasarkan d_kakel_id
+    $existingKakelMK = DB::table('t_kakel_mk')
+        ->where('d_kakel_id', $d_kakel_id)
+        ->get();
+    $existingKakelMKIds = $existingKakelMK->pluck('kurikulum_mk_id')->toArray();
+
+    // Handle insert/update data kurikulum_mk_id jika ada dalam request
+    if ($request->has('kurikulum_mk_id')) {
+        foreach ($request->kurikulum_mk_id as $kurikulum_mk_id) {
+            Log::info('Processing kurikulum_mk_id', ['kurikulum_mk_id' => $kurikulum_mk_id]);
+
+            if (in_array($kurikulum_mk_id, $existingKakelMKIds)) {
+                // Update existing data
                 DB::table('t_kakel_mk')
-                    ->where('d_kakel_id', $id)
-                    ->whereNotIn('kurikulum_mk_id', $request->kurikulum_mk_id)
-                    ->update(['deleted_at' => now(), 'deleted_by' => auth()->user()->id]);
+                    ->where('d_kakel_id', $d_kakel_id)
+                    ->where('kurikulum_mk_id', $kurikulum_mk_id)
+                    ->update(['deleted_at' => null, 'updated_at' => now()]);
             } else {
-                // Jika tidak ada kurikulum_mk_id dalam request, hapus semua data existing
-                DB::table('t_kakel_mk')
-                    ->where('d_kakel_id', $id)
-                    ->update(['deleted_at' => now(), 'deleted_by' => auth()->user()->id]);
+                // Insert new data
+                DB::table('t_kakel_mk')->insert([
+                    'd_kakel_id' => $d_kakel_id,
+                    'kurikulum_mk_id' => $kurikulum_mk_id,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
             }
-
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Update Data Kakel Error: ', ['error' => $e->getMessage()]);
-            return false;
         }
+
+        // Hapus data yang tidak ada dalam request
+        DB::table('t_kakel_mk')
+            ->where('d_kakel_id', $d_kakel_id)
+            ->whereNotIn('kurikulum_mk_id', $request->kurikulum_mk_id)
+            ->update(['deleted_at' => now(), 'deleted_by' => auth()->user()->id]);
+    } else {
+        // Jika tidak ada kurikulum_mk_id dalam request, hapus semua data existing
+        DB::table('t_kakel_mk')
+            ->where('d_kakel_id', $d_kakel_id)
+            ->update(['deleted_at' => now(), 'deleted_by' => auth()->user()->id]);
+    }
+
+    DB::commit();
+    return true;
+} catch (\Exception $e) {
+    DB::rollBack();
+    Log::error('Update Data Kakel Error: ', ['error' => $e->getMessage()]);
+    return false;
+}
     }
 
     public static function deleteKakelMK($kurikulumMkIds, $kakelId) {
