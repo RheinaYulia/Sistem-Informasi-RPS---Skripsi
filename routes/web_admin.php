@@ -56,8 +56,12 @@ Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
 
     // User
     Route::get('periode', [PeriodeController::class, 'index']);
-    // Route::resource('periode', PeriodeController::class)->parameter('periode', 'id');
-    // Route::post('periode/list', [PeriodeController::class, 'list']);
-    Route::post('periode/update', [PeriodeController::class, 'update'])->name('periode.update'); // Tambahkan ini
-    // Route::get('periode/{id}/delete', [PeriodeController::class, 'confirm']);
+    Route::resource('periode', PeriodeController::class)->parameter('periode', 'id');
+    Route::post('periode/list', [PeriodeController::class, 'list']);
+    Route::post('periode/updateperiode', [PeriodeController::class, 'updateperiode'])->name('periode.update'); // Tambahkan ini
+    Route::get('periode/{id}/delete', [PeriodeController::class, 'confirm']);
+
+    Route::get('periode/{id}/edits', [PeriodeController::class, 'edits'])->name('edits');
+    Route::match(['post', 'put'], 'periode/{id}/updates', [PeriodeController::class, 'updates'])->name('updates');
+    Route::match(['post', 'put'], 'periode/{id}/get-mata-kuliah-by-kurikulum', [PeriodeController::class, 'getMataKuliahByKurikulum'])->name('get-mata-kuliah-by-kurikulum');
 });

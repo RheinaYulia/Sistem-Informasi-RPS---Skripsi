@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DDosen extends Migration
+class DKakel extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class DDosen extends Migration
      */
     public function up()
     {
-        Schema::create('d_dosen', function (Blueprint $table) {
-            $table->id('dosen_id');
-            $table->string('nama_dosen',150)->nullable();
-            $table->unsignedBigInteger('user_id')->index();
-            $table->unsignedBigInteger('prodi_id')->nullable();
-            $table->string('nip',50)->nullable();
-            $table->string('nidn',50)->nullable();
+        Schema::create('d_kakel', function (Blueprint $table) {
+            $table->id('d_kakel_id');
+            $table->unsignedBigInteger('m_kakel_id')->nullable();
+            $table->unsignedBigInteger('dosen_id')->nullable();
+            $table->unsignedBigInteger('periode_id')->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();
@@ -27,9 +25,11 @@ class DDosen extends Migration
             $table->dateTime('deleted_at')->nullable()->index();
             $table->integer('deleted_by')->nullable()->index();
 
-            $table->foreign('user_id')->references('user_id')->on('s_user');
-            $table->foreign('prodi_id')->references('prodi_id')->on('m_prodi');
+            $table->foreign('m_kakel_id')->references('m_kakel_id')->on('m_kakel');
+            $table->foreign('dosen_id')->references('dosen_id')->on('d_dosen');
+            $table->foreign('periode_id')->references('periode_id')->on('m_periode');
         });
+
     }
 
     /**
@@ -39,6 +39,6 @@ class DDosen extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('d_dosen');
+        Schema::dropIfExists('d_kakel');
     }
 }

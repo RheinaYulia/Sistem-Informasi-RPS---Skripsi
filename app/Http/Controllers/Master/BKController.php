@@ -210,11 +210,11 @@ public function update(Request $request, $id)
         $this->authAction('delete', 'modal');
         if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
 
-        $data = MediaModel::find($id);
+        $data = BKModel::find($id);
 
         return (!$data)? $this->showModalError() :
             $this->showModalConfirm($this->menuUrl.'/'.$id, [
-                'Nama_media' => $data->nama_media,
+                'Deskripsi' => $data->bk_deskripsi,
             ]);
     }
 
@@ -224,12 +224,12 @@ public function update(Request $request, $id)
 
         if ($request->ajax() || $request->wantsJson()) {
 
-            $res = MediaModel::deleteData($id);
+            $res = BKModel::deleteData($id);
 
             return response()->json([
                 'stat' => $res,
                 'mc' => $res, // close modal
-                'msg' => MediaModel::getDeleteMessage()
+                'msg' => BKModel::getDeleteMessage()
             ]);
         }
 

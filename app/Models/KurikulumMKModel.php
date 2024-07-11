@@ -56,18 +56,20 @@ class KurikulumMKModel extends AppModel
 
     $selectedPeriodeId = $periode->periode_id;
 
-    $map = DB::table('d_kurikulum_mk AS m')
+    $map = DB::table('t_kakel_mk AS tk')
         ->selectRaw('m.kurikulum_mk_id, m.kode_mk, k.mk_nama, COUNT(r.kurikulum_mk_id) > 0 AND r.deleted_at IS NULL AS is_frozen')
+        ->join('d_kurikulum_mk AS m', 'tk.kurikulum_mk_id', '=', 'm.kurikulum_mk_id')
         ->join('m_mk AS k', 'm.mk_id', '=', 'k.mk_id')
         ->leftJoin('m_rps AS r', 'm.kurikulum_mk_id', '=', 'r.kurikulum_mk_id')
-        ->join('d_kurikulum AS dk', 'm.kurikulum_id', '=', 'dk.kurikulum_id')
-        ->join('m_periode AS p', 'dk.periode_id', '=', 'p.periode_id')
+        ->join('m_periode AS p', 'm.periode_id', '=', 'p.periode_id')
         ->where('p.periode_id', $selectedPeriodeId)
         ->groupBy('m.kurikulum_mk_id', 'k.mk_nama')
         ->get();
 
     return $map;
 }
+
+
 
 public static function getMksId($rps_id)
 {

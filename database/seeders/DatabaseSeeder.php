@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             TCplCpmkSeeder::class,
             TMkBkSeeder::class,
             DCpmkDetailSeeder::class,
+            MKakel::class,
         ]);
     }
 }

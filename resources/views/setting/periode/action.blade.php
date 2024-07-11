@@ -17,28 +17,18 @@
                 <div class="form-message text-center"></div>
 
                 <div class="form-group required row mb-2">
-                    <label class="col-sm-3 control-label col-form-label">Periode</label>
-                    <div class="col-sm-9">
-                        <input @if($is_edit) disabled @endif type="text" class="form-control form-control-sm" id="periode_id" name="periode_id" value="{{ isset($data->periode_id) ? $data->periode_id : '' }}"/>
-                    </div>
-                </div>
-                <div class="form-group required row mb-2">
-                    <label class="col-sm-3 control-label col-form-label">Keterangan</label>
+                    <label class="col-sm-3 control-label col-form-label">Tahun Periode</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control form-control-sm" id="periode_name" name="periode_name" value="{{ isset($data->periode_name) ? $data->periode_name : '' }}"/>
                     </div>
                 </div>
                 <div class="form-group required row mb-2">
-                    <label class="col-sm-3 control-label col-form-label">Status</label>
-                    <div class="col-sm-9 mt-2">
-                        <div class="icheck-success d-inline mr-3">
-                            <input type="radio" id="radioActive" name="is_active" value="1" <?php echo isset($data->is_active)? (($data->is_active == 1)? 'checked' : '') : 'checked' ?>>
-                            <label for="radioActive">Aktif </label>
-                        </div>
-                        <div class="icheck-danger d-inline mr-3">
-                            <input type="radio" id="radioFailed" name="is_active" value="0" <?php echo isset($data->is_active)? (($data->is_active == 0)? 'checked' : '') : '' ?>>
-                            <label for="radioFailed">non-aktif</label>
-                        </div>
+                    <label class="col-sm-3 control-label col-form-label">Periode</label>
+                    <div class="col-sm-9">
+                        <select class="form-control form-control-sm select2" id="periode_semester" name="periode_semester">
+                            <option value="Ganjil" {{ isset($data->periode_semester) && $data->periode_semester == 'Ganjil' ? 'selected' : '' }}>Ganjil</option>
+                            <option value="Genap" {{ isset($data->periode_semester) && $data->periode_semester == 'Genap' ? 'selected' : '' }}>Genap</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -52,23 +42,21 @@
 
 <script>
     $(document).ready(function () {
+        $('.select2').select2({
+        placeholder: 'Pilih Periode',
+        allowClear: true
+    });
         unblockUI();
 
         $("#form-master").validate({
             rules: {
-                periode_id: {
-                    required: true,
-                    digits: true,
-                    min: 2022,
-                    max: 2099
-                },
                 periode_name: {
+                    required: true,
+                },
+                periode_semester: {
                     required: true,
                     maxlength: 100
                 },
-                is_active: {
-                    required: true
-                }
             },
             submitHandler: function (form) {
                 $('.form-message').html('');

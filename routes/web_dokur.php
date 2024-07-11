@@ -1,11 +1,18 @@
 <?php
 
+use App\Http\Controllers\Kakel\KakelController;
 use App\Http\Controllers\Rps\PengembangController;
+use App\Http\Controllers\Rps\VerifikasiController1;
+use App\Http\Controllers\Rps\VerifikasiController2;
+use App\Http\Controllers\Rps\VerifikasiController3;
 use App\Http\Controllers\Rps\VerifikasiController;
 use App\Http\Controllers\Setting\GroupController;
 use App\Http\Controllers\Setting\MenuController;
 use App\Http\Controllers\Setting\UserController;
 use Illuminate\Support\Facades\Route;
+
+
+
 
 
 
@@ -36,8 +43,19 @@ Route::group(['prefix' => 'rps', 'middleware' => ['auth']], function() {
      Route::get('verifikasi/{id}/delete', [VerifikasiController::class, 'confirm']);
 
      // Kelola Bab
+
+
+     // Kelola Bab
      Route::resource('pengembang', PengembangController::class)->parameter('pengembang', 'id');
      Route::post('pengembang/list', [PengembangController::class, 'list']);
      Route::get('pengembang/{id}/delete', [PengembangController::class, 'confirm']);
+});
+
+Route::group(['prefix' => 'kakel', 'middleware' => ['auth']], function() {
+
+    // Kelola Bab
+    Route::resource('aktivasi', KakelController::class)->parameter('aktivasi', 'id');
+    Route::post('aktivasi/list', [KakelController::class, 'list']);
+    Route::get('aktivasi/{id}/delete', [KakelController::class, 'confirm']);
 });
 

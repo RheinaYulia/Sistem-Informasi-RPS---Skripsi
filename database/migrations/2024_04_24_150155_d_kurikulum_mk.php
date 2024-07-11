@@ -19,6 +19,7 @@ class DKurikulumMk extends Migration
             $table->unsignedBigInteger('rumpun_mk_id')->index()->nullable();
             $table->unsignedBigInteger('mk_id')->index();
             $table->unsignedBigInteger('prodi_id')->index();
+            $table->unsignedBigInteger('periode_id')->nullable();
             $table->string('kode_mk', 10)->index();
             $table->smallInteger('sks')->nullable();
             $table->smallInteger('semester')->nullable();

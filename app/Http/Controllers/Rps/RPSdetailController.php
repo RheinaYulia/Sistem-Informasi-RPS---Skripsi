@@ -1213,4 +1213,236 @@ class RPSdetailController extends Controller
     
         return redirect('/');
     }
+
+
+    //KAKEL
+
+    public function editkakel1($id) {
+        $this->authAction('create || update', 'modal');
+        if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+    
+        $page = [
+            'url' => $this->menuUrl . '/' . $id,
+            'title' => 'Edit ' . $this->menuTitle
+        ];
+        $data = RpsModel::getRpsData($id);
+        $pengampu = DosenModel::selectRaw('dosen_id, nama_dosen')->get();
+        $rpsDescription = RpsModel::getRpsDescription($id);
+        $pengembangview = RpsModel::getSelectedkakel1($id);
+    
+        return (!$data) ? $this->showModalError() :
+            view($this->viewPath . 'master_rps.ackakel1')
+                ->with('page', (object) $page)
+                ->with('id', $id)
+                ->with('data', $data)
+                ->with('pengampu', $pengampu)
+                ->with('pengembangview', $pengembangview)
+                ->with('rpsDescription', $rpsDescription);
+    }
+    
+    public function updatekakel1(Request $request, $id) {
+        $this->authAction('create || update', 'json');
+        if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+    
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'rps_id' => 'required|integer',
+                'dosen_id.*' => 'required|integer',
+                'elements_to_remove.*' => 'nullable|integer',
+                'elements_to_remove1.*' => 'nullable|integer',
+            ];
+    
+            $validator = Validator::make($request->all(), $rules);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'stat' => false,
+                    'mc' => false,
+                    'msg' => 'Terjadi kesalahan.',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+    
+            if ($request->has('elements_kakel1')) {
+                $this->deletekakel1($request->input('elements_kakel1'), $request->input('rps_id'));
+            }
+    
+    
+            $resPengembang = RpsModel::spkakel1(
+                $request->input('rps_id'),
+                $request->input('dosen_id')
+            );
+    
+            $res = $resPengembang;
+    
+            return response()->json([
+                'stat' => $res,
+                'mc' => $res,
+                'msg' => ($res) ? $this->getMessage('update.success') : $this->getMessage('update.failed')
+            ]);
+        }
+    
+        return redirect('/');
+    }
+
+    private function deletekakel1($PengembangIds, $rpsId) {
+        foreach ($PengembangIds as $pengembangId) {
+            DB::table('d_rps_kakel')
+                ->where('dosen_id', $pengembangId)
+                ->where('rps_id', $rpsId)
+                ->update([
+                    'deleted_at' => now(),
+                    'deleted_by' => auth()->user()->id
+                ]);
+        }
+        return true;
+    }
+
+    public function editKakel2($id)
+    {
+        $this->authAction('create || update', 'modal');
+        if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+        $page = [
+            'url' => $this->menuUrl . '/' . $id,
+            'title' => 'Edit ' . $this->menuTitle
+        ];
+
+        $data = RpsModel::getRpsData($id);
+        $dosenData = RpsModel::getIsKakel1();
+        $selectedKakel = RpsModel::getSelectedKakel2($id);
+
+        return (!$data) ? $this->showModalError() :
+            view($this->viewPath . 'master_rps.ackakel2')
+                ->with('page', (object) $page)
+                ->with('id', $id)
+                ->with('data', $data)
+                ->with('dosenData', $dosenData)
+                ->with('selectedKakel', $selectedKakel);
+    }
+
+    public function updateKakel2(Request $request, $id)
+    {
+        $this->authAction('create || update', 'json');
+        if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'rps_id' => 'required|integer',
+                'kakel_id' => 'array',
+                'kakel_id.*' => 'required|integer',
+                'removed_kakel_id' => 'array',
+                'removed_kakel_id.*' => 'nullable|integer',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'stat' => false,
+                    'mc' => false,
+                    'msg' => 'Terjadi kesalahan.',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            $rps_id = $request->input('rps_id');
+            $kakel_ids = $request->input('kakel_id', []);
+            $removed_kakel_ids = $request->input('removed_kakel_id', []);
+
+            RpsModel::deleteKakel($rps_id, $removed_kakel_ids);
+            $res = RpsModel::spKakel2($rps_id, $kakel_ids);
+
+            return response()->json([
+                'stat' => $res,
+                'mc' => $res,
+                'msg' => ($res) ? $this->getMessage('update.success') : $this->getMessage('update.failed')
+            ]);
+        }
+
+        return redirect('/');
+    }
+
+    public function editKakel3($id)
+{
+    $this->authAction('create || update', 'modal');
+    if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+    $page = [
+        'url' => $this->menuUrl . '/' . $id,
+        'title' => 'Edit ' . $this->menuTitle
+    ];
+
+    $data = RpsModel::getRpsData($id);
+    $dosenData = RpsModel::getIsKakel3();
+    $selectedKakel = RpsModel::getSelectedKakel3($id);
+
+    return (!$data) ? $this->showModalError() :
+        view($this->viewPath . 'master_rps.ackakel3')
+            ->with('page', (object) $page)
+            ->with('id', $id)
+            ->with('data', $data)
+            ->with('dosenData', $dosenData)
+            ->with('selectedKakel', $selectedKakel);
 }
+
+public function updateKakel3(Request $request, $id)
+{
+    $this->authAction('create || update', 'json');
+    if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+
+    if ($request->ajax() || $request->wantsJson()) {
+        $rules = [
+            'rps_id' => 'required|integer',
+            'dosen_kakel_id' => 'array',
+            'dosen_kakel_id.*' => 'required|integer',
+            'removed_dosen_kakel_id' => 'array',
+            'removed_dosen_kakel_id.*' => 'nullable|integer',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'stat' => false,
+                'mc' => false,
+                'msg' => 'Terjadi kesalahan.',
+                'msgField' => $validator->errors()
+            ]);
+        }
+
+        $rps_id = $request->input('rps_id');
+        $dosen_kakel_ids = $request->input('dosen_kakel_id', []);
+        $removed_dosen_kakel_ids = $request->input('removed_dosen_kakel_id', []);
+
+        if (!empty($removed_dosen_kakel_ids)) {
+            RpsModel::deleteKakel3($rps_id, $removed_dosen_kakel_ids);
+        }
+
+        $res = RpsModel::spKakel3($rps_id, $dosen_kakel_ids);
+
+        return response()->json([
+            'stat' => $res,
+            'mc' => $res,
+            'msg' => ($res) ? $this->getMessage('update.success') : $this->getMessage('update.failed')
+        ]);
+    }
+
+    return redirect('/');
+}
+
+
+private function deleteKakel3($rps_id, $dosen_kakel_ids) {
+    foreach ($dosen_kakel_ids as $dosen_kakel_id) {
+        DB::table('d_rps_kakel')
+            ->where('dosen_id', $dosen_kakel_id)
+            ->where('rps_id', $rps_id)
+            ->update([
+                'deleted_at' => now(),
+                'deleted_by' => auth()->user()->id
+            ]);
+    }
+    return true;
+}
+}
+

@@ -50,16 +50,20 @@ class VerifikasiController extends Controller
             ->with('allowAccess', $this->authAccessKey());
     }
 
-    public function list(Request $request){
+    public function list(Request $request) {
         $this->authAction('read', 'json');
-        if($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
-
-        $data  = VerifikasiModel::getMkRpsVer();
-
+        if ($this->authCheckDetailAccess() !== true) return $this->authCheckDetailAccess();
+    
+        // Ambil user_id dari user yang sedang login
+        $userId = auth()->user()->user_id;
+    
+        $data = VerifikasiModel::getmkver($userId);
+    
         return DataTables::of($data)
             ->addIndexColumn()
             ->make(true);
     }
+    
 
     public function create(){
         $this->authAction('create || update', 'modal');

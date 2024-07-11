@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DRpsKakel extends Migration
+class TKakelMk extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class DRpsKakel extends Migration
      */
     public function up()
     {
-        Schema::create('d_rps_kakel', function (Blueprint $table) {
-            $table->id('rps_kakel_id');
-            $table->unsignedBigInteger('rps_id')->index();
-            $table->unsignedBigInteger('dosen_id')->index();
+        Schema::create('t_kakel_mk', function (Blueprint $table) {
+            $table->id('kakel_mk_id');
+            $table->unsignedBigInteger('d_kakel_id')->nullable();
+            $table->unsignedBigInteger('kurikulum_mk_id')->nullable();
             $table->dateTime('created_at')->nullable()->useCurrent();
             $table->integer('created_by')->nullable()->index();
             $table->dateTime('updated_at')->nullable();
@@ -24,9 +24,10 @@ class DRpsKakel extends Migration
             $table->dateTime('deleted_at')->nullable()->index();
             $table->integer('deleted_by')->nullable()->index();
 
-            $table->foreign('rps_id')->references('rps_id')->on('m_rps');
-            $table->foreign('dosen_id')->references('dosen_id')->on('d_dosen');
+            $table->foreign('d_kakel_id')->references('d_kakel_id')->on('d_kakel');
+            $table->foreign('kurikulum_mk_id')->references('kurikulum_mk_id')->on('d_kurikulum_mk');
         });
+
     }
 
     /**
@@ -36,6 +37,6 @@ class DRpsKakel extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('d_rps_pengampu');
+        Schema::dropIfExists('t_kakel_mk');
     }
 }

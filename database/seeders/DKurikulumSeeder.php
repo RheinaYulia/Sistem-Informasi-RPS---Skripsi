@@ -15,10 +15,10 @@ class DKurikulumSeeder extends Seeder
     public function run()
     {
         DB::table('d_kurikulum')->insert([
-            ['kurikulum_id' => 1, 'prodi_id' => 1, 'periode_id' => 1, 'kurikulum_tahun' => '2023'],
-            ['kurikulum_id' => 2, 'prodi_id' => 2, 'periode_id' => 1, 'kurikulum_tahun' => '2023'],
-            ['kurikulum_id' => 3, 'prodi_id' => 1, 'periode_id' => 2, 'kurikulum_tahun' => '2023'],
-            ['kurikulum_id' => 4, 'prodi_id' => 2, 'periode_id' => 2, 'kurikulum_tahun' => '2023']
+            ['kurikulum_id' => 1, 'prodi_id' => 1,  'kurikulum_tahun' => '2023'],
+            ['kurikulum_id' => 2, 'prodi_id' => 2,  'kurikulum_tahun' => '2023'],
+            ['kurikulum_id' => 3, 'prodi_id' => 1,  'kurikulum_tahun' => '2023'],
+            ['kurikulum_id' => 4, 'prodi_id' => 2,  'kurikulum_tahun' => '2023']
         ]);
     }
 }

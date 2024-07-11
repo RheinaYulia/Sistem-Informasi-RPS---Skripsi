@@ -25,7 +25,7 @@ class MPeriode extends Migration
             $table->dateTime('deleted_at')->nullable()->index();
             $table->integer('deleted_by')->nullable()->index();
         });
-        Schema::table('d_kurikulum', function (Blueprint $table) {
+        Schema::table('d_kurikulum_mk', function (Blueprint $table) {
             $table->foreign('periode_id')->references('periode_id')->on('m_periode'); // Tambahkan FK yang baru
         });
     }

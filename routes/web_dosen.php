@@ -90,6 +90,18 @@ Route::group(['prefix' => 'rps', 'middleware' => ['auth']], function() {
       Route::match(['post', 'put'], 'kelola_master/{id}/updateMkSyarat', [RPSdetailController::class, 'updateMkSyarat'])->name('kelola_master.updateMkSyarat');
     //   Route::get('kelola_master/master_rps/kelola-data/{id}', [RPSdetailController::class, 'kelolaData'])->name('kelola.data');
 
+   
+
+    //KAKEL
+    Route::get('kelola_master/master_rps/{id}/editkakel1', [RPSdetailController::class, 'editkakel1'])->name('kelola_master.editkakel1');
+      Route::match(['post', 'put'], 'kelola_master/{id}/updatekakel1', [RPSdetailController::class, 'updatekakel1'])->name('kelola_master.updatekakel1');
+
+      Route::get('kelola_master/master_rps/{id}/editKakel2', [RPSdetailController::class, 'editKakel2'])->name('kelola_master.editKakel2');
+      Route::match(['post', 'put'], 'kelola_master/{id}/updateKakel2', [RPSdetailController::class, 'updateKakel2'])->name('kelola_master.updateKakel2');
+
+      Route::get('kelola_master/master_rps/{id}/editKakel3', [RPSdetailController::class, 'editKakel3'])->name('kelola_master.editKakel3');
+      Route::match(['post', 'put'], 'kelola_master/{id}/updateKakel3', [RPSdetailController::class, 'updateKakel3'])->name('kelola_master.updateKakel3');
+
       //BAB RPS
 
       Route::get('kelola_master/bab_rps/kelola-data/{id}', [RPSdetailController::class, 'kelolaData'])->name('kelola.data');

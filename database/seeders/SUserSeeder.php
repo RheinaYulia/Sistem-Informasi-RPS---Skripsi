@@ -128,7 +128,16 @@ class SUserSeeder extends Seeder
                 'name'      => 'Kaprodi SIB',
                 'email'     => 'kaprodisib@admin.com',
                 'password'  => password_hash('12345', PASSWORD_DEFAULT)
+            ],
+            [
+                'user_id'   => 87, // Super Admin
+                'group_id'  => 2, // Super Admin
+                'username'  => 'dosen',
+                'name'      => 'dosen',
+                'email'     => 'dosentes@admin.com',
+                'password'  => password_hash('12345', PASSWORD_DEFAULT)
             ]
+            
             
             
         ]);

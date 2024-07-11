@@ -57,19 +57,60 @@ class RpsModel extends AppModel
         $data = $request->except($exception);
         $data['created_by'] = Auth::user()->user_id;
         $data['created_at'] = date('Y-m-d H:i:s');
-
-        $id = self::insertGetId($data);
-        $bab = array();
-        for ($i = 1; $i <= 17; $i++) {
-            $bab[$i] = [
-                'rps_id' => $id,
-                'rps_bab' => $i,
-                'created_by' => Auth::user()->user_id,
-                'created_at' => date('Y-m-d H:i:s'),
-            ];
+    
+        DB::beginTransaction();
+        try {
+            // Insert ke tabel utama dan dapatkan ID yang baru dibuat
+            $id = self::insertGetId($data);
+            Log::info('Inserted main record with ID: ' . $id);
+    
+            // Insert ke tabel RpsBabModel
+            $bab = array();
+            for ($i = 1; $i <= 17; $i++) {
+                $bab[$i] = [
+                    'rps_id' => $id,
+                    'rps_bab' => $i,
+                    'created_by' => Auth::user()->user_id,
+                    'created_at' => date('Y-m-d H:i:s'),
+                ];
+            }
+            RpsBabModel::insert($bab);
+            Log::info('Inserted RpsBab records');
+    
+            // Dapatkan kakel_mk_id dari t_kakel_mk berdasarkan kurikulum_mk_id
+            $kakelMkIds = DB::table('t_kakel_mk')
+                ->where('kurikulum_mk_id', $data['kurikulum_mk_id'])
+                ->pluck('kakel_mk_id');
+    
+            // Log hasil query untuk debugging
+            Log::info('KakelMkIds: ' . $kakelMkIds);
+    
+            // Jika ada kecocokan, insert ke d_rps_kakel
+            if ($kakelMkIds->isNotEmpty()) {
+                $dRpsKakelData = [];
+                foreach ($kakelMkIds as $kakelMkId) {
+                    $dRpsKakelData[] = [
+                        'rps_id' => $id,
+                        'kakel_mk_id' => $kakelMkId,
+                        'created_by' => Auth::user()->user_id,
+                        'created_at' => date('Y-m-d H:i:s'),
+                    ];
+                }
+                DB::table('d_rps_kakel')->insert($dRpsKakelData);
+                Log::info('Inserted d_rps_kakel records: ' . json_encode($dRpsKakelData));
+            } else {
+                Log::info('No matching records found in t_kakel_mk');
+            }
+    
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error: ' . $e->getMessage());
+            throw $e;
         }
-        return RpsBabModel::insert($bab);
     }
+    
 
     public static function getMkRps($userId){
         $periode = session('periode');
@@ -105,8 +146,7 @@ class RpsModel extends AppModel
             $join->on('rp.dosen_id', '=', 'dp_pengembang.dosen_id');
         })
         ->leftJoin('s_user AS su_pengembang', 'dp_pengembang.user_id', '=', 'su_pengembang.user_id')
-        ->join('d_kurikulum AS dk', 'p.kurikulum_id', '=', 'dk.kurikulum_id') // Join dengan tabel d_kurikulum
-        ->join('m_periode AS pr', 'dk.periode_id', '=', 'pr.periode_id') // Join dengan tabel m_periode
+        ->join('m_periode AS pr', 'p.periode_id', '=', 'pr.periode_id') // Join dengan tabel m_periode
         ->where('pr.periode_id', $selectedPeriodeId) // Filter berdasarkan periode yang dipilih
         ->where(function ($query) use ($userId) {
             $query->where('su_pengembang.user_id', $userId)
@@ -1158,6 +1198,267 @@ public static function getSelectedBk($rps_id) {
 }
 
 
-    
-    
+//KAKEL
+public static function getSelectedkakel1($rps_id) {
+    $selectedCpmk = DB::table('d_rps_kakel')
+        ->select('dosen_id', DB::raw('MAX(deleted_at IS NULL) as is_selected'))
+        ->where('rps_id', $rps_id)
+        ->groupBy('dosen_id')
+        ->get();
+
+    return $selectedCpmk;
+}
+
+public static function spkakel1($rps_id, array $dosen_id = null)
+{
+    DB::beginTransaction();
+
+    try {
+        // Jika array $dosen_pengembang_id kosong, hapus semua data yang ada
+        if (empty($dosen_id)) {
+            DB::table('d_rps_kakel')
+                ->where('rps_id', $rps_id)
+                ->update(['deleted_at' => now()]);
+        } else {
+            // Ambil data pengembang yang ada
+            $existingPengembang = DB::table('d_rps_kakel')
+                ->where('rps_id', $rps_id)
+                ->whereNull('deleted_at')
+                ->get();
+            $existingPengembangIds = $existingPengembang->pluck('rps_kakel_id')->toArray();
+
+            foreach ($dosen_id as $index => $jenis) {
+                if (isset($existingPengembangIds[$index])) {
+                    $pengembangid = $existingPengembang->where('rps_kakel_id', $existingPengembangIds[$index])->first();
+
+                    if (is_null($pengembangid->deleted_at)) {
+                        DB::table('d_rps_kakel')
+                            ->where('rps_id', $rps_id)
+                            ->where('rps_kakel_id', $existingPengembangIds[$index])
+                            ->update([
+                                'dosen_id' => $dosen_id[$index],
+                                'updated_at' => now()
+                            ]);
+                    }
+                } else {
+                    DB::table('d_rps_kakel')->insert([
+                        'rps_id' => $rps_id,
+                        'dosen_id' => $dosen_id[$index],
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+                }
+            }
+        }
+
+        DB::commit();
+        return true;
+    } catch (\Exception $e) {
+        DB::rollback();
+        return false;
+    }
+}
+
+// Mendapatkan dosen yang is_kakelnya bernilai 1
+public static function getIsKakel1()
+    {
+        return DB::table('d_dosen')
+            ->select('d_dosen.dosen_id', 'd_dosen.nama_dosen', 'd_kakel.is_kakel', 'd_kakel.kakel_id')
+            ->leftJoin('d_kakel', 'd_dosen.dosen_id', '=', 'd_kakel.dosen_id')
+            ->where('d_kakel.is_kakel', 1)
+            ->get();
+    }
+
+   public static function getSelectedKakel2($rps_id) {
+    return DB::table('d_rps_kakels')
+        ->select('kakel_id', DB::raw('MAX(deleted_at IS NULL) as is_selected'))
+        ->where('rps_id', $rps_id)
+        ->groupBy('kakel_id')
+        ->get();
+}
+
+public static function spKakel2($rps_id, array $kakel_ids = null)
+{
+    DB::beginTransaction();
+
+    try {
+        // Jika array $kakel_ids kosong, hapus semua data yang ada
+        if (empty($kakel_ids)) {
+            DB::table('d_rps_kakels')
+                ->where('rps_id', $rps_id)
+                ->update(['deleted_at' => now()]);
+        } else {
+            // Ambil data yang ada
+            $existingKakel = DB::table('d_rps_kakels')
+                ->where('rps_id', $rps_id)
+                ->get();
+
+            foreach ($kakel_ids as $kakel_id) {
+                $existingEntry = $existingKakel->firstWhere('kakel_id', $kakel_id);
+
+                if ($existingEntry) {
+                    if ($existingEntry->deleted_at) {
+                        // Jika data ada dan deleted_at tidak null, buat data baru
+                        DB::table('d_rps_kakels')->insert([
+                            'rps_id' => $rps_id,
+                            'kakel_id' => $kakel_id,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    } else {
+                        // Jika data ada dan deleted_at null, update data tersebut
+                        DB::table('d_rps_kakels')
+                            ->where('rps_id', $rps_id)
+                            ->where('kakel_id', $kakel_id)
+                            ->update([
+                                'deleted_at' => null,
+                                'updated_at' => now()
+                            ]);
+                    }
+                } else {
+                    // Jika data tidak ada, buat data baru
+                    DB::table('d_rps_kakels')->insert([
+                        'rps_id' => $rps_id,
+                        'kakel_id' => $kakel_id,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+                }
+            }
+        }
+
+        DB::commit();
+        return true;
+    } catch (\Exception $e) {
+        DB::rollback();
+        return false;
+    }
+}
+
+
+
+    // public static function spKakel2($rps_id, array $kakel_ids)
+    // {
+    //     DB::beginTransaction();
+
+    //     try {
+    //         foreach ($kakel_ids as $kakel_id) {
+    //             DB::table('d_rps_kakels')->updateOrInsert(
+    //                 ['rps_id' => $rps_id, 'kakel_id' => $kakel_id],
+    //                 ['deleted_at' => null, 'updated_at' => now()]
+    //             );
+    //         }
+
+    //         DB::commit();
+    //         return true;
+    //     } catch (\Exception $e) {
+    //         DB::rollback();
+    //         return false;
+    //     }
+    // }
+
+    public static function deleteKakel($rps_id, array $kakel_ids)
+    {
+        DB::table('d_rps_kakels')
+            ->where('rps_id', $rps_id)
+            ->whereIn('kakel_id', $kakel_ids)
+            ->update(['deleted_at' => now()]);
+    }
+
+// Mendapatkan dosen yang is_kakelnya bernilai 1
+public static function getIsKakel3()
+{
+    return DB::table('d_dosen')
+        ->select('d_dosen.dosen_id', 'd_dosen.nama_dosen')
+        ->leftJoin('s_user', 'd_dosen.user_id', '=', 's_user.user_id')
+        ->where('s_user.group_id', 5)
+        ->get();
+}
+
+public static function getSelectedKakel3($rps_id)
+{
+    return DB::table('d_rps_kakel')
+        ->select('dosen_id as dosen_kakel_id', DB::raw('MAX(deleted_at IS NULL) as is_selected'))
+        ->where('rps_id', $rps_id)
+        ->groupBy('dosen_id')
+        ->get();
+}
+
+public static function spKakel3($rps_id, array $dosen_kakel_ids = null)
+{
+    DB::beginTransaction();
+
+    try {
+        // Jika array $dosen_kakel_ids kosong, hapus semua data yang ada
+        if (empty($dosen_kakel_ids)) {
+            DB::table('d_rps_kakel')
+                ->where('rps_id', $rps_id)
+                ->update(['deleted_at' => now()]);
+        } else {
+            // Ambil data yang ada
+            $existingKakel = DB::table('d_rps_kakel')
+                ->where('rps_id', $rps_id)
+                ->get();
+
+            foreach ($dosen_kakel_ids as $dosen_kakel_id) {
+                $existingEntry = $existingKakel->firstWhere('dosen_id', $dosen_kakel_id);
+
+                if ($existingEntry) {
+                    if (!is_null($existingEntry->deleted_at)) {
+                        // Jika data ada dan deleted_at tidak null, buat data baru
+                        DB::table('d_rps_kakel')->insert([
+                            'rps_id' => $rps_id,
+                            'dosen_id' => $dosen_kakel_id,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    } else {
+                        // Jika data ada dan deleted_at null, tidak perlu menambah data baru
+                        // Update data yang ada untuk memastikan deleted_at tetap null
+                        DB::table('d_rps_kakel')
+                            ->where('rps_id', $rps_id)
+                            ->where('dosen_id', $dosen_kakel_id)
+                            ->update([
+                                'deleted_at' => null,
+                                'updated_at' => now()
+                            ]);
+                    }
+                } else {
+                    // Jika data tidak ada, buat data baru
+                    DB::table('d_rps_kakel')->insert([
+                        'rps_id' => $rps_id,
+                        'dosen_id' => $dosen_kakel_id,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+                }
+            }
+
+            // Update deleted_at untuk dosen yang tidak ada dalam daftar baru
+            DB::table('d_rps_kakel')
+                ->where('rps_id', $rps_id)
+                ->whereNotIn('dosen_id', $dosen_kakel_ids)
+                ->update(['deleted_at' => now()]);
+        }
+
+        DB::commit();
+        return true;
+    } catch (\Exception $e) {
+        DB::rollback();
+        return false;
+    }
+}
+
+
+
+
+public static function deleteKakel3($rps_id, array $dosen_ids)
+{
+    if (!empty($dosen_ids)) {
+        DB::table('d_rps_kakel')
+            ->where('rps_id', $rps_id)
+            ->whereIn('dosen_id', $dosen_ids)
+            ->update(['deleted_at' => now()]);
+    }
+}
 }

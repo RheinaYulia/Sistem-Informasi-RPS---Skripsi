@@ -121,8 +121,7 @@ class StatusModel extends AppModel
             $join->on('rp.dosen_id', '=', 'dp_pengembang.dosen_id');
         })
         ->leftJoin('s_user AS su_pengembang', 'dp_pengembang.user_id', '=', 'su_pengembang.user_id')
-        ->join('d_kurikulum AS dk', 'p.kurikulum_id', '=', 'dk.kurikulum_id') // Join dengan tabel d_kurikulum
-        ->join('m_periode AS pr', 'dk.periode_id', '=', 'pr.periode_id') // Join dengan tabel m_periode
+        ->join('m_periode AS pr', 'p.periode_id', '=', 'pr.periode_id') // Join dengan tabel m_periode
         ->where('pr.periode_id', $selectedPeriodeId) // Filter berdasarkan periode yang dipilih
         ->where(function ($query) use ($userId) {
             $query->where('su_pengembang.user_id', $userId)

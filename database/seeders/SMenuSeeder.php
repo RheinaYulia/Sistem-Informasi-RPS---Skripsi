@@ -80,8 +80,16 @@ class SMenuSeeder extends Seeder
 
 
             ['menu_id' => '22','menu_scope' => 'DOSEN','menu_code' => 'MASTER.BK','menu_name' => 'Kelola Bahan Kajian','menu_url' => 'master/bk','menu_level' => '2','order_no' => '18','parent_id' => '10','class_tag' => 'master-bk','icon' => 'fas fa-minus text-xs','is_active' => '1'],
-            
 
+            //verifikasi
+
+
+            //Pemilihan Kakel oleh Dokur
+            ['menu_id' => '23','menu_scope' => 'DOSEN KURIKULUM','menu_code' => 'KAKEL','menu_name' => 'KaPokJar','menu_url' => NULL,'menu_level' => '1','order_no' => '8','parent_id' => NULL,'class_tag' => 'kakel','icon' => 'fas fa-users-cog','is_active' => '1'],
+                
+            //Level 2
+            ['menu_id' => '24','menu_scope' => 'DOSEN KURIKULUM','menu_code' => 'KAKEL.AKTIVASI','menu_name' => 'KaPokJar','menu_url' => 'kakel/aktivasi','menu_level' => '2','order_no' => '29','parent_id' => '23','class_tag' => 'kakel-aktivasi','icon' => 'fas fa-minus text-xs','is_active' => '1'],
+            
 
             ],
             ['menu_id', 'menu_code'],
